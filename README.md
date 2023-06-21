@@ -1,6 +1,6 @@
 # parkiot
 Proyecto de Grado, es un sistema IoT que permite detectar los vehiculos en los estacionameintos.
-##Tecnologias Utilizadas
+## Tecnologias Utilizadas
 - Django REST Framework
 - NodeJS with React
 - MariaDB
