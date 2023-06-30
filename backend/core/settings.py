@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "api",
     "api.user",
     "api.authentication",
+    "parking"
 ]
 
 MIDDLEWARE = [

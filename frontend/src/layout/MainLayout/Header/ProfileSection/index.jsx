@@ -9,8 +9,6 @@ import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
   Box,
-  Card,
-  CardContent,
   Chip,
   ClickAwayListener,
   Divider,
@@ -23,8 +21,7 @@ import {
   OutlinedInput,
   Paper,
   Popper,
-  Stack,
-  Switch,
+  Stack,  
   Typography
 } from '@mui/material';
 
@@ -39,6 +36,7 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+import { QrCode, DirectionsCar } from '@mui/icons-material';
 
 import { LOGOUT } from 'store/actions';
 // ==============================|| PROFILE MENU ||============================== //
@@ -51,9 +49,9 @@ const ProfileSection = () => {
   const account = useSelector((state) => state.account);
   const dispatcher = useDispatch();
 
-  const [sdm, setSdm] = useState(true);
+  // const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState('');
-  const [notification, setNotification] = useState(false);
+  // const [notification, setNotification] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   /**
@@ -209,49 +207,8 @@ const ProfileSection = () => {
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                     <Box sx={{ p: 2 }}>
                       <UpgradePlanCard />
-                      <Divider />
-                      <Card
-                        sx={{
-                          bgcolor: theme.palette.primary.light,
-                          my: 2
-                        }}
-                      >
-                        <CardContent>
-                          <Grid container spacing={3} direction="column">
-                            <Grid item>
-                              <Grid item container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="subtitle1">Start DND Mode</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    color="primary"
-                                    checked={sdm}
-                                    onChange={(e) => setSdm(e.target.checked)}
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                            <Grid item>
-                              <Grid item container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="subtitle1">Allow Notifications</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    checked={notification}
-                                    onChange={(e) => setNotification(e.target.checked)}
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
+                      <Divider />                    
+
                       <Divider />
                       <List
                         component="nav"
@@ -282,7 +239,27 @@ const ProfileSection = () => {
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 1}
-                          onClick={(event) => handleListItemClick(event, 1, '#')}
+                          onClick={(event) => handleListItemClick(event, 1, '/vehicle/show')}
+                        >
+                          <ListItemIcon>
+                            <DirectionsCar stroke={1.5} size="1.3rem" />
+                          </ListItemIcon>
+                          <ListItemText primary={<Typography variant="body2">Registrar Vehiculos</Typography>} />
+                        </ListItemButton>
+                        <ListItemButton
+                          sx={{ borderRadius: `${customization.borderRadius}px` }}
+                          selected={selectedIndex === 2}
+                          onClick={(event) => handleListItemClick(event, 2, '/qrcode')}
+                        >
+                          <ListItemIcon>
+                            <QrCode stroke={1.5} size="1.3rem" />
+                          </ListItemIcon>
+                          <ListItemText primary={<Typography variant="body2">Generar Codigo QR</Typography>} />
+                        </ListItemButton>
+                        <ListItemButton
+                          sx={{ borderRadius: `${customization.borderRadius}px` }}
+                          selected={selectedIndex === 3}
+                          onClick={(event) => handleListItemClick(event, 3, '#')}
                         >
                           <ListItemIcon>
                             <IconUser stroke={1.5} size="1.3rem" />

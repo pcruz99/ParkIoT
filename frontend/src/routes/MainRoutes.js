@@ -17,6 +17,12 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
+//qrcode page
+const QrcodePage = Loadable(lazy(() => import('views/pages/QrcodeShow')));
+
+const VehicleShow = Loadable(lazy(() => import('views/pages/VehicleShow')));
+const VehicleCreate = Loadable(lazy(() => import('views/pages/VehicleCreate')));
+const ParkingShow = Loadable(lazy(() => import('views/pages/ParkingShow')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -33,6 +39,10 @@ const MainRoutes = {
         {
           path: 'default',
           element: <DashboardDefault />
+        },
+        {
+          path: 'parking',
+          element: <ParkingShow />
         }
       ]
     },
@@ -84,6 +94,23 @@ const MainRoutes = {
     {
       path: 'sample-page',
       element: <SamplePage />
+    },
+    {
+      path: 'qrcode',
+      element: <QrcodePage />
+    },
+    {
+      path: 'vehicle',
+      children: [
+        {
+          path: 'show',
+          element: <VehicleShow />
+        },
+        {
+          path: 'create',
+          element: <VehicleCreate />
+        }
+      ]
     }
   ]
 };

@@ -18,6 +18,14 @@ const dashboard = {
       url: '/dashboard/default',
       icon: icons.IconDashboard,
       breadcrumbs: false
+    },
+    {
+      id: 'parking',
+      title: 'Parqueadero',
+      type: 'item',
+      url: '/dashboard/parking',
+      icon: icons.IconDashboard,
+      breadcrumbs: false
     }
   ]
 };

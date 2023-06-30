@@ -1,4 +1,4 @@
-from ast import Bytes
+# from ast import Bytes
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -52,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
     qrcode = models.TextField(unique=True)
+    
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "password"]
 
