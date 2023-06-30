@@ -1,0 +1,22 @@
+// import { useState, useEffect } from "react"
+import { Typography, Box, CardContent, Card } from '@mui/material';
+
+const ParkingCard = ({ id, estado }) => {
+  return (
+    <>
+      <Card>
+        <CardContent>
+          <Box
+            sx={{
+              background: estado === 'libre' ? 'green' : 'red'
+            }}
+          >
+            <Typography color={'white'}>{id}</Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    </>
+  );
+};
+
+export default ParkingCard;
