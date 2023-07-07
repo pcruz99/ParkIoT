@@ -22,7 +22,7 @@ const App = () => {
   const account = useSelector((state) => state.account);
   const navigate = useNavigate();  
   useEffect(()=>{
-    !account.isLoggedIn && navigate('/login')
+    !account.isLoggedIn ? navigate('/login'): navigate('/');
   },[]);
 
   return (

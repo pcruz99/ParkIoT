@@ -16,14 +16,14 @@ class VehicleList(APIView):
         except User.DoesNotExist:
             return HTTP_404_NOT_FOUND
 
-    def get(self, request, pk, format=None):
-        user = self.get_user(pk)
+    def get(self, request, userid, format=None):
+        user = self.get_user(userid)
         vehicles = user.vehicle_set.all()
         serilizer = VehicleSerializer(vehicles, many=True)
         return Response(serilizer.data, status=HTTP_200_OK)
 
-    def post(self, request, pk, format=None):
-        user = self.get_user(pk)
+    def post(self, request, userid, format=None):
+        user = self.get_user(userid)
         serializer = VehicleSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True) and user.vehicle_set.count() < 3:
             serializer.save()

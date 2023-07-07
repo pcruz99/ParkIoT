@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import MainCard from 'ui-component/cards/MainCard';
 import { Grid, Box } from '@mui/material';
@@ -9,6 +9,7 @@ import VehicleCard from 'components/VehicleCard';
 import { Button } from '@mui/material';
 
 import configData from '../../config';
+import AnimateButton from 'ui-component/extended/AnimateButton';
 
 const VehicleShow = () => {
   const account = useSelector((state) => state.account);
@@ -44,18 +45,18 @@ const VehicleShow = () => {
     <>
       <MainCard title="Vehiculos Registrados">
         <Box textAlign="center" sx={{ margin: 3 }}>
-          <Button variant="contained" onClick={handleAddVehicle} disabled={disableAddButton}>
-            Agregar Vehiculo
-          </Button>
+          <AnimateButton>
+            <Button variant="contained" onClick={handleAddVehicle} disabled={disableAddButton} size="large">
+              Agregar Vehiculo
+            </Button>
+          </AnimateButton>
         </Box>
         <Grid container spacing={3}>
-          {vehicles.map((data) => {
-            return (
-              <Grid item lg={4} md={6} sm={6} xs={12} key={data.id}>
-                <VehicleCard isLoading={false} vehicle={data} />
-              </Grid>
-            );
-          })}
+          {vehicles.map((data) => (
+            <Grid item lg={4} md={6} sm={6} xs={12} key={data.id}>
+              <VehicleCard isLoading={false} vehicle={data} />
+            </Grid>
+          ))}
         </Grid>
       </MainCard>
     </>

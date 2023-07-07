@@ -1,9 +1,11 @@
+import array
 from uuid import uuid3, NAMESPACE_DNS
 from io import BytesIO
 import qrcode
 from base64 import b64encode
 
-def create_qrcode(username:str="") -> str:
+
+def create_qrcode(username: str = "") -> list:
     try:
         # Creat Unique Identifier by the username and hash MD5
         uid = uuid3(NAMESPACE_DNS, username)
@@ -21,10 +23,8 @@ def create_qrcode(username:str="") -> str:
         buffered = BytesIO()
         img.save(buffered)
         img_str = b64encode(buffered.getvalue()).decode("utf-8")
-        return img_str
+        
+        return [img_str, uid]
     except Exception:
         print(Exception.args)
-        return uid.hex
-
-
-    
+        return ["", ""]

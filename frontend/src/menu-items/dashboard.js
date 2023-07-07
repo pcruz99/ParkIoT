@@ -1,5 +1,6 @@
 // assets
 import { IconDashboard } from '@tabler/icons';
+import { LocalParking } from '@mui/icons-material';
 
 // constant
 const icons = { IconDashboard };
@@ -12,18 +13,18 @@ const dashboard = {
   type: 'group',
   children: [
     {
-      id: 'default',
-      title: 'Dashboard',
-      type: 'item',
-      url: '/dashboard/default',
-      icon: icons.IconDashboard,
-      breadcrumbs: false
-    },
-    {
       id: 'parking',
       title: 'Parqueadero',
       type: 'item',
       url: '/dashboard/parking',
+      icon: LocalParking,
+      breadcrumbs: false
+    },
+    {
+      id: 'default',
+      title: 'Dashboard',
+      type: 'item',
+      url: '/dashboard/default',
       icon: icons.IconDashboard,
       breadcrumbs: false
     }

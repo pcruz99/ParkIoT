@@ -21,7 +21,7 @@ import {
   OutlinedInput,
   Paper,
   Popper,
-  Stack,  
+  Stack,
   Typography
 } from '@mui/material';
 
@@ -59,8 +59,6 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = async () => {
-    console.log('Logout');
-    console.log(account.token);
     axios
       .post(
         `${configData.API_SERVER}/api/users/logout`,
@@ -207,7 +205,7 @@ const ProfileSection = () => {
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                     <Box sx={{ p: 2 }}>
                       <UpgradePlanCard />
-                      <Divider />                    
+                      <Divider />
 
                       <Divider />
                       <List

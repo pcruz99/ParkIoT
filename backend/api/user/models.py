@@ -1,4 +1,5 @@
 # from ast import Bytes
+import uuid
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -15,10 +16,11 @@ class UserManager(BaseUserManager):
             raise TypeError("Users must have a username.")
         if email is None:
             raise TypeError("Users must have an email.")
+        
+        #Identifieds like qrcode in base64 and uuid pure
+        ids = create_qrcode(username)
 
-        qrcode = create_qrcode(username)
-
-        user = self.model(username=username, email=self.normalize_email(email), first_name=first_name, last_name=last_name, qrcode=qrcode)
+        user = self.model(username=username, email=self.normalize_email(email), first_name=first_name, last_name=last_name, qrcode=ids[0], uuid=ids[1])
         user.set_password(password)
         user.save(using=self._db)
 
@@ -51,6 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date = models.DateTimeField(auto_now_add=True)
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
+    uuid = models.TextField(unique=True)
     qrcode = models.TextField(unique=True)
     
     USERNAME_FIELD = "email"

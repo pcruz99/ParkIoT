@@ -9,11 +9,10 @@ import MainCard from 'ui-component/cards/MainCard';
 import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
 // assets
-// import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme, estado }) => ({
-  backgroundColor: estado==="libre" ? theme.palette.success.dark : theme.palette.error.dark,
+  backgroundColor: estado === 'libre' ? theme.palette.success.dark : theme.palette.error.dark,
   color: theme.palette.primary.light,
   overflow: 'hidden',
   position: 'relative',
@@ -49,7 +48,7 @@ const ParkingCard = ({ isLoading }) => {
       {isLoading ? (
         <TotalIncomeCard />
       ) : (
-        <CardWrapper border={false} content={false} estado={"libre"}>
+        <CardWrapper border={false} content={false} estado={'libre'}>
           <Box sx={{ p: 2 }}>
             <List sx={{ py: 0 }}>
               <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
@@ -63,8 +62,9 @@ const ParkingCard = ({ isLoading }) => {
                       color: 'ThreeDDarkShadow'
                     }}
                   >
-                    {/* <TableChartOutlinedIcon fontSize="inherit" /> */}
-                    <Typography variant="h2" fontSize="inherit">1</Typography>
+                    <Typography variant="h2" fontSize="inherit">
+                      1
+                    </Typography>
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
@@ -75,12 +75,12 @@ const ParkingCard = ({ isLoading }) => {
                   }}
                   primary={
                     <Typography variant="h4" sx={{ color: '#fff' }}>
-                      --
+                      Ubicación
                     </Typography>
                   }
                   secondary={
                     <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
-                      --
+                      Planta Baja
                     </Typography>
                   }
                 />

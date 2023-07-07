@@ -4,18 +4,17 @@ import { useState } from 'react';
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import EditIcon from '@mui/icons-material/Edit';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
+import { capitalizerCustom } from 'scripts/cambiarSize';
 
 // assets
 import { DirectionsCar, TwoWheeler } from '@mui/icons-material';
-
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
@@ -83,12 +82,16 @@ const VehicleCard = ({ isLoading, vehicle }) => {
                       variant="rounded"
                       sx={{
                         ...theme.typography.commonAvatar,
-                        ...theme.typography.largeAvatar,                        
+                        ...theme.typography.largeAvatar,
                         backgroundColor: theme.palette.secondary[800],
                         mt: 1
                       }}
-                    >                      
-                      {vehicle.tipo === 'carro' ? <DirectionsCar stroke={1.5} size="1.3rem" sx={{color:'white'}}/> : <TwoWheeler stroke={1.5} size="1.3rem" sx={{color:'white'}}/>}
+                    >
+                      {vehicle.tipo === 'carro' ? (
+                        <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
+                      ) : (
+                        <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
+                      )}
                     </Avatar>
                   </Grid>
                   <Grid item>
@@ -139,7 +142,7 @@ const VehicleCard = ({ isLoading, vehicle }) => {
                 <Grid container alignItems="center">
                   <Grid item>
                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                        {vehicle.brand} - {vehicle.model}
+                      {capitalizerCustom(vehicle.brand)} - {capitalizerCustom(vehicle.model)}
                     </Typography>
                   </Grid>
                   <Grid item></Grid>
@@ -153,7 +156,7 @@ const VehicleCard = ({ isLoading, vehicle }) => {
                     color: theme.palette.secondary[200]
                   }}
                 >
-                  {vehicle.color} - {vehicle.placa}
+                  {capitalizerCustom(vehicle.color)} - {vehicle.placa.toUpperCase()}
                 </Typography>
               </Grid>
             </Grid>
