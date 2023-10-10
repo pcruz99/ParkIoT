@@ -5,17 +5,17 @@ import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
-  Checkbox,
+  // Checkbox,
   Divider,
   FormControl,
-  FormControlLabel,
+  // FormControlLabel,
   FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  Stack,
+  // Stack,
   Typography
 } from '@mui/material';
 
@@ -42,7 +42,8 @@ import configData from '../../../../config';
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
-  const [checked, setChecked] = useState(true);
+
+  // const [checked, setChecked] = useState(true);
 
   const dispatcher = useDispatch();
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ const FirebaseLogin = ({ ...others }) => {
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Inicia Session con tu Correo</Typography>
+            <Typography variant="subtitle1">Inicia Session con tu Correo Electronico</Typography>
           </Box>
         </Grid>
       </Grid>
@@ -89,10 +90,18 @@ const FirebaseLogin = ({ ...others }) => {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             axios
-              .post(`${configData.API_SERVER}/api/users/login`, {
-                password: values.password,
-                email: values.email
-              })
+              .post(
+                `${configData.API_SERVER}/api/users/login`,
+                {
+                  password: values.password,
+                  email: values.email
+                },
+                {
+                  headers: {
+                    'content-type': 'application/json'
+                  }
+                }
+              )
               .then((response) => {
                 if (response.data?.success) {
                   dispatcher({
@@ -102,8 +111,9 @@ const FirebaseLogin = ({ ...others }) => {
 
                   if (scriptedRef.current) {
                     setStatus({ success: true });
-                    setSubmitting(false);
+                    setSubmitting(true);
                   }
+
                   navigate('/');
                 } else {
                   setStatus({ success: false });
@@ -113,11 +123,9 @@ const FirebaseLogin = ({ ...others }) => {
               })
               .catch((error) => {
                 setErrors({ submit: error.response.data.msg });
-                console.log(error);
-                console.log(error.response.data);
+                setSubmitting(false);
               });
           } catch (err) {
-            console.error(err);
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors({ submit: err.message });
@@ -178,7 +186,7 @@ const FirebaseLogin = ({ ...others }) => {
                 </FormHelperText>
               )}
             </FormControl>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+            {/* <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
               <FormControlLabel
                 control={
                   <Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />
@@ -188,7 +196,7 @@ const FirebaseLogin = ({ ...others }) => {
               <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
                 Forgot Password?
               </Typography>
-            </Stack>
+            </Stack> */}
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>

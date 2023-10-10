@@ -5,7 +5,7 @@ import storage from 'redux-persist/lib/storage';
 // reducer import
 import customizationReducer from './customizationReducer';
 import accountReducer from './accountReducer';
-
+import vehiclesReducer from './vehiclesReducer';
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
@@ -17,7 +17,8 @@ const reducer = combineReducers({
     },
     accountReducer
   ),
-  customization: customizationReducer
+  customization: customizationReducer,
+  vehicles: vehiclesReducer
 });
 
 export default reducer;

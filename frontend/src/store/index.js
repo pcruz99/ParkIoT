@@ -1,4 +1,5 @@
-import { createStore } from 'redux';
+//? Deberia manetener createStore o cambiar a configureStore
+import { legacy_createStore as createStore } from 'redux';
 import { persistStore } from 'redux-persist';
 import reducer from './reducer';
 

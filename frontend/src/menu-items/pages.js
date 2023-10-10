@@ -1,39 +1,50 @@
 // assets
-import { IconKey } from '@tabler/icons';
+import { Assessment, ImportExport, SmartToy } from '@mui/icons-material';
 
 // constant
 const icons = {
-  IconKey
+  Assessment,
+  ImportExport,
+  SmartToy
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
 const pages = {
   id: 'pages',
-  title: 'Pages',
-  caption: 'Pages Caption',
+  // title: 'Pages',
+  // caption: 'Pages Caption',
   type: 'group',
   children: [
     {
-      id: 'authentication',
-      title: 'Authentication',
+      id: 'prognosis',
+      title: 'Prognostico IA',
+      type: 'item',
+      url: '/report/prognosis',
+      icon: icons.SmartToy
+      // target: true
+    },
+    {
+      id: 'reports',
+      title: 'Reportes',
       type: 'collapse',
-      icon: icons.IconKey,
-
+      icon: icons.Assessment,
       children: [
         {
-          id: 'login3',
-          title: 'Login',
+          id: 'general',
+          title: 'General',
           type: 'item',
-          url: '/pages/login/login3',
-          target: true
+          url: '/',
+          // icon: icons.SmartToy
+          // target: true
         },
         {
-          id: 'register3',
-          title: 'Register',
+          id: 'es',
+          title: 'E/S de Vehiculos',
           type: 'item',
-          url: '/pages/register/register3',
-          target: true
+          url: '/report/show',
+          // icon: icons.ImportExport
+          // target: true
         }
       ]
     }

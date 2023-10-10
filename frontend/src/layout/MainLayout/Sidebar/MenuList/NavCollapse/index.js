@@ -41,7 +41,6 @@ const NavCollapse = ({ menu, level }) => {
       }
     });
   };
-
   // menu collapse for sub-levels
   useEffect(() => {
     setOpen(false);

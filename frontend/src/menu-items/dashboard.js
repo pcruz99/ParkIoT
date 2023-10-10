@@ -3,7 +3,7 @@ import { IconDashboard } from '@tabler/icons';
 import { LocalParking } from '@mui/icons-material';
 
 // constant
-const icons = { IconDashboard };
+const icons = { IconDashboard, LocalParking };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -17,7 +17,7 @@ const dashboard = {
       title: 'Parqueadero',
       type: 'item',
       url: '/dashboard/parking',
-      icon: LocalParking,
+      icon: icons.LocalParking,
       breadcrumbs: false
     },
     {

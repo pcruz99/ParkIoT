@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from api.authentication.models import ActiveSession
 
+
 def _generate_jwt_token(user):
     token = jwt.encode(
         {"id": user.pk, "exp": datetime.utcnow() + timedelta(days=7)},
@@ -20,29 +21,28 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
-    first_name = serializers.CharField(max_length=45, read_only=True)
-    last_name = serializers.CharField(max_length=45, read_only=True)
-
+    
     def validate(self, data):
         email = data.get("email", None)
         password = data.get("password", None)
 
         if email is None:
             raise exceptions.ValidationError(
-                {"success": False, "msg": "Email is required to login"}
+                {"success": False, "msg": "Correo requerido para iniciar session"}
             )
         if password is None:
             raise exceptions.ValidationError(
-                {"success": False, "msg": "Password is required to log in."}
+                {"success": False, "msg": "Contraseña requerida para iniciar session"}
             )
         user = authenticate(username=email, password=password)
 
         if user is None:
-            raise exceptions.AuthenticationFailed({"success": False, "msg": "Credenciales Incorrectas"})
+            raise exceptions.AuthenticationFailed(
+                {"success": False, "msg": "Credenciales Incorrectas"})
 
         if not user.is_active:
             raise exceptions.ValidationError(
-                {"success": False, "msg": "User is not active"}
+                {"success": False, "msg": "Usuario no activo"}
             )
 
         try:
@@ -50,7 +50,8 @@ class LoginSerializer(serializers.Serializer):
             if not session.token:
                 raise ValueError
 
-            jwt.decode(session.token, settings.SECRET_KEY, algorithms=["HS256"])
+            jwt.decode(session.token, settings.SECRET_KEY,
+                       algorithms=["HS256"])
 
         except (ObjectDoesNotExist, ValueError, jwt.ExpiredSignatureError):
             session = ActiveSession.objects.create(
@@ -60,7 +61,6 @@ class LoginSerializer(serializers.Serializer):
         return {
             "success": True,
             "token": session.token,
-            "user": {"_id": user.pk, "username": user.username, "email": user.email, "first_name": user.first_name, "last_name": user.last_name},
+            "user": {"_id": user.pk, "username": user.username, "email": user.email,
+                     "first_name": user.first_name, "last_name": user.last_name, "role": user.role},
         }
-
-

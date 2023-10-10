@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from api.authentication.viewsets import (
     RegisterViewSet,
     LoginViewSet,
@@ -8,9 +8,9 @@ from api.authentication.viewsets import (
 from rest_framework import routers
 from api.user.viewsets import UserViewSet, UserQrcodeView
 
-router = routers.SimpleRouter(trailing_slash=False)
+router = routers.SimpleRouter(trailing_slash = False)
 
-router.register(r"edit", UserViewSet, basename="user-edit")
+router.register(r"general", UserViewSet, basename="user-general")
 
 router.register(r"register", RegisterViewSet, basename="register")
 
@@ -20,8 +20,12 @@ router.register(r"checkSession", ActiveSessionViewSet, basename="check-session")
 
 router.register(r"logout", LogoutViewSet, basename="logout")
 
+router2 = routers.SimpleRouter(trailing_slash = True)
+
+router2.register(r"qrcode", UserQrcodeView, basename="qrcode")
 
 urlpatterns = [
     *router.urls,
-    path('qrcode/<int:pk>/', UserQrcodeView.as_view(), name='qrcode'),
+    path('', include(router2.urls))
 ]
+

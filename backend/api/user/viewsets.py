@@ -1,4 +1,3 @@
-from django.http import Http404
 from api.user.serializers import UserSerializer, UserQrcodeSerializer
 from api.user.models import User
 from rest_framework import viewsets, status
@@ -6,17 +5,19 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework import mixins
-from rest_framework.views import APIView
-
 
 class UserViewSet(
-    viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin
+    viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin,    
+    mixins.RetrieveModelMixin
 ):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
+    #!: OJO con este permiso, no esta bien definido
+    # permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     error_message = {"success": False, "msg": "Error updating user"}
-
+    
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", True)
         instance = User.objects.get(id=request.data.get("userID"))
@@ -42,17 +43,7 @@ class UserViewSet(
         self.update(request)
 
         return Response({"success": True}, status.HTTP_200_OK)
-
-
-class UserQrcodeView(APIView):
-    permission_classes = [AllowAny,]
-    def get_object(self, pk):
-        try:            
-            return User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):        
-        user = self.get_object(pk)        
-        serializers = UserQrcodeSerializer(user)        
-        return Response(serializers.data, status=status.HTTP_200_OK)
+class UserQrcodeView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserQrcodeSerializer
+    permission_classes = [IsAuthenticated,]

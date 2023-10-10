@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 // material-ui
+import { DirectionsCar, TwoWheeler } from '@mui/icons-material';
 import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 
@@ -11,8 +12,9 @@ import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 // assets
 
 // styles
+//TODO: BUSCAR DE DONDE SALE EL PROMPT "theme".
 const CardWrapper = styled(MainCard)(({ theme, estado }) => ({
-  backgroundColor: estado === 'libre' ? theme.palette.success.dark : theme.palette.error.dark,
+  backgroundColor: estado === 'true' ? theme.palette.success.dark : theme.palette.error.dark,
   color: theme.palette.primary.light,
   overflow: 'hidden',
   position: 'relative',
@@ -40,7 +42,7 @@ const CardWrapper = styled(MainCard)(({ theme, estado }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const ParkingCard = ({ isLoading }) => {
+const ParkingCard = ({ isLoading, space }) => {
   const theme = useTheme();
 
   return (
@@ -48,7 +50,7 @@ const ParkingCard = ({ isLoading }) => {
       {isLoading ? (
         <TotalIncomeCard />
       ) : (
-        <CardWrapper border={false} content={false} estado={'libre'}>
+        <CardWrapper border={false} content={false} estado={space.state.toString()}>
           <Box sx={{ p: 2 }}>
             <List sx={{ py: 0 }}>
               <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
@@ -63,7 +65,7 @@ const ParkingCard = ({ isLoading }) => {
                     }}
                   >
                     <Typography variant="h2" fontSize="inherit">
-                      1
+                      {space?.number}
                     </Typography>
                   </Avatar>
                 </ListItemAvatar>
@@ -74,15 +76,40 @@ const ParkingCard = ({ isLoading }) => {
                     mb: 0.45
                   }}
                   primary={
-                    <Typography variant="h4" sx={{ color: '#fff' }}>
-                      Ubicación
-                    </Typography>
+                    <Box
+                      textAlign="center"
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                        // maxWidth: '90px',
+                      }}
+                    >
+                      <Typography variant="h4" sx={{ color: 'primary.light', mt: 0.25 }}>
+                        {space.state ? 'LIBRE' : 'OCUPADO'}
+                      </Typography>
+
+                      {space.tipo == 'carro' ? (
+                        <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
+                      ) : (
+                        <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
+                      )}
+
+                      <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
+                        Ubicación
+                      </Typography>
+                      <Typography variant="h4" sx={{ color: 'primary.light' }}>
+                        {space.location.toUpperCase()}
+                      </Typography>
+                    </Box>
                   }
-                  secondary={
-                    <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
-                      Planta Baja
-                    </Typography>
-                  }
+                  // secondary={
+                  //   <Box textAlign="center">
+                  //     <Typography variant="h4" sx={{ color: 'primary.light', mt: 0.25 }}>
+                  //       {space.state ? 'Libre' : 'Ocupado'}
+                  //     </Typography>
+                  //   </Box>
+                  // }
                 />
               </ListItem>
             </List>
@@ -94,7 +121,8 @@ const ParkingCard = ({ isLoading }) => {
 };
 
 ParkingCard.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  space: PropTypes.object
 };
 
 export default ParkingCard;

@@ -1,12 +1,17 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
+//react-redux
+import { SET_VEHICLES } from 'store/actions.js';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -16,9 +21,11 @@ import { capitalizerCustom } from 'scripts/cambiarSize';
 // assets
 import { DirectionsCar, TwoWheeler } from '@mui/icons-material';
 
-const CardWrapper = styled(MainCard)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.dark,
-  color: '#fff',
+import caxios from '../scripts/customAxios.js';
+
+const CardWrapper = styled(MainCard)(({ theme, ischecked }) => ({
+  backgroundColor: ischecked === 'true' ? theme.palette.secondary.light : theme.palette.secondary.dark,
+  color: ischecked === 'true' ? '#000000' : '#fff',
   overflow: 'hidden',
   position: 'relative',
   '&:after': {
@@ -54,10 +61,22 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const VehicleCard = ({ isLoading, vehicle }) => {
+const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }) => {
   const theme = useTheme();
 
+  const account = useSelector((state) => state.account);
+  const { vehicles } = useSelector((state) => state.vehicles);
+  const dispatcher = useDispatch();
+
   const [anchorEl, setAnchorEl] = useState(null);
+
+  //! Esto no es definitivo, hay que mejorar la funcionliad
+  const callAPI = async (tokenAccount) => {
+    const cax = caxios(tokenAccount);
+    await cax.delete(`/parking/vehicle/${vehicle.id}`).then((response) => {
+      console.log(response.status);
+    });
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,12 +86,27 @@ const VehicleCard = ({ isLoading, vehicle }) => {
     setAnchorEl(null);
   };
 
+  const handleCheckVehicle = () => {
+    if (isForCheck) {
+      setVehicleId(vehicle.id);
+    }
+  };
+
+  const handleDeleteVehicle = () => {
+    callAPI(account?.token).then(() => {
+      dispatcher({
+        type: SET_VEHICLES,
+        payload: vehicles.filter((v) => v.id != vehicle.id)
+      });
+    });
+  };
+
   return (
     <>
       {isLoading ? (
         <SkeletonEarningCard />
       ) : (
-        <CardWrapper border={false} content={false}>
+        <CardWrapper border={false} content={false} ischecked={vehicleId === vehicle.id ? 'true' : 'false'}>
           <Box sx={{ p: 2.25 }}>
             <Grid container direction="column">
               <Grid item>
@@ -86,6 +120,7 @@ const VehicleCard = ({ isLoading, vehicle }) => {
                         backgroundColor: theme.palette.secondary[800],
                         mt: 1
                       }}
+                      onClick={handleCheckVehicle}
                     >
                       {vehicle.tipo === 'carro' ? (
                         <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
@@ -94,48 +129,51 @@ const VehicleCard = ({ isLoading, vehicle }) => {
                       )}
                     </Avatar>
                   </Grid>
-                  <Grid item>
-                    <Avatar
-                      variant="rounded"
-                      sx={{
-                        ...theme.typography.commonAvatar,
-                        ...theme.typography.mediumAvatar,
-                        backgroundColor: theme.palette.secondary.dark,
-                        color: theme.palette.secondary[200],
-                        zIndex: 1
-                      }}
-                      aria-controls="menu-earning-card"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreHorizIcon fontSize="inherit" />
-                    </Avatar>
-                    <Menu
-                      id="menu-earning-card"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      variant="selectedMenu"
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right'
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right'
-                      }}
-                    >
-                      <MenuItem onClick={handleClose}>
+                  {!isForCheck && (
+                    <Grid item>
+                      <Avatar
+                        variant="rounded"
+                        sx={{
+                          ...theme.typography.commonAvatar,
+                          ...theme.typography.mediumAvatar,
+                          backgroundColor: theme.palette.secondary.dark,
+                          color: theme.palette.secondary[200],
+                          zIndex: 1
+                        }}
+                        aria-controls="menu-earning-card"
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreHorizIcon fontSize="inherit" />
+                      </Avatar>
+                      <Menu
+                        id="menu-earning-card"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                        variant="selectedMenu"
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right'
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right'
+                        }}
+                      >
+                        {/* <MenuItem onClick={handleClose}>
                         <EditIcon sx={{ mr: 1.75 }} />
                         Editar
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <DeleteIcon sx={{ mr: 1.75 }} />
-                        Eliminar
-                      </MenuItem>
-                    </Menu>
-                  </Grid>
+                      </MenuItem> */}
+
+                        <MenuItem onClick={handleDeleteVehicle}>
+                          <DeleteIcon sx={{ mr: 1.75 }} />
+                          Eliminar
+                        </MenuItem>
+                      </Menu>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
               <Grid item>
@@ -168,7 +206,11 @@ const VehicleCard = ({ isLoading, vehicle }) => {
 };
 
 VehicleCard.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  vehicle: PropTypes.object,
+  isForCheck: PropTypes.bool,
+  setVehicleId: PropTypes.func,
+  vehicleId: PropTypes.number
 };
 
 export default VehicleCard;

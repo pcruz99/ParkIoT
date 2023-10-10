@@ -18,14 +18,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             User.objects.get(username=value)
         except ObjectDoesNotExist:
             return value
-        raise ValidationError({"success": False, "msg": "Username already taken."})
+        raise ValidationError({"success": False, "msg": "Nombre de Usuario ya Existente."})
 
     def validate_email(self, value):
         try:
             User.objects.get(email=value)
         except ObjectDoesNotExist:
             return value
-        raise ValidationError({"success": False, "msg": "Email already taken."})
+        raise ValidationError({"success": False, "msg": "Correo Electronico ya Existente"})
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)

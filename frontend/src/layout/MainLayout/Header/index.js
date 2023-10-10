@@ -6,9 +6,9 @@ import { Avatar, Box, ButtonBase } from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
+// import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
-import NotificationSection from './NotificationSection';
+// import NotificationSection from './NotificationSection';
 
 // assets
 import { IconMenu2 } from '@tabler/icons';
@@ -23,7 +23,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       {/* logo & toggler button */}
       <Box
         sx={{
-          width: 228,
+          width: 130,
           display: 'flex',
           [theme.breakpoints.down('md')]: {
             width: 'auto'
@@ -50,18 +50,19 @@ const Header = ({ handleLeftDrawerToggle }) => {
             onClick={handleLeftDrawerToggle}
             color="inherit"
           >
-            <IconMenu2 stroke={1.5} size="1.3rem" />
+            <IconMenu2 stroke={2} size="1.4rem" />
           </Avatar>
         </ButtonBase>
       </Box>
 
       {/* header search */}
-      <SearchSection />
+      {/* <SearchSection /> */}
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-      <NotificationSection />
+      {/* <NotificationSection /> */}
+
       <ProfileSection />
     </>
   );

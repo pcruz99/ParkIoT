@@ -1,13 +1,20 @@
+//react
 import { useState } from 'react';
+//react-router
 import { useNavigate } from 'react-router-dom';
+//redux
 import { useSelector } from 'react-redux';
 
-import { Cancel } from '@mui/icons-material';
-import { Button, Box, TextField, MenuItem, Grid, FormHelperText } from '@mui/material';
+//axios
+import axios from 'axios';
 
+//formik
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+
+//MUI
+import { Cancel } from '@mui/icons-material';
+import { Button, Box, TextField, MenuItem, Grid, FormHelperText } from '@mui/material';
 
 import configData from '../../config';
 import { listColorV, listTypesV, listBrandVCarro, listBrandVMoto } from 'static-data/vehicle';
@@ -15,36 +22,19 @@ import { listColorV, listTypesV, listBrandVCarro, listBrandVMoto } from 'static-
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import GeneralBack from 'components/GeneralBack';
 
-const VehicleForm = () => {
+const VehicleCreate = () => {
   const anioActual = new Date().getFullYear();
 
   const [listBrandV, setListBrandV] = useState([]);
   const account = useSelector((state) => state.account);
   const navigate = useNavigate();
 
-  const callApi = (body) => {
-    axios
-      .post(
-        `${configData.API_SERVER}/parking/vehicle/${account.user?._id}`,
-        { ...body, owner: `${account.user?._id}` },
-        {
-          headers: { Authorization: `${account.token}` }
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  };
-
   const handleTipo = (e) => {
     e.target.value === 'carro' ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
   };
 
   return (
-    <>      
+    <>
       <GeneralBack title="Registrar Vehiculo">
         <Box textAlign={'end'} sx={{ margin: 2 }}>
           <Button
@@ -54,8 +44,7 @@ const VehicleForm = () => {
               navigate('/vehicle/show');
             }}
           >
-            {/* Cancel Icon by MUI */}
-            <Cancel /> 
+            <Cancel />
           </Button>
         </Box>
 
@@ -67,6 +56,7 @@ const VehicleForm = () => {
             year: '',
             color: '',
             placa: ''
+            // submit: null
           }}
           validationSchema={Yup.object().shape({
             model: Yup.string().max(255, 'El maximo es: 255').required('Se requiere el Modelo del Vehiculo'),
@@ -79,10 +69,28 @@ const VehicleForm = () => {
               .max(7, 'Maximo de caracteres es: 7')
               .required('Se requiere la Placa del Vehiculo')
           })}
-          onSubmit={async (values) => {
-            callApi(values);
-            navigate('/vehicle/show');
-            window.location.reload();
+          onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+            await axios
+              .post(`${configData.API_SERVER}/parking/vehicle/`, values, {
+                headers: { Authorization: `${account.token}` }
+              })
+              .then((response) => {
+                if (response.status === 201) {
+                  setSubmitting(true);
+                  setStatus({ success: true });
+                  navigate('/vehicle/show');
+                } else {
+                  console.log('hola');
+                  // setStatus({ success: false });
+                  // setErrors({ submit: response.data });
+                  // setSubmitting(false);
+                }
+              })
+              .catch((error) => {
+                setErrors({ submit: { placa: error.response.data.placa[0] } });
+                setStatus({ success: false });
+                setSubmitting(false);
+              });
           }}
         >
           {({ errors, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -187,15 +195,19 @@ const VehicleForm = () => {
                     variant="outlined"
                     value={values.year}
                     onChange={(e) => {
-                      handleChange(e);
-                      values.year = e.target.value;
+                      const inputValue = e.target.value;
+                      if (inputValue > 0) {
+                        handleChange(e);
+                        values.year = inputValue;
+                      }
                     }}
                     InputProps={{
                       sx: {
                         '& input': {
                           textAlign: 'center'
                         }
-                      }
+                      },
+                      min: 0
                     }}
                     required
                   />
@@ -228,6 +240,7 @@ const VehicleForm = () => {
                     ))}
                   </TextField>
                 </Grid>
+
                 <Grid item xs={12} sm={4}>
                   <TextField
                     fullWidth
@@ -249,16 +262,24 @@ const VehicleForm = () => {
                     }}
                     required
                   />
+
                   {touched.placa && errors.placa && (
                     <FormHelperText error id="standard-weight-helper-text--register">
                       {errors.placa}
                     </FormHelperText>
                   )}
                 </Grid>
+
+                {errors.submit && errors.submit.placa && (
+                  <Box sx={{ mt: 3 }}>
+                    <FormHelperText error>{errors.submit.placa}</FormHelperText>
+                  </Box>
+                )}
+
                 <Grid item sm={12}>
                   <AnimateButton>
                     <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
-                      Agregar Vehiculo
+                      Agregar Vehículo
                     </Button>
                   </AnimateButton>
                 </Grid>
@@ -267,9 +288,8 @@ const VehicleForm = () => {
           )}
         </Formik>
       </GeneralBack>
-      
     </>
   );
 };
 
-export default VehicleForm;
+export default VehicleCreate;

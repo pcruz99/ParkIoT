@@ -12,7 +12,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
   overflow: 'hidden',
   position: 'relative',
   margin: 15,
-  padding: 5,
+  padding: 3,
 
   '&:after': {
     content: '""',
@@ -38,13 +38,11 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME LIGHT CARD ||============================== //
 
-const GeneralBack = ({children, title}) => {
+const GeneralBack = ({ children, title }) => {
   return (
-    <>    
+    <>
       <CardWrapper border={false} content={false} title={title}>
-        <Box sx={{ p: 2 }}>
-            {children}
-        </Box>
+        <Box sx={{ p: 2 }}>{children}</Box>
       </CardWrapper>
     </>
   );

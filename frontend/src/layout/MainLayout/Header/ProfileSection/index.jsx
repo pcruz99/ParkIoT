@@ -4,21 +4,23 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import configData from '../../../../config';
 
+import { capitalizerCustom } from '../../../../scripts/cambiarSize.js';
+
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-  Avatar,
+  // Avatar,
   Box,
   Chip,
   ClickAwayListener,
   Divider,
-  Grid,
-  InputAdornment,
+  // Grid,
+  // InputAdornment,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  OutlinedInput,
+  // OutlinedInput,
   Paper,
   Popper,
   Stack,
@@ -31,11 +33,13 @@ import axios from 'axios';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
-import UpgradePlanCard from './UpgradePlanCard';
-import User1 from 'assets/images/users/user-round.svg';
+
+// import UpgradePlanCard from './UpgradePlanCard';
+
+// import User1 from 'assets/images/users/user-round.svg';
 
 // assets
-import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+import { IconLogout, IconSettings } from '@tabler/icons';
 import { QrCode, DirectionsCar } from '@mui/icons-material';
 
 import { LOGOUT } from 'store/actions';
@@ -50,8 +54,9 @@ const ProfileSection = () => {
   const dispatcher = useDispatch();
 
   // const [sdm, setSdm] = useState(true);
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
   // const [notification, setNotification] = useState(false);
+
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   /**
@@ -129,20 +134,20 @@ const ProfileSection = () => {
             lineHeight: 0
           }
         }}
-        icon={
-          <Avatar
-            src={User1}
-            sx={{
-              ...theme.typography.mediumAvatar,
-              margin: '8px 0 8px 8px !important',
-              cursor: 'pointer'
-            }}
-            ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            color="inherit"
-          />
-        }
+        // icon={
+        //   <Avatar
+        //     src={User1}
+        //     sx={{
+        //       ...theme.typography.mediumAvatar,
+        //       margin: '8px 0 8px 8px !important',
+        //       cursor: 'pointer'
+        //     }}
+        //     ref={anchorRef}
+        //     aria-controls={open ? 'menu-list-grow' : undefined}
+        //     aria-haspopup="true"
+        //     color="inherit"
+        //   />
+        // }
         label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
         variant="outlined"
         ref={anchorRef}
@@ -177,14 +182,16 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
+                        <Typography variant="h4">Hola,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {capitalizerCustom(account?.user?.first_name)} {capitalizerCustom(account?.user?.last_name)}
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      <Typography variant="subtitle2">
+                        <b>Rol:</b> {capitalizerCustom(account?.user?.role)}
+                      </Typography>
                     </Stack>
-                    <OutlinedInput
+                    {/* <OutlinedInput
                       sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
                       id="input-search-profile"
                       value={value}
@@ -199,13 +206,13 @@ const ProfileSection = () => {
                       inputProps={{
                         'aria-label': 'weight'
                       }}
-                    />
-                    <Divider />
+                    /> */}
+                    {/* <Divider /> */}
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 2 }}>
-                      <UpgradePlanCard />
-                      <Divider />
+                    <Box sx={{ p: 1 }}>
+                      {/* <UpgradePlanCard /> */}
+                      {/* <Divider /> */}
 
                       <Divider />
                       <List
@@ -224,7 +231,7 @@ const ProfileSection = () => {
                           }
                         }}
                       >
-                        <ListItemButton
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
                           onClick={(event) => handleListItemClick(event, 0, '#')}
@@ -233,7 +240,7 @@ const ProfileSection = () => {
                             <IconSettings stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                        </ListItemButton>
+                        </ListItemButton> */}
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 1}
@@ -244,6 +251,7 @@ const ProfileSection = () => {
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Registrar Vehiculos</Typography>} />
                         </ListItemButton>
+
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 2}
@@ -254,7 +262,8 @@ const ProfileSection = () => {
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Generar Codigo QR</Typography>} />
                         </ListItemButton>
-                        <ListItemButton
+
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 3}
                           onClick={(event) => handleListItemClick(event, 3, '#')}
@@ -281,7 +290,8 @@ const ProfileSection = () => {
                               </Grid>
                             }
                           />
-                        </ListItemButton>
+                        </ListItemButton> */}
+
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}
@@ -290,7 +300,7 @@ const ProfileSection = () => {
                           <ListItemIcon>
                             <IconLogout stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Logout</Typography>} />
+                          <ListItemText primary={<Typography variant="body2">Cerrar Session</Typography>} />
                         </ListItemButton>
                       </List>
                     </Box>

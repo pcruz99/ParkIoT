@@ -12,7 +12,7 @@ class LogoutViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     def create(self, request, *args, **kwargs):
         user = request.user
 
-        session = ActiveSession.objects.get(user=user)
+        session = ActiveSession.objects.get(user=user)        
         session.delete()
 
         return Response(

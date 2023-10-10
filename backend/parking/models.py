@@ -1,13 +1,66 @@
+from django.utils import timezone
 from django.db import models
 from api.user.models import User
+
+from scripts.feriados import es_feriado
+
+TIPO_CHOICES = (
+    ('carro', 'carro'),
+    ('moto', 'moto')
+)
 
 
 class Vehicle(models.Model):
     brand = models.CharField(max_length=45, verbose_name="marca")
     model = models.CharField(max_length=45, verbose_name="modelo")
     color = models.CharField(max_length=45)
-    tipo = models.CharField(max_length=45)
+    tipo = models.CharField(max_length=45, choices=TIPO_CHOICES)
     placa = models.CharField(max_length=45, unique=True)
-    year = models.IntegerField(verbose_name="Año del Vehiculo")
+    year = models.IntegerField(verbose_name="año del vehiculo")
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="dueño")
+        User, on_delete=models.CASCADE, verbose_name="dueño", related_name='vehicles')
+
+
+class Space(models.Model):
+    number = models.IntegerField(verbose_name="numero", unique=True)
+    location = models.CharField(max_length=45, verbose_name="ubicacion")
+    # *This state is equal to free or not free os the parking
+    # *true is equivalent of free and false of not free.
+    state = models.BooleanField(verbose_name="estado")
+    sensor = models.CharField(
+        max_length=45, verbose_name="numero sensor", unique=True)
+    tipo = models.CharField(max_length=45, choices=TIPO_CHOICES)
+
+
+class Register(models.Model):
+    time_entry = models.TimeField(auto_now_add=True)
+    time_departure = models.TimeField(blank=True, null=True)
+    date = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="usuario", related_name='users')
+    vehicle = models.ForeignKey(
+        Vehicle, on_delete=models.CASCADE, verbose_name="vehiculo", related_name='vehicles')
+
+
+class RegisterTotalDay(models.Model):
+    date = models.DateField(auto_now_add=True)
+    part_of_day = models.CharField(max_length=3)
+    is_holiday = models.BooleanField(default=es_feriado(timezone.now().date()))
+    is_weekend = models.BooleanField(
+        default=True if timezone.now().weekday() >= 5 else False)
+
+    is_promotionday = models.BooleanField(default=False)
+    number_vehicles = models.IntegerField(verbose_name="cantidad de vehiculos")
+    temperature = models.IntegerField(default=0, verbose_name="temperatura de la ciudad")
+    # temperature = models.FloatField()
+
+
+class PromotionDay(models.Model):
+    name = models.CharField(max_length=45)
+    date = models.DateField()
+    description = models.CharField(max_length=100)
+
+    def today_is_promotionday(self):
+        return self.date == timezone.now().date()
+    
