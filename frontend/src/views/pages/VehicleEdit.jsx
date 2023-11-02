@@ -1,12 +1,15 @@
 //react
 import { useState } from 'react';
 //react-router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 //redux
 import { useSelector } from 'react-redux';
 
 //axios
 import axios from 'axios';
+
+//custom-axios
+// import caxios from '../../scripts/customAxios.js'
 
 //formik
 import { Formik } from 'formik';
@@ -22,12 +25,14 @@ import { listColorV, listTypesV, listBrandVCarro, listBrandVMoto } from 'static-
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import GeneralBack from 'components/GeneralBack';
 
-const VehicleCreate = () => {
+const VehicleEdit = () => {
   const anioActual = new Date().getFullYear();
 
   const [listBrandV, setListBrandV] = useState([]);
   const account = useSelector((state) => state.account);
   const navigate = useNavigate();
+  const { id } = useParams();
+  console.log(id);
 
   const handleTipo = (e) => {
     e.target.value === 'carro' ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
@@ -35,7 +40,7 @@ const VehicleCreate = () => {
 
   return (
     <>
-      <GeneralBack title="Registrar Vehiculo">
+      <GeneralBack title="Editar Vehiculo">
         <Box textAlign={'end'} sx={{ margin: 2 }}>
           <Button
             variant="outlined"
@@ -62,33 +67,35 @@ const VehicleCreate = () => {
             model: Yup.string().max(255, 'El maximo es: 255').required('Se requiere el Modelo del Vehiculo'),
             year: Yup.number()
               .min(1500, 'El año minimo es: 1500')
-              .max(anioActual, `El año maximo es: ${anioActual}`)
+              .max(anioActual, `El año maximo es: ${anioActual+1}`)
               .required('Se requiere el Año del Vehiculo'),
             placa: Yup.string()
               .min(6, 'Minimo de caracateres es: 6')
               .max(7, 'Maximo de caracteres es: 7')
               .required('Se requiere la Placa del Vehiculo')
           })}
-          onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          // onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          onSubmit={async (values) => {
             await axios
               .post(`${configData.API_SERVER}/parking/vehicle/`, values, {
                 headers: { Authorization: `${account.token}` }
               })
-              .then((response) => {
-                if (response.status === 201) {
-                  setSubmitting(true);
-                  setStatus({ success: true });
-                  navigate('/vehicle/show');
-                } else {
-                  // setStatus({ success: false });
-                  // setErrors({ submit: response.data });
-                  // setSubmitting(false);
-                }
+              .then(() => {
+                // if (response.status === 201) {
+                //   setSubmitting(true);
+                //   setStatus({ success: true });
+                //   navigate('/vehicle/show');
+                // } else {
+                //   console.log('hola');
+                //   // setStatus({ success: false });
+                //   // setErrors({ submit: response.data });
+                //   // setSubmitting(false);
+                // }
               })
-              .catch((error) => {
-                setErrors({ submit: { placa: error.response.data.placa[0] } });
-                setStatus({ success: false });
-                setSubmitting(false);
+              .catch(() => {
+                // setErrors({ submit: { placa: error.response.data.placa[0] } });
+                // setStatus({ success: false });
+                // setSubmitting(false);
               });
           }}
         >
@@ -114,14 +121,12 @@ const VehicleCreate = () => {
                     helperText="Elija el tipo de Vehiculo"
                     variant="outlined"
                     // defaultValue={''}
-                    // value={values.tipo ? values.tipo : 'carro'}
                     value={values.tipo}
                     onChange={(e) => {
                       handleChange(e);
                       handleTipo(e);
                       values.tipo = e.target.value;
                     }}
-                    // onLoad={console.log('hola')}
                     select
                     required
                   >
@@ -280,7 +285,7 @@ const VehicleCreate = () => {
                 <Grid item sm={12}>
                   <AnimateButton>
                     <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
-                      Agregar Vehículo
+                      Modificar Vehículo
                     </Button>
                   </AnimateButton>
                 </Grid>
@@ -293,4 +298,4 @@ const VehicleCreate = () => {
   );
 };
 
-export default VehicleCreate;
+export default VehicleEdit;

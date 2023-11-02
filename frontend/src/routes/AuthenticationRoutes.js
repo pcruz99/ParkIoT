@@ -8,7 +8,7 @@ import MinimalLayout from 'layout/MinimalLayout';
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
 
-import { ProtectedRoute } from 'components/ProtectedRoute';
+import { ProtectedRoute } from 'components/Route/ProtectedRoute';
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 const AuthenticationRoutes = (account) => {

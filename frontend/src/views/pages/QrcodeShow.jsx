@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 // import MainCard from 'ui-component/cards/MainCard';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 // import { Typography } from '@mui/material'
 
 import QrcodeCard from 'components/QrcodeCard';
@@ -41,6 +41,12 @@ const QrcodeShow = () => {
       <GeneralBack title="Codigo QR">
         <Box textAlign={'center'}>
           <QrcodeCard qrcode={qrcode} />
+        </Box>
+        <Box textAlign={'left'} sx={{ margin: 4 }}>
+          <Typography variant="h3">Como usar:</Typography>
+          <Typography variant="body1">
+            Presente el codigo QR al guardia cuando ingrese al estacionamiento para que pueda ser identificado.
+          </Typography>
         </Box>
       </GeneralBack>
     </>

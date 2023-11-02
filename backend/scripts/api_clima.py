@@ -19,6 +19,7 @@ def get_temperature(date: str) -> dict:
         # url = f'https://api.meteomatics.com/2023-10-10T00:00:00Z/t_2m:C,precip_24h:mm,wind_speed_10m:ms/0.2531,79.1754/json'
         url = 'https://api.meteomatics.com/{0}T00:00:00Z/t_2m:C/{1},{2}/json'.format(
             date, LATITUDE, LONGITUDE)
+        print(url)
         response = requests.get(url, auth=HTTPBasicAuth(API_USER, API_PASS))
         if response.ok:
             data = {"temp": response.json(

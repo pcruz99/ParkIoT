@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from api.user.models import User
 from api.user.serializers import UserSerializer
-from parking.serializers import VehicleSerializer, SpaceSerializer, RegisterSerializer, RegisterTotalDaySerializer
+from parking.serializers import VehicleSerializer, SpaceSerializer, RegisterSerializer, RegisterTotalDaySerializer,RegisterFilteredSerializer
 from parking.models import Vehicle, Space, Register, RegisterTotalDay
 
 from scripts.partofday import get_part_of_day
@@ -27,7 +27,7 @@ class VehicleViewList(APIView):
 
     def get(self, request, format=None):
         user = self.request.user
-        vehicles = user.vehicles.all()
+        vehicles = user.vehicles.all()        
         # vehicles = Vehicle.objects.filter(owner=user)
         serilizer = VehicleSerializer(vehicles, many=True)
         return Response(serilizer.data, status=HTTP_200_OK)
@@ -50,9 +50,16 @@ class VehicleViewDetail(APIView):
         except Vehicle.DoesNotExist:
             return Http404
 
+    def put(self, request, pk, format=None):
+        vehicle = self.get_object(pk)
+        
+    
+    
     def delete(self, request, pk, format=None):
         vehicle = self.get_object(pk)
-        vehicle.delete()
+        # vehicle.delete()   
+        vehicle.owner = None
+        vehicle.save(update_fields=['owner'])
         return Response(status=HTTP_204_NO_CONTENT)
 
 
@@ -80,7 +87,7 @@ class SpaceViewDetail(mixins.UpdateModelMixin,
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def patch(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         self.partial_update(request, *args, **kwargs)
         return Response({"success": True}, status=HTTP_200_OK)
 
@@ -107,23 +114,45 @@ class RegisterViewFiltered(APIView):
                 vehicle = Vehicle.objects.get(
                     placa=str(request.GET.get('placa')))
             except Vehicle.DoesNotExist:
-                pass
+                return Response(status=HTTP_400_BAD_REQUEST)
             registers = Register.objects.filter(date=date, vehicle=vehicle)
         else:
             registers = Register.objects.filter(date=date)
 
-        r = RegisterSerializer(registers, many=True)
+        r = RegisterFilteredSerializer(registers, many=True)
+        if not r.data:
+            return Response(status=HTTP_400_BAD_REQUEST)
         return Response(r.data, status=HTTP_200_OK)
 
 
-class RegistertTotalDayViewList(mixins.ListModelMixin,
-                                generics.GenericAPIView):
-    queryset = RegisterTotalDay.objects.all()
-    serializer_class = RegisterTotalDaySerializer
+# class RegistertTotalDayViewList(mixins.ListModelMixin,
+#                                 generics.GenericAPIView):
+#     queryset = RegisterTotalDay.objects.all()
+#     serializer_class = RegisterTotalDaySerializer
+#     permission_classes = [AllowAny, ]
+
+#     def get(self, request, *args, **kwargs):
+#         print(timezone.now().date().month)
+#         return self.list(request, *args, **kwargs)
+
+class RegistertTotalDayViewList(APIView):
     permission_classes = [AllowAny, ]
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    def get(self, request, format=None):
+        res = []
+        total = 0
+        sql = f"""SELECT id, part_of_day, MONTH(date) as Month, SUM(number_vehicles) AS Total 
+            FROM prk_registertotalday     
+            WHERE YEAR(date)={timezone.localtime(timezone.now()).date().year}        
+            GROUP BY part_of_day, MONTH(date) ORDER BY Month ASC"""
+
+        for i in RegisterTotalDay.objects.raw(sql):
+            total += i.Total
+            res.append({'month': i.Month, 'part_of_day': str(
+                i.part_of_day), 'total': int(i.Total)})
+        return Response({"data": {
+            "registers": res, "total_vehicles": total
+        }}, status=HTTP_200_OK)
 
 
 class CheckView(APIView):
@@ -134,12 +163,13 @@ class CheckView(APIView):
             user = User.objects.get(pk=uuid)
         except User.DoesNotExist:
             return Response(status=HTTP_400_BAD_REQUEST)
-
         u_serializer = UserSerializer(user)
 
         register = Register.objects.filter(
-            user=user, date=timezone.now().date()).last()
+            user=user, date=timezone.localtime(timezone.now()).date()).last()
 
+        #Me valida si no existe un registro o si algun registro ya no esta activo
+        #para no entregar informacion al serializador
         if register == None or not register.is_active:
             r_serilizer = None
         else:
@@ -219,7 +249,7 @@ class PrognosisMLAlgView(APIView):
             ).date()
             if not request.GET.get('pod'):
                 raise ValueError()
-            pod = str(request.GET.get('pod'))
+            pod = str(request.GET.get('pod')).upper()
         except ValueError:
             return Response({"success": False, "msg": "Faltan datos del Query Params", "error": "dataFault"},
                             status=HTTP_400_BAD_REQUEST)

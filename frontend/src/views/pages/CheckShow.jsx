@@ -19,6 +19,7 @@ import VehicleCard from 'components/VehicleCard';
 import MessageCard from 'components/MessageCard.jsx';
 
 const CheckShow = () => {
+  //TODO: Este useSelector es para definir la cuenta del guardia y que sea parte del registro
   // const account = useSelector((state) => state.account);
   const cax = caxios();
   const { uuid } = useParams();
@@ -38,12 +39,17 @@ const CheckShow = () => {
     await cax
       .get(`/parking/check/${uuid}`)
       .then((response) => {
-        setUser(response.data.user);
-        setVehicles(response.data.user.vehicles);
-        setRegister(response.data.register);
+        if (response.status == 200) {
+          setUser(response.data.user);
+          setVehicles(response.data.user.vehicles);
+          setRegister(response.data.register);
+        }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        // console.log(error);
+        setMsg('No hay datos disponibles');
+        setType('warning');
+        setOpen(true);
       });
   };
 
@@ -77,7 +83,9 @@ const CheckShow = () => {
           }
         })
         .catch((error) => {
-          console.log(error);
+          setMsg(error?.response.data.msg[0]);
+          setType('error');
+          setOpen(true);
         });
     } else {
       setMsg('Necesita elegir un Vehiculo Primero');

@@ -1,7 +1,7 @@
 from api.user.serializers import UserSerializer, UserQrcodeSerializer
 from api.user.models import User
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework import mixins
@@ -12,9 +12,7 @@ class UserViewSet(
 ):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #!: OJO con este permiso, no esta bien definido
-    # permission_classes = (IsAuthenticated,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     error_message = {"success": False, "msg": "Error updating user"}
     

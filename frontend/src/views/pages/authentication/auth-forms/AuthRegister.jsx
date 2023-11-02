@@ -94,8 +94,8 @@ const FirebaseRegister = ({ ...others }) => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          email: Yup.string().email('Must be a valid email').max(255).required('El correo es requerido'),
+          password: Yup.string().max(255).required('La contrasena es requerida')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           if (checked) {
@@ -135,9 +135,9 @@ const FirebaseRegister = ({ ...others }) => {
                 setSubmitting(false);
               }
             }
-          }else{
-            setErrors({submit: 'Debe Aceptar los Términos y Condiciones'})
-            setSubmitting(false)
+          } else {
+            setErrors({ submit: 'Debe Aceptar los Términos y Condiciones' });
+            setSubmitting(false);
           }
         }}
       >
@@ -173,8 +173,21 @@ const FirebaseRegister = ({ ...others }) => {
                   }}
                   sx={{ ...theme.typography.customInput }}
                 />
-              </Grid>
+              </Grid>             
             </Grid>
+            <TextField
+                  fullWidth
+                  label="Cedula"
+                  margin="normal"
+                  name="cedula"
+                  type="text"
+                  // value={values.last_name}
+                  // onChange={(e) => {
+                  //   handleChange(e);
+                  //   values.last_name = e.target.value;
+                  // }}
+                  sx={{ ...theme.typography.customInput }}
+                />
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-register">Correo Electronico</InputLabel>
               <OutlinedInput
@@ -186,11 +199,12 @@ const FirebaseRegister = ({ ...others }) => {
                 onChange={handleChange}
                 inputProps={{}}
               />
-              {touched.email && errors.email && (
+              {touched.email && errors.email && (                
                 <FormHelperText error id="standard-weight-helper-text--register">
                   {errors.email}
                 </FormHelperText>
               )}
+              {console.log(errors.email)}
             </FormControl>
 
             <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
@@ -263,9 +277,7 @@ const FirebaseRegister = ({ ...others }) => {
               </Grid>
             </Grid>
 
-            {
-              console.log(touched)
-            }
+            {console.log(touched)}
 
             {errors.submit && (
               <Box sx={{ mt: 3 }}>

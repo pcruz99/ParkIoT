@@ -23,13 +23,15 @@ const CheckShow = Loadable(lazy(() => import('views/pages/CheckShow')));
 
 const VehicleShow = Loadable(lazy(() => import('views/pages/VehicleShow')));
 const VehicleCreate = Loadable(lazy(() => import('views/pages/VehicleCreate')));
+const VehicleEdit = Loadable(lazy(()=> import('views/pages/VehicleEdit')));
 
 const ParkingShow = Loadable(lazy(() => import('views/dashboard/ParkingShow')));
 
 const PrognosisShow = Loadable(lazy(() => import('views/reports/PrognosisShow')));
-const ReportShow = Loadable(lazy(() => import('views/reports/ReportShow')));
+const GeneralReportShow = Loadable(lazy(() => import('views/reports/GeneralReportShow')));
+const ESResportShow = Loadable(lazy(() => import('views/reports/ESReportShow')));
 
-import { ProtectedRoute } from 'components/ProtectedRoute';
+import { ProtectedRoute } from 'components/Route/ProtectedRoute';
 
 // ==============================|| MAIN ROUTING ||============================== //
 const MainRoutes = (account) => {
@@ -130,19 +132,27 @@ const MainRoutes = (account) => {
               {
                 path: 'create',
                 element: <VehicleCreate />
+              },
+              {
+                path: 'edit/:id',
+                element: <VehicleEdit />
               }
             ]
+          },
+          {
+            path: 'prognosis',
+            element: <PrognosisShow />
           },
           {
             path: 'report',
             children: [
               {
-                path: 'prognosis',
-                element: <PrognosisShow />
+                path: 'general',
+                element: <GeneralReportShow />
               },
               {
-                path: 'show',
-                element: <ReportShow />
+                path: 'es',
+                element: <ESResportShow />
               }
             ]
           }

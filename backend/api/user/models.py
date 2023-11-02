@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
 )
 
 from scripts.qr import create_qrcode
+from core.settings import URl_FRONTEND
 
 ROLE_CHOICES = (
     ('client', 'client'),
@@ -25,7 +26,7 @@ class UserManager(BaseUserManager):
             raise TypeError("Users must have an email.")
 
         # Identifieds like qrcode in base64 and uuid pure
-        ids = create_qrcode(username, 'http://127.0.0.1:3000')
+        ids = create_qrcode(username, URl_FRONTEND)
 
         user = self.model(username=username, email=self.normalize_email(email),
                           first_name=first_name, last_name=last_name,

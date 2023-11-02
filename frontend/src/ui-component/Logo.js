@@ -11,7 +11,7 @@ import ImagenIcon from 'assets/images/logo-color.png';
 
 // ==============================|| LOGO SVG ||============================== //
 
-const Logo = () => {
+const Logo = ({width}) => {
   // const theme = useTheme();
 
   return (
@@ -21,7 +21,7 @@ const Logo = () => {
      * <img src={logo} alt="Berry" width="100" />
      *
      */
-    <img src={ImagenIcon} alt="Berry" width="75" />   
+    <img src={ImagenIcon} alt="ParkIoT" width={width} />   
   );
 };
 

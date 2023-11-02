@@ -6,12 +6,15 @@ import { SET_VEHICLES } from 'store/actions.js';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
+//react-router
+import { useNavigate } from 'react-router';
+
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-// import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from '@mui/icons-material/Edit';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -21,6 +24,7 @@ import { capitalizerCustom } from 'scripts/cambiarSize';
 // assets
 import { DirectionsCar, TwoWheeler } from '@mui/icons-material';
 
+//custom-axios
 import caxios from '../scripts/customAxios.js';
 
 const CardWrapper = styled(MainCard)(({ theme, ischecked }) => ({
@@ -63,6 +67,7 @@ const CardWrapper = styled(MainCard)(({ theme, ischecked }) => ({
 
 const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const account = useSelector((state) => state.account);
   const { vehicles } = useSelector((state) => state.vehicles);
@@ -71,10 +76,15 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
   const [anchorEl, setAnchorEl] = useState(null);
 
   //! Esto no es definitivo, hay que mejorar la funcionliad
-  const callAPI = async (tokenAccount) => {
-    const cax = caxios(tokenAccount);
+  const callAPI = async () => {
+    const cax = caxios(account?.token);
     await cax.delete(`/parking/vehicle/${vehicle.id}`).then((response) => {
-      console.log(response.status);
+      if(response.status == 204){
+        dispatcher({
+          type: SET_VEHICLES,
+          payload: vehicles.filter((v) => v.id != vehicle.id)
+        });
+      }
     });
   };
 
@@ -93,12 +103,11 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
   };
 
   const handleDeleteVehicle = () => {
-    callAPI(account?.token).then(() => {
-      dispatcher({
-        type: SET_VEHICLES,
-        payload: vehicles.filter((v) => v.id != vehicle.id)
-      });
-    });
+    callAPI();
+  };
+
+  const hanldeEditVehicle = () => {
+    navigate(`/vehicle/edit/${vehicle.id}`);
   };
 
   return (
@@ -162,10 +171,10 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
                           horizontal: 'right'
                         }}
                       >
-                        {/* <MenuItem onClick={handleClose}>
-                        <EditIcon sx={{ mr: 1.75 }} />
-                        Editar
-                      </MenuItem> */}
+                        <MenuItem onClick={hanldeEditVehicle}>
+                          <EditIcon sx={{ mr: 1.75 }} />
+                          Editar
+                        </MenuItem>
 
                         <MenuItem onClick={handleDeleteVehicle}>
                           <DeleteIcon sx={{ mr: 1.75 }} />

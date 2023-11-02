@@ -81,7 +81,7 @@ LinearProgressWithLabel.propTypes = {
 
 // ==============================|| SIDEBAR MENU Card ||============================== //
 
-const MenuCard = () => {
+const MenuCard = ({title}) => {
   const theme = useTheme();
 
   return (
@@ -109,14 +109,14 @@ const MenuCard = () => {
               sx={{ mt: 0 }}
               primary={
                 <Typography variant="subtitle1" sx={{ color: theme.palette.primary[800] }}>
-                  Get Extra Space
+                  {title}
                 </Typography>
               }
-              secondary={<Typography variant="caption"> 28/23 GB</Typography>}
+              secondary={<Typography variant="caption"> Alta/Baja</Typography>}
             />
           </ListItem>
         </List>
-        <LinearProgressWithLabel value={80} />
+        {/* <LinearProgressWithLabel value={30} /> */}
       </CardContent>
     </CardStyle>
   );

@@ -18,7 +18,7 @@ class Vehicle(models.Model):
     placa = models.CharField(max_length=45, unique=True)
     year = models.IntegerField(verbose_name="año del vehiculo")
     owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="dueño", related_name='vehicles')
+        User, on_delete=models.CASCADE, verbose_name="dueño", related_name='vehicles', null=True, blank=True)
 
 
 class Space(models.Model):
@@ -37,23 +37,25 @@ class Register(models.Model):
     time_departure = models.TimeField(blank=True, null=True)
     date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    #TODO: Definir este campo para que acepte valores nulos
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="usuario", related_name='users')
     vehicle = models.ForeignKey(
         Vehicle, on_delete=models.CASCADE, verbose_name="vehiculo", related_name='vehicles')
-
+    #TODO: Si es necesrio, agregar la informacion del guardia que realizo el registro
+    # guard = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class RegisterTotalDay(models.Model):
     date = models.DateField(auto_now_add=True)
     part_of_day = models.CharField(max_length=3)
-    is_holiday = models.BooleanField(default=es_feriado(timezone.now().date()))
+    is_holiday = models.BooleanField(default=es_feriado(timezone.localtime(timezone.now()).date()))
     is_weekend = models.BooleanField(
-        default=True if timezone.now().weekday() >= 5 else False)
+        default=True if timezone.localtime(timezone.now()).weekday() >= 5 else False)
 
     is_promotionday = models.BooleanField(default=False)
     number_vehicles = models.IntegerField(verbose_name="cantidad de vehiculos")
-    temperature = models.IntegerField(default=0, verbose_name="temperatura de la ciudad")
-    # temperature = models.FloatField()
+    # temperature = models.IntegerField(default=0, verbose_name="temperatura de la ciudad")
+    temperature = models.FloatField(default=0)
 
 
 class PromotionDay(models.Model):

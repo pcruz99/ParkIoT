@@ -1,5 +1,7 @@
 from datetime import date
 import pandas as pd
+
+#sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn import preprocessing
@@ -81,7 +83,7 @@ def prognosis_model(date: date, pod: str):
     
     temp = get_temperature(str(date))
     #TODO: FIX: Arreglar el mensaje de error donde solo se puede hacer el pedido de temperatura
-    #TODO: para 10 dias adelantes y 1 dia para atras en la cuenta gratutita
+    #para 10 dias adelantes y 1 dia para atras en la cuenta gratutita
     if not temp['success'] and temp['error'] == 'max10days':
         return {"success": False, "msg": temp["msg"], "error": "max10days"}
         
@@ -93,6 +95,8 @@ def prognosis_model(date: date, pod: str):
     try:
         data = LR.predict(
             [[is_holiday, is_weekend, is_promotionday, part_of_day, temperature]])
+        # data = LR.predict(
+        #     [[0, 0, 0, 3, 1]])
         return {"success": True, "msg": "Prediccion Realizada con Exito", "data": data[0]}
     except Exception:
         return {"success": False, "msg": "Problema en la prediccion", "error": "errorPredict"}

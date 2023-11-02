@@ -1,12 +1,16 @@
+from django.utils import timezone
+
 from rest_framework import serializers, exceptions
 from rest_framework.validators import UniqueValidator
 from parking.models import Vehicle, Space, Register, RegisterTotalDay
 
 
 class VehicleSerializer(serializers.ModelSerializer):
-    placa = serializers.CharField(validators=[
+    placa = serializers.CharField(
+        validators=[
         UniqueValidator(
-            queryset=Vehicle.objects.all(),
+            # queryset=Vehicle.objects.all(),
+            queryset=Vehicle.objects.filter(owner = not None),
             message="El Vehiculo ya se encuentra Registrado"
         )]
     )
@@ -18,7 +22,13 @@ class VehicleSerializer(serializers.ModelSerializer):
         read_only_field = ["id"]
 
     def create(self, validate_data):
-        return Vehicle.objects.create(**validate_data)
+        try: 
+            v = Vehicle.objects.get(placa = validate_data['placa'], owner = None)
+            v.owner = validate_data['owner']
+            v.save(update_fields=['owner'])
+            return v
+        except Vehicle.DoesNotExist:            
+            return Vehicle.objects.create(**validate_data)
 
 
 class SpaceSerializer(serializers.ModelSerializer):
@@ -31,16 +41,28 @@ class SpaceSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     time_entry = serializers.TimeField(read_only=True)
     date = serializers.DateField(read_only=True)
-    # user = serializers.ReadOnlyField(source = 'user.username')
+
     class Meta:
         model = Register
         fields = '__all__'
 
     def validate(self, attrs):
-        registers = Register.objects.filter(user=attrs['user'], is_active=True)
-        if registers:                                
-                raise exceptions.ValidationError({"success": False, "msg": "Ya existe un registro activo"})
+        registers = Register.objects.filter(
+            user=attrs['user'], is_active=True, date=timezone.localtime(timezone.now()).date())
+        if registers:
+            raise exceptions.ValidationError(
+                {"success": False, "msg": "Ya existe un registro activo"})
         return super().validate(attrs)
+
+
+class RegisterFilteredSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.email')
+    vehicle = serializers.ReadOnlyField(source='vehicle.placa')
+
+    class Meta:
+        model = Register
+        fields = '__all__'
+
 
 class RegisterTotalDaySerializer(serializers.ModelSerializer):
     class Meta:

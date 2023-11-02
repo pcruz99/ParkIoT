@@ -20,14 +20,14 @@ const dashboard = {
       icon: icons.LocalParking,
       breadcrumbs: false
     },
-    {
-      id: 'default',
-      title: 'Dashboard',
-      type: 'item',
-      url: '/dashboard/default',
-      icon: icons.IconDashboard,
-      breadcrumbs: false
-    }
+    // {
+    //   id: 'default',
+    //   title: 'Dashboard',
+    //   type: 'item',
+    //   url: '/dashboard/default',
+    //   icon: icons.IconDashboard,
+    //   breadcrumbs: false
+    // }
   ]
 };
 

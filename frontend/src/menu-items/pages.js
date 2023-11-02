@@ -12,15 +12,15 @@ const icons = {
 
 const pages = {
   id: 'pages',
-  // title: 'Pages',
+  title: 'Analisis',
   // caption: 'Pages Caption',
   type: 'group',
   children: [
     {
       id: 'prognosis',
-      title: 'Prognostico IA',
+      title: 'Prognóstico IA',
       type: 'item',
-      url: '/report/prognosis',
+      url: '/prognosis/',
       icon: icons.SmartToy
       // target: true
     },
@@ -34,7 +34,7 @@ const pages = {
           id: 'general',
           title: 'General',
           type: 'item',
-          url: '/',
+          url: '/report/general/'
           // icon: icons.SmartToy
           // target: true
         },
@@ -42,7 +42,7 @@ const pages = {
           id: 'es',
           title: 'E/S de Vehiculos',
           type: 'item',
-          url: '/report/show',
+          url: '/report/es/'
           // icon: icons.ImportExport
           // target: true
         }
