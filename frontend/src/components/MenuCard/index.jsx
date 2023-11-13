@@ -20,16 +20,17 @@ import {
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 
 // styles
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
+const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({  
+  height: 10,    
   borderRadius: 30,
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor: '#fff'
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
-    backgroundColor: theme.palette.primary.main
+    backgroundColor: value > 50 ?theme.palette.success.dark : theme.palette.error.dark
   }
+
 }));
 
 const CardStyle = styled(Card)(({ theme }) => ({
@@ -60,7 +61,7 @@ function LinearProgressWithLabel({ value, ...others }) {
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography variant="h6" sx={{ color: theme.palette.primary[800] }}>
-              Progress
+              Cantidad 
             </Typography>
           </Grid>
           <Grid item>
@@ -116,7 +117,7 @@ const MenuCard = ({title}) => {
             />
           </ListItem>
         </List>
-        {/* <LinearProgressWithLabel value={30} /> */}
+        <LinearProgressWithLabel value={51} />
       </CardContent>
     </CardStyle>
   );

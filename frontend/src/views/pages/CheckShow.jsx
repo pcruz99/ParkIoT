@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 //redux
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 //MUI
 import { Box, Grid, Typography, Button } from '@mui/material';
@@ -20,8 +20,8 @@ import MessageCard from 'components/MessageCard.jsx';
 
 const CheckShow = () => {
   //TODO: Este useSelector es para definir la cuenta del guardia y que sea parte del registro
-  // const account = useSelector((state) => state.account);
-  const cax = caxios();
+  const account = useSelector((state) => state.account);
+  const cax = caxios(account.token);
   const { uuid } = useParams();
 
   const [user, setUser] = useState({});
@@ -72,7 +72,8 @@ const CheckShow = () => {
           '/parking/register/entry/',
           {
             user: user.id,
-            vehicle: vehicleId
+            vehicle: vehicleId,
+            guard: account.user._id
           },
           { timeout: 5000 }
         )
@@ -124,24 +125,25 @@ const CheckShow = () => {
                 <b>Apellido:</b> {user.last_name}
               </Typography>
               <Typography variant="body1">
+                <b>Cedula:</b>
+              </Typography>
+              <Typography variant="body1">
                 <b>Correo:</b> {user.email}
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} lg={12}>
             {vehicles.map((data) => (
-              <Grid item lg={4} md={6} sm={6} xs={12} key={data.id}>
+              <Grid item lg={4} md={4} sm={6} xs={12} key={data.id}>
                 <VehicleCard isLoading={false} vehicle={data} isForCheck={true} setVehicleId={setVehicleId} vehicleId={vehicleId} />
               </Grid>
             ))}
-          </Grid>
           <Grid item xs={6}>
             <AnimateButton>
               <Button
                 disableElevation
                 disabled={register != null ? true : false}
                 variant="contained"
-                type="submit"
+                // type="submit"
                 size="large"
                 color="success"
                 onClick={registerEntry}
@@ -156,7 +158,7 @@ const CheckShow = () => {
                 disableElevation
                 disabled={register != null ? false : true}
                 variant="contained"
-                type="submit"
+                // type="submit"
                 size="large"
                 color="error"
                 onClick={registerDeparture}

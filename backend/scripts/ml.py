@@ -1,7 +1,7 @@
 from datetime import date
 import pandas as pd
 
-#sklearn
+# sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn import preprocessing
@@ -15,6 +15,9 @@ LR = LogisticRegression(random_state=0)
 label_encoder = preprocessing.LabelEncoder()
 ML_SCORE = None
 
+
+def get_ml_score():
+    return ML_SCORE
 
 def teach_model(queryset):
     global LR
@@ -62,13 +65,14 @@ def teach_model(queryset):
     ML_SCORE = LR.score(X_test.values, y_test.values)
     return ML_SCORE
 
+
 def prognosis_model(date: date, pod: str):
     """
     @param: date The value is de date selected
     @param: pod The value is the part of day (values MAD, MAN, TAR, NOC)
     """
-    global LR 
-    
+    global LR
+
     if ML_SCORE == None:
         return {"success": False, "msg": "Modelo no Entrenado", "error": "mlNotTeach"}
 
@@ -80,13 +84,13 @@ def prognosis_model(date: date, pod: str):
     is_holiday = es_feriado(date)
     is_weekend = True if date.weekday() >= 5 else False
     is_promotionday = es_promotionday(date)
-    
+
     temp = get_temperature(str(date))
-    #TODO: FIX: Arreglar el mensaje de error donde solo se puede hacer el pedido de temperatura
-    #para 10 dias adelantes y 1 dia para atras en la cuenta gratutita
+    # TODO: FIX: Arreglar el mensaje de error donde solo se puede hacer el pedido de temperatura
+    # para 10 dias adelantes y 1 dia para atras en la cuenta gratutita
     if not temp['success'] and temp['error'] == 'max10days':
-        return {"success": False, "msg": temp["msg"], "error": "max10days"}
-        
+        return {"success": False, "msg": 'Predicciones de mas de 10 dias no se pueden realizar', "error": "max10days"}
+
     #!: En caso de que la temperatura no se obtenga de la API Meteomatics
     #!: mantendre el resultado de 0 como un string para que salte la excepcion de la prediccion
     #!: para saber que el valor de la temperatura no se esta obteniendo de la API.

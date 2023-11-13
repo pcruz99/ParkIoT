@@ -67,7 +67,7 @@ const VehicleEdit = () => {
             model: Yup.string().max(255, 'El maximo es: 255').required('Se requiere el Modelo del Vehiculo'),
             year: Yup.number()
               .min(1500, 'El año minimo es: 1500')
-              .max(anioActual, `El año maximo es: ${anioActual+1}`)
+              .max(anioActual, `El año maximo es: ${anioActual + 1}`)
               .required('Se requiere el Año del Vehiculo'),
             placa: Yup.string()
               .min(6, 'Minimo de caracateres es: 6')
@@ -282,12 +282,14 @@ const VehicleEdit = () => {
                   </Box>
                 )}
 
-                <Grid item sm={12}>
-                  <AnimateButton>
-                    <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
-                      Modificar Vehículo
-                    </Button>
-                  </AnimateButton>
+                <Grid item lg={12} xs={12} md={12}>
+                  <Box display="flex" justifyContent="center" alignContent="center">
+                    <AnimateButton>
+                      <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
+                        Editar Vehículo
+                      </Button>
+                    </AnimateButton>
+                  </Box>
                 </Grid>
               </Grid>
             </Box>

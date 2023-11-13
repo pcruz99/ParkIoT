@@ -2,7 +2,7 @@ from django.urls import path
 from parking.views import (VehicleViewList, VehicleViewDetail, SpaceViewList,
                            SpaceViewDetail, CheckView, RegisterEntryView, RegisterDepartureView,
                            RegisterViewFiltered, RegistertTotalDayViewList, 
-                           TeachMLAlgView, PrognosisMLAlgView
+                           TeachMLAlgView, PrognosisMLAlgView, StateMLALgView
                            )
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
          RegisterDepartureView.as_view(), name='register-departure'),
     path(r'registertotalday/', RegistertTotalDayViewList.as_view(),
          name='registertotalday-list'),
+    path(r'ml/status/', StateMLALgView.as_view(), name='ml-state'),
     path(r'ml/teach/', TeachMLAlgView.as_view(), name='ml-teach'),
     path(r'ml/prognosis/', PrognosisMLAlgView.as_view(), name='ml-prognosis'), #*: ml/prognosis/?year={y}&month={m}&day={d}&pod={p}
 ]

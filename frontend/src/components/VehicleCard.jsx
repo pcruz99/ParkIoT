@@ -79,7 +79,7 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
   const callAPI = async () => {
     const cax = caxios(account?.token);
     await cax.delete(`/parking/vehicle/${vehicle.id}`).then((response) => {
-      if(response.status == 204){
+      if (response.status == 204) {
         dispatcher({
           type: SET_VEHICLES,
           payload: vehicles.filter((v) => v.id != vehicle.id)
@@ -115,100 +115,101 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
       {isLoading ? (
         <SkeletonEarningCard />
       ) : (
-        <CardWrapper border={false} content={false} ischecked={vehicleId === vehicle.id ? 'true' : 'false'}>
-          <Box sx={{ p: 2.25 }}>
-            <Grid container direction="column">
-              <Grid item>
-                <Grid container justifyContent="space-between">
-                  <Grid item>
-                    <Avatar
-                      variant="rounded"
-                      sx={{
-                        ...theme.typography.commonAvatar,
-                        ...theme.typography.largeAvatar,
-                        backgroundColor: theme.palette.secondary[800],
-                        mt: 1
-                      }}
-                      onClick={handleCheckVehicle}
-                    >
-                      {vehicle.tipo === 'carro' ? (
-                        <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
-                      ) : (
-                        <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
-                      )}
-                    </Avatar>
-                  </Grid>
-                  {!isForCheck && (
+        <Box sx={{ cursor:  isForCheck ? 'pointer': 'default' }} onClick={handleCheckVehicle} component="div">
+          <CardWrapper border={false} content={false} ischecked={vehicleId === vehicle.id ? 'true' : 'false'}>
+            <Box sx={{ p: 2.25 }}>
+              <Grid container direction="column">
+                <Grid item>
+                  <Grid container justifyContent="space-between">
                     <Grid item>
                       <Avatar
                         variant="rounded"
                         sx={{
                           ...theme.typography.commonAvatar,
-                          ...theme.typography.mediumAvatar,
-                          backgroundColor: theme.palette.secondary.dark,
-                          color: theme.palette.secondary[200],
-                          zIndex: 1
+                          ...theme.typography.largeAvatar,
+                          backgroundColor: theme.palette.secondary[800],
+                          mt: 1
                         }}
-                        aria-controls="menu-earning-card"
-                        aria-haspopup="true"
-                        onClick={handleClick}
                       >
-                        <MoreHorizIcon fontSize="inherit" />
+                        {vehicle.tipo === 'carro' ? (
+                          <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
+                        ) : (
+                          <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
+                        )}
                       </Avatar>
-                      <Menu
-                        id="menu-earning-card"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                        variant="selectedMenu"
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right'
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right'
-                        }}
-                      >
-                        <MenuItem onClick={hanldeEditVehicle}>
-                          <EditIcon sx={{ mr: 1.75 }} />
-                          Editar
-                        </MenuItem>
-
-                        <MenuItem onClick={handleDeleteVehicle}>
-                          <DeleteIcon sx={{ mr: 1.75 }} />
-                          Eliminar
-                        </MenuItem>
-                      </Menu>
                     </Grid>
-                  )}
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                      {capitalizerCustom(vehicle.brand)} - {capitalizerCustom(vehicle.model)}
-                    </Typography>
+                    {!isForCheck && (
+                      <Grid item>
+                        <Avatar
+                          variant="rounded"
+                          sx={{
+                            ...theme.typography.commonAvatar,
+                            ...theme.typography.mediumAvatar,
+                            backgroundColor: theme.palette.secondary.dark,
+                            color: theme.palette.secondary[200],
+                            zIndex: 1
+                          }}
+                          aria-controls="menu-earning-card"
+                          aria-haspopup="true"
+                          onClick={handleClick}
+                        >
+                          <MoreHorizIcon fontSize="inherit" />
+                        </Avatar>
+                        <Menu
+                          id="menu-earning-card"
+                          anchorEl={anchorEl}
+                          keepMounted
+                          open={Boolean(anchorEl)}
+                          onClose={handleClose}
+                          variant="selectedMenu"
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right'
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right'
+                          }}
+                        >
+                          <MenuItem onClick={hanldeEditVehicle}>
+                            <EditIcon sx={{ mr: 1.75 }} />
+                            Editar
+                          </MenuItem>
+
+                          <MenuItem onClick={handleDeleteVehicle}>
+                            <DeleteIcon sx={{ mr: 1.75 }} />
+                            Eliminar
+                          </MenuItem>
+                        </Menu>
+                      </Grid>
+                    )}
                   </Grid>
-                  <Grid item></Grid>
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item>
+                      <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
+                        {capitalizerCustom(vehicle.brand)} - {capitalizerCustom(vehicle.model)}
+                      </Typography>
+                    </Grid>
+                    <Grid item></Grid>
+                  </Grid>
+                </Grid>
+                <Grid item sx={{ mb: 1.25 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '1rem',
+                      fontWeight: 500,
+                      color: theme.palette.secondary[200]
+                    }}
+                  >
+                    {capitalizerCustom(vehicle.color)} - {vehicle.placa.toUpperCase()}
+                  </Typography>
                 </Grid>
               </Grid>
-              <Grid item sx={{ mb: 1.25 }}>
-                <Typography
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    color: theme.palette.secondary[200]
-                  }}
-                >
-                  {capitalizerCustom(vehicle.color)} - {vehicle.placa.toUpperCase()}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Box>
-        </CardWrapper>
+            </Box>
+          </CardWrapper>
+        </Box>
       )}
     </>
   );

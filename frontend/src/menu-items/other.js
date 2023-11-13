@@ -23,24 +23,6 @@ const other = {
       external: true,
       target: true
     },
-    {
-      id: 'promotions',
-      title: 'Promociones del Comercial Miñaca',
-      type: 'item',
-      url: 'https://www.comercialminaca.com/sale/',
-      icon: icons.DiscountIcon,
-      breadcrumbs: false,
-      external: true,
-      target: true
-    },
-    // {
-    //   id: 'promotions',
-    //   title: 'Promociones del Comercial Miñaca',
-    //   type: 'item',
-    //   url: '/sample-page',
-    //   icon: icons.DiscountIcon,
-    //   breadcrumbs: false
-    // },
     // {
     //   id: 'documentation',
     //   title: 'Documentation',

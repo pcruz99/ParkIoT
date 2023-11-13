@@ -10,7 +10,6 @@ const ParkingShow = () => {
   const account = useSelector((state) => state.account);
   const [spaces, setSpaces] = useState([]);
   const [completed, setCompleted] = useState(false);
-
   useEffect(() => {
     axios
       .get(`${configData.API_SERVER}/parking/space/`, {

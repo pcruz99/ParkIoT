@@ -9,7 +9,7 @@ export default function BasicDatePicker({ setPickDate }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
       {/* <DemoContainer components={['DatePicker']}> */}
-      <DatePicker
+      <DatePicker        
         label="Fecha"
         onChange={(e) => {
           if (e) {
@@ -23,6 +23,7 @@ export default function BasicDatePicker({ setPickDate }) {
             required: true
           }
         }}
+        sx={{width:250, height:80}}
       />
       {/* </DemoContainer> */}
     </LocalizationProvider>

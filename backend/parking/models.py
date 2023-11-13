@@ -11,15 +11,15 @@ TIPO_CHOICES = (
 
 
 class Vehicle(models.Model):
-    brand = models.CharField(max_length=45, verbose_name="marca")
-    model = models.CharField(max_length=45, verbose_name="modelo")
-    color = models.CharField(max_length=45)
-    tipo = models.CharField(max_length=45, choices=TIPO_CHOICES)
+    brand = models.CharField(max_length=45, verbose_name="marca", null=True, blank=True)
+    model = models.CharField(max_length=45, verbose_name="modelo", null=True, blank=True)
+    color = models.CharField(max_length=45, null=True, blank=True)
+    tipo = models.CharField(max_length=45, choices=TIPO_CHOICES, null=True, blank=True)
     placa = models.CharField(max_length=45, unique=True)
-    year = models.IntegerField(verbose_name="año del vehiculo")
+    year = models.IntegerField(verbose_name="año del vehiculo", null=True, blank=True)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="dueño", related_name='vehicles', null=True, blank=True)
-
+    # register_manual = models.BooleanField(default=False)
 
 class Space(models.Model):
     number = models.IntegerField(verbose_name="numero", unique=True)

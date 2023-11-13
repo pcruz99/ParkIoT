@@ -12,14 +12,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from api.user.models import User
 from api.user.serializers import UserSerializer
-from parking.serializers import VehicleSerializer, SpaceSerializer, RegisterSerializer, RegisterTotalDaySerializer,RegisterFilteredSerializer
+from parking.serializers import VehicleSerializer, SpaceSerializer, RegisterSerializer, RegisterTotalDaySerializer, RegisterFilteredSerializer
 from parking.models import Vehicle, Space, Register, RegisterTotalDay
 
 from scripts.partofday import get_part_of_day
 from scripts.promotionalday import es_promotionday
 from scripts.api_clima import get_temperature
 
-from scripts.ml import teach_model, prognosis_model
+from scripts.ml import teach_model, prognosis_model, get_ml_score
 
 
 class VehicleViewList(APIView):
@@ -27,7 +27,7 @@ class VehicleViewList(APIView):
 
     def get(self, request, format=None):
         user = self.request.user
-        vehicles = user.vehicles.all()        
+        vehicles = user.vehicles.all()
         # vehicles = Vehicle.objects.filter(owner=user)
         serilizer = VehicleSerializer(vehicles, many=True)
         return Response(serilizer.data, status=HTTP_200_OK)
@@ -52,16 +52,13 @@ class VehicleViewDetail(APIView):
 
     def put(self, request, pk, format=None):
         vehicle = self.get_object(pk)
-        
-    
-    
+
     def delete(self, request, pk, format=None):
         vehicle = self.get_object(pk)
-        # vehicle.delete()   
+        # vehicle.delete()
         vehicle.owner = None
         vehicle.save(update_fields=['owner'])
         return Response(status=HTTP_204_NO_CONTENT)
-
 
 class SpaceViewList(mixins.ListModelMixin,
                     mixins.CreateModelMixin,
@@ -91,6 +88,10 @@ class SpaceViewDetail(mixins.UpdateModelMixin,
         self.partial_update(request, *args, **kwargs)
         return Response({"success": True}, status=HTTP_200_OK)
 
+
+#=================================================================================================
+#==================================== Registers Zone =============================================
+#=================================================================================================
 
 class RegisterViewFiltered(APIView):
     permission_classes = [AllowAny, ]
@@ -154,9 +155,11 @@ class RegistertTotalDayViewList(APIView):
             "registers": res, "total_vehicles": total
         }}, status=HTTP_200_OK)
 
-
+#=================================================================================================
+#============================= Vehicle Register by Guard Zone ====================================
+#=================================================================================================
 class CheckView(APIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, uuid, format=None):
         try:
@@ -168,8 +171,8 @@ class CheckView(APIView):
         register = Register.objects.filter(
             user=user, date=timezone.localtime(timezone.now()).date()).last()
 
-        #Me valida si no existe un registro o si algun registro ya no esta activo
-        #para no entregar informacion al serializador
+        # Me valida si no existe un registro o si algun registro ya no esta activo
+        # para no entregar informacion al serializador
         if register == None or not register.is_active:
             r_serilizer = None
         else:
@@ -182,11 +185,12 @@ class CheckView(APIView):
 
 
 class RegisterEntryView(APIView):
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated,]
 
     def post(self, request, format=None):
         current_date = timezone.localtime(timezone.now())
         serializer = RegisterSerializer(data=request.data)
+        print(request.data)
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -214,7 +218,7 @@ class RegisterEntryView(APIView):
 
 
 class RegisterDepartureView(APIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def put(self, request, pk, format=None):
         register = get_object_or_404(Register, pk=pk)
@@ -223,9 +227,21 @@ class RegisterDepartureView(APIView):
         register.save(update_fields=['time_departure', 'is_active'])
         return Response({"success": True, "msg": "Entrada Actualizada"}, status=HTTP_201_CREATED)
 
+#=================================================================================================
+#============================= Machine Learning Zone =============================================
+#=================================================================================================
+class StateMLALgView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, format=None):
+        score = get_ml_score()
+        if score != None:            
+            return Response({"success": True, "score": score}, status=HTTP_200_OK)
+        return Response({"success": False, "score": 0}, status= HTTP_200_OK)
+
 
 class TeachMLAlgView(APIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def post(self, request, format=None):
         registros_total = RegisterTotalDay.objects.all()

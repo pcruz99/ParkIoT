@@ -86,6 +86,7 @@ const VehicleCreate = () => {
                 }
               })
               .catch((error) => {
+                console.log(error);
                 setErrors({ submit: { placa: error.response.data.placa[0] } });
                 setStatus({ success: false });
                 setSubmitting(false);
@@ -277,12 +278,14 @@ const VehicleCreate = () => {
                   </Box>
                 )}
 
-                <Grid item sm={12}>
-                  <AnimateButton>
-                    <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
-                      Agregar Vehículo
-                    </Button>
-                  </AnimateButton>
+                <Grid item lg={12} xs={12} md={12}>
+                  <Box display="flex" justifyContent="center" alignContent="center">
+                    <AnimateButton>
+                      <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
+                        Agregar Vehículo
+                      </Button>
+                    </AnimateButton>
+                  </Box>
                 </Grid>
               </Grid>
             </Box>

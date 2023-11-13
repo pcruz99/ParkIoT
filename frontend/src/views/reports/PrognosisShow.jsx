@@ -1,89 +1,191 @@
 //React
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 //MUI
 import { Grid, Button, Divider, TextField, MenuItem, Typography, Box } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
+
+//Redux
+import { useSelector } from 'react-redux';
 
 //Custon MUI
 import BasicDatePicker from 'components/Mui/BasicDatepicker';
 
-import AnimateButton from 'ui-component/extended/AnimateButton';
+//Custom Axios
+import caxios from '../../scripts/customAxios.js';
 
+import AnimateButton from 'ui-component/extended/AnimateButton';
 import GeneralBack from 'components/GeneralBack';
-import MenuCard from 'components/MenuCard';
+import MessageCard from 'components/MessageCard.jsx';
 
 const POD = [
-  { value: 'MAD', label: 'MAD' },
-  { value: 'MAN', label: 'MAN' },
-  { value: 'TAR', label: 'TAR' },
-  { value: 'NOC', label: 'NOC' }
+  { value: 'MAD', label: 'Madrugada' },
+  { value: 'MAN', label: 'Mañana' },
+  { value: 'TAR', label: 'Tarde' },
+  { value: 'NOC', label: 'Noche' }
 ];
 
 const PrognosisShow = () => {
+  const account = useSelector((state) => state.account);
+  const cax = caxios(account.token);
+
   const [pickDate, setPickDate] = useState();
-  console.log(pickDate);
+  const [pod, setPod] = useState('');
+
+  const [score, setScore] = useState(0);
+  const [cantVehicles, setCantVehicles] = useState();
+
+  const [prognosticado, setPrognosticado] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState(null);
+  const [type, setType] = useState(null);
+
+  const callAPI = async () => {
+    await cax
+      .get('/parking/ml/status/')
+      .then((response) => {
+        setScore(response.data?.score);
+      })
+      .catch((error) => {
+        console.log(error);
+        setScore(0);
+      });
+  };
+
+  useEffect(() => {
+    callAPI();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const trainModel = async () => {
+    await cax
+      .post('/parking/ml/teach/')
+      .then((response) => {
+        setScore(response.data?.score);
+        setOpen(true);
+        setMsg('Modelo entrenado con Exito');
+        setType('success');
+      })
+      .catch((error) => {
+        setOpen(true);
+        setMsg(error.response.data?.msg);
+        setType('error');
+      });
+  };
+
+  const doPrognosis = async () => {
+    if (pickDate && pod != '') {
+      if (score != 0) {
+        await cax
+          .get(`/parking/ml/prognosis/?year=${pickDate.year}&month=${pickDate.month}&day=${pickDate.day}&pod=${pod}`)
+          .then((response) => {
+            setCantVehicles(response.data?.data);
+            setPrognosticado(true);
+
+            setOpen(true);
+            setMsg('Prediccion realizada con Exito');
+            setType('success');
+          })
+          .catch((error) => {
+            setOpen(true);
+            setMsg(error.response.data?.msg);
+            setType('error');
+          });
+      }
+    } else {
+      setOpen(true);
+      setMsg('Completa los Campos');
+      setType('error');
+    }
+  };
 
   return (
     <>
       <GeneralBack title="Pronóstico con IA">
         <Grid container spacing={3}>
-          <Grid item lg={6}>
-            <AnimateButton>
-              <Button fullWidth variant="contained" size="large">
-                Entrenar Modelo
-              </Button>
-            </AnimateButton>
+          <Grid item lg={12} xs={12}>
+            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
           </Grid>
-          <Grid item lg={6}>
-            <Box alignItems={'center'}>
-              <Typography variant="h3">
-                Modelo Entrenado: <CheckIcon color="success" />
+          <Grid item lg={6} xs={12}>
+            <Box display="flex" justifyContent="center" alignContent="center">
+              <AnimateButton>
+                <Button disableElevation variant="contained" size="large" sx={{ height: 48 }} onClick={trainModel}>
+                  {score == 0 ? 'Entrenar Modelo' : 'Volver a Entrenar Modelo'}
+                </Button>
+              </AnimateButton>
+            </Box>
+          </Grid>
+          <Grid item lg={6} xs={12}>
+            <Box display="flex" justifyContent="center" alignContent="center">
+              <Typography variant="h4">Estado:_</Typography>              
+              <Typography variant="body1" sx={{ color: score != 0 ? 'green' : 'red' }}>
+                {score != 0 ? 'Entrenado' : 'No Entrenado'}
               </Typography>
             </Box>
           </Grid>
-          <Grid item lg={12}>
+          <Grid item lg={12} xs={12}>
             <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
           </Grid>
 
           <Grid item lg={3} xs={12}>
-            <BasicDatePicker setPickDate={setPickDate} />
+            <Box display="flex" justifyContent="center" alignContent="center">
+              <BasicDatePicker setPickDate={setPickDate} />
+            </Box>
           </Grid>
           <Grid item lg={3} xs={12}>
-            <TextField
-              fullWidth
-              name="color"
-              id="color-id"
-              label="Parte del Dia"
-              helperText="Elija la parte del dia"
-              // defaultValue={''}
-              // value={values.color}
-              // onChange={(e) => {
-              //   handleChange(e);
-              //   values.color = e.target.value;
-              // }}
-              select
-              // required
-            >
-              {POD.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Box display="flex" justifyContent="center" alignContent="center">
+              <TextField
+                // fullWidth
+                label="Parte del Dia"
+                helperText="Elija la parte del dia"
+                value={pod}
+                onChange={(e) => {
+                  setPod(e.target.value);
+                }}
+                select
+                required
+                sx={{ width: 250, height: 80 }}
+              >
+                {POD.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Box>
           </Grid>
-          <Grid item lg={3}>
-            <AnimateButton>
-              <Button fullWidth variant="contained" size="large">
-                Generar Pronostico
-              </Button>
-            </AnimateButton>
+          <Grid item lg={3} xs={12}>
+            <Box display="flex" justifyContent="center" alignContent="center">
+              <AnimateButton>
+                <Button fullWidth disabled={!score} variant="contained" size="large" sx={{ height: 48 }} onClick={doPrognosis}>
+                  Generar Pronostico
+                </Button>
+              </AnimateButton>
+            </Box>
           </Grid>
 
-          <Grid item lg={12}>
-            <MenuCard title={'Cantidad de Vehiculos'} />
+          <Grid item lg={3} xs={12}>
+            <Box display="flex" justifyContent="center" alignContent="center">
+              <Typography variant="h4">Cantidad de Vehiculos:_</Typography>
+              {prognosticado && (
+                <Typography variant="body1" sx={{ color: cantVehicles === 1 ? 'green' : 'red' }}>
+                  {cantVehicles === 1 ? 'ALTO' : 'BAJO'}
+                </Typography>
+              )}
+            </Box>
           </Grid>
         </Grid>
+        <Box textAlign={'left'} sx={{ margin: 4 }}>
+          <Typography variant="h3">Como usar:</Typography>
+          <Typography variant="body1" align='justify'>
+            {`Descubre la potencia de nuestra funcionalidad de Machine Learning para el pronóstico de tráfico. Para comenzar, utiliza el botón 
+            "Entrenar Modelo" para iniciar el proceso y observa el estado en tiempo real en el campo correspondiente. Si necesitas
+            actualizar el modelo con datos recientes, simplemente vuelve a entrenarlo después de generar informes diarios. Una vez
+            entrenado, selecciona la fecha y la parte del día para realizar pronósticos con un máximo de 10 días hacia adelante. Los
+            resultados se clasificarán como "ALTO" o "BAJO", indicando la cantidad prevista de vehículos. ¡Optimiza tus decisiones de
+            gestión de tráfico con esta herramienta intuitiva y potente!`}
+          </Typography>
+        </Box>
+        <MessageCard open={open} setOpen={setOpen} msg={msg} type={type} />
       </GeneralBack>
     </>
   );

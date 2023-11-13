@@ -36,7 +36,7 @@ const ESReportShow = () => {
       })
       .catch(() => {
         setRegister([]);
-        setMsg('No existen Registros con esos Datos');
+        setMsg('No existen Registros con esos Datos o en la Fecha de Hoy');
         setType('error');
         setOpen(true);
       });
@@ -80,15 +80,18 @@ const ESReportShow = () => {
                   setPlaca(e.target.value);
                 }}
                 helperText="Escriba la placa del Vehiculo"
+                sx={{ width: 250, height: 80 }}
               />
             </Grid>
             <Grid item lg={3} xs={12}>
               <Box>
-                <AnimateButton>
-                  <Button fullWidth variant="contained" size="large" onClick={consultar}>
-                    Generar Reporte
-                  </Button>
-                </AnimateButton>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <AnimateButton>
+                    <Button fullWidth variant="contained" size="large" onClick={consultar} sx={{ height: 48 }}>
+                      Generar Reporte
+                    </Button>
+                  </AnimateButton>
+                </Box>
               </Box>
             </Grid>
             <Grid item xs={12}>

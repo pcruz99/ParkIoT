@@ -9,8 +9,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     placa = serializers.CharField(
         validators=[
         UniqueValidator(
-            # queryset=Vehicle.objects.all(),
-            queryset=Vehicle.objects.filter(owner = not None),
+            queryset=Vehicle.objects.exclude(owner__isnull=True),
             message="El Vehiculo ya se encuentra Registrado"
         )]
     )
@@ -23,6 +22,21 @@ class VehicleSerializer(serializers.ModelSerializer):
 
     def create(self, validate_data):
         try: 
+            # v = Vehicle.objects.get(placa = validate_data['placa'], owner = None)
+            
+            # if(v.register_manual):
+            #     v.brand = validate_data['brand']
+            #     v.model = validate_data['model']
+            #     v.color = validate_data['color']
+            #     v.tipo = validate_data['tipo']
+            #     v.year = validate_data['year']
+            #     v.owner = validate_data['owner']
+            #     v.register_manual = False
+            #     v.save(update_fields=['brand','model','color','tipo','year','owner','regiter_manual'])
+            # else:
+            #     v.owner = validate_data['owner']
+            #     v.save(update_fields=['owner'])                              
+            
             v = Vehicle.objects.get(placa = validate_data['placa'], owner = None)
             v.owner = validate_data['owner']
             v.save(update_fields=['owner'])

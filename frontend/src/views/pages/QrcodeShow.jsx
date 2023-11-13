@@ -44,8 +44,11 @@ const QrcodeShow = () => {
         </Box>
         <Box textAlign={'left'} sx={{ margin: 4 }}>
           <Typography variant="h3">Como usar:</Typography>
-          <Typography variant="body1">
-            Presente el codigo QR al guardia cuando ingrese al estacionamiento para que pueda ser identificado.
+          <Typography variant="body1" align='justify'>
+            {`Al ingresar al estacionamiento, asegúrate de mostrar el código QR al guardia para que pueda identificarte correctamente. Este
+              código QR es esencial para tu identificación tanto en la entrada como en la salida del parqueadero. Por favor, ten en cuenta que
+              es necesario presentar el código en ambas ocasiones para garantizar un registro preciso de tu ingreso y salida. ¡Gracias por tu
+              colaboración y disfruta de tu estancia en nuestro estacionamiento!`}
           </Typography>
         </Box>
       </GeneralBack>
