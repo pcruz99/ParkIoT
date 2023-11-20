@@ -173,21 +173,21 @@ const FirebaseRegister = ({ ...others }) => {
                   }}
                   sx={{ ...theme.typography.customInput }}
                 />
-              </Grid>             
+              </Grid>
             </Grid>
             <TextField
-                  fullWidth
-                  label="Cedula"
-                  margin="normal"
-                  name="cedula"
-                  type="text"
-                  // value={values.last_name}
-                  // onChange={(e) => {
-                  //   handleChange(e);
-                  //   values.last_name = e.target.value;
-                  // }}
-                  sx={{ ...theme.typography.customInput }}
-                />
+              fullWidth
+              label="Cedula"
+              margin="normal"
+              name="cedula"
+              type="text"
+              // value={values.last_name}
+              // onChange={(e) => {
+              //   handleChange(e);
+              //   values.last_name = e.target.value;
+              // }}
+              sx={{ ...theme.typography.customInput }}
+            />
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-register">Correo Electronico</InputLabel>
               <OutlinedInput
@@ -199,7 +199,7 @@ const FirebaseRegister = ({ ...others }) => {
                 onChange={handleChange}
                 inputProps={{}}
               />
-              {touched.email && errors.email && (                
+              {touched.email && errors.email && (
                 <FormHelperText error id="standard-weight-helper-text--register">
                   {errors.email}
                 </FormHelperText>
@@ -268,8 +268,8 @@ const FirebaseRegister = ({ ...others }) => {
                   label={
                     <Typography variant="subtitle1">
                       Acepto los &nbsp;
-                      <Typography variant="subtitle1" component={Link} to="#">
-                        Terminos y Condiciones.
+                      <Typography variant="subtitle1" component={Link} to="/termsconditions">
+                        Términos y Condiciones.
                       </Typography>
                     </Typography>
                   }

@@ -16,6 +16,7 @@ import caxios from '../../scripts/customAxios.js';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import GeneralBack from 'components/GeneralBack';
 import MessageCard from 'components/MessageCard.jsx';
+// import MessageCard from 'components/MessageCard.jsx';
 
 const POD = [
   { value: 'MAD', label: 'Madrugada' },
@@ -58,7 +59,7 @@ const PrognosisShow = () => {
 
   const trainModel = async () => {
     await cax
-      .post('/parking/ml/teach/')
+      .post('/parking/ml/teach/', {}, { timeout: 5000 })
       .then((response) => {
         setScore(response.data?.score);
         setOpen(true);
@@ -76,7 +77,7 @@ const PrognosisShow = () => {
     if (pickDate && pod != '') {
       if (score != 0) {
         await cax
-          .get(`/parking/ml/prognosis/?year=${pickDate.year}&month=${pickDate.month}&day=${pickDate.day}&pod=${pod}`)
+          .get(`/parking/ml/prognosis/?year=${pickDate.year}&month=${pickDate.month}&day=${pickDate.day}&pod=${pod}`, { timeout: 5000 })
           .then((response) => {
             setCantVehicles(response.data?.data);
             setPrognosticado(true);
@@ -116,7 +117,7 @@ const PrognosisShow = () => {
           </Grid>
           <Grid item lg={6} xs={12}>
             <Box display="flex" justifyContent="center" alignContent="center">
-              <Typography variant="h4">Estado:_</Typography>              
+              <Typography variant="h4">Estado:_</Typography>
               <Typography variant="body1" sx={{ color: score != 0 ? 'green' : 'red' }}>
                 {score != 0 ? 'Entrenado' : 'No Entrenado'}
               </Typography>
@@ -176,7 +177,7 @@ const PrognosisShow = () => {
         </Grid>
         <Box textAlign={'left'} sx={{ margin: 4 }}>
           <Typography variant="h3">Como usar:</Typography>
-          <Typography variant="body1" align='justify'>
+          <Typography variant="body1" align="justify">
             {`Descubre la potencia de nuestra funcionalidad de Machine Learning para el pronóstico de tráfico. Para comenzar, utiliza el botón 
             "Entrenar Modelo" para iniciar el proceso y observa el estado en tiempo real en el campo correspondiente. Si necesitas
             actualizar el modelo con datos recientes, simplemente vuelve a entrenarlo después de generar informes diarios. Una vez

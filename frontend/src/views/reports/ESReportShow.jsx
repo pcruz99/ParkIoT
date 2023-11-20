@@ -1,6 +1,9 @@
 //react
 import { useEffect, useState } from 'react';
 
+//redux
+import { useSelector } from 'react-redux';
+
 //MUI
 import { Grid, TextField, Button, Box } from '@mui/material';
 
@@ -18,8 +21,10 @@ import GeneralBack from 'components/GeneralBack';
 import MessageCard from 'components/MessageCard.jsx';
 
 const ESReportShow = () => {
+  const account = useSelector((state)=>state.account);
   const dateNow = new Date();
-  const cax = caxiox();
+  const cax = caxiox(account.token);
+
   const [registers, setRegister] = useState(null);
   const [pickDate, setPickDate] = useState();
   const [placa, setPlaca] = useState('');
@@ -77,7 +82,7 @@ const ESReportShow = () => {
                 variant="outlined"
                 value={placa}
                 onChange={(e) => {
-                  setPlaca(e.target.value);
+                  setPlaca(e.target.value.toUpperCase());
                 }}
                 helperText="Escriba la placa del Vehiculo"
                 sx={{ width: 250, height: 80 }}

@@ -86,7 +86,6 @@ const VehicleCreate = () => {
                 }
               })
               .catch((error) => {
-                console.log(error);
                 setErrors({ submit: { placa: error.response.data.placa[0] } });
                 setStatus({ success: false });
                 setSubmitting(false);
@@ -114,8 +113,6 @@ const VehicleCreate = () => {
                     label="Tipo de Vehiculo"
                     helperText="Elija el tipo de Vehiculo"
                     variant="outlined"
-                    // defaultValue={''}
-                    // value={values.tipo ? values.tipo : 'carro'}
                     value={values.tipo}
                     onChange={(e) => {
                       handleChange(e);
@@ -141,7 +138,6 @@ const VehicleCreate = () => {
                     label="Marca"
                     helperText="Elija el color del Vehiculo"
                     variant="outlined"
-                    // defaultValue={''}
                     value={values.brand}
                     onChange={(e) => {
                       handleChange(e);
@@ -226,7 +222,6 @@ const VehicleCreate = () => {
                     id="color-id"
                     label="Color del Vehiculo"
                     helperText="Elija el color del Vehiculo"
-                    // defaultValue={''}
                     value={values.color}
                     onChange={(e) => {
                       handleChange(e);
@@ -281,7 +276,7 @@ const VehicleCreate = () => {
                 <Grid item lg={12} xs={12} md={12}>
                   <Box display="flex" justifyContent="center" alignContent="center">
                     <AnimateButton>
-                      <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large">
+                      <Button disableElevation disabled={isSubmitting} variant="contained" type="submit" size="large" color="secondary">
                         Agregar Vehículo
                       </Button>
                     </AnimateButton>

@@ -19,7 +19,11 @@ class Vehicle(models.Model):
     year = models.IntegerField(verbose_name="año del vehiculo", null=True, blank=True)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="dueño", related_name='vehicles', null=True, blank=True)
-    # register_manual = models.BooleanField(default=False)
+    register_manual = models.BooleanField()
+    
+    def save(self, *args, **kwargs):
+        self.placa = self.placa.upper()
+        super().save(*args, **kwargs)
 
 class Space(models.Model):
     number = models.IntegerField(verbose_name="numero", unique=True)
@@ -37,13 +41,13 @@ class Register(models.Model):
     time_departure = models.TimeField(blank=True, null=True)
     date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    #TODO: Definir este campo para que acepte valores nulos
+    #TODO: Definir este campo para que acepte valores nulos 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="usuario", related_name='users')
+        User, on_delete=models.CASCADE, verbose_name="usuario", related_name='users', blank=True, null=True)
     vehicle = models.ForeignKey(
         Vehicle, on_delete=models.CASCADE, verbose_name="vehiculo", related_name='vehicles')
     #TODO: Si es necesrio, agregar la informacion del guardia que realizo el registro
-    # guard = models.ForeignKey(User, on_delete=models.CASCADE)
+    guard = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
 class RegisterTotalDay(models.Model):
     date = models.DateField(auto_now_add=True)
@@ -54,8 +58,7 @@ class RegisterTotalDay(models.Model):
 
     is_promotionday = models.BooleanField(default=False)
     number_vehicles = models.IntegerField(verbose_name="cantidad de vehiculos")
-    # temperature = models.IntegerField(default=0, verbose_name="temperatura de la ciudad")
-    temperature = models.FloatField(default=0)
+    temperature = models.FloatField(default=0, verbose_name="temperatura de la ciudad")
 
 
 class PromotionDay(models.Model):

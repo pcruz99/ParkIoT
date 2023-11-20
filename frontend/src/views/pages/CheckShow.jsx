@@ -8,7 +8,7 @@ import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 
 //MUI
-import { Box, Grid, Typography, Button } from '@mui/material';
+import { Box, Grid, Typography, Button, Divider } from '@mui/material';
 
 //axios
 import caxios from '../../scripts/customAxios.js';
@@ -46,7 +46,6 @@ const CheckShow = () => {
         }
       })
       .catch(() => {
-        // console.log(error);
         setMsg('No hay datos disponibles');
         setType('warning');
         setOpen(true);
@@ -89,7 +88,7 @@ const CheckShow = () => {
           setOpen(true);
         });
     } else {
-      setMsg('Necesita elegir un Vehiculo Primero');
+      setMsg('Necesita elegir un Vehiculo Primero o el Usuario no tiene Vehiculos Registrados');
       setType('error');
       setOpen(true);
     }
@@ -115,7 +114,7 @@ const CheckShow = () => {
     <GeneralBack title="Registro de Entrada y Salida">
       <Box textAlign={'center'}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item lg={12} xs={12}>
             <Box sx={{ border: 1, borderColor: 'gray', borderRadius: 3, padding: 3 }}>
               <Typography variant="h2">Información del Cliente</Typography>
               <Typography variant="body1">
@@ -133,39 +132,45 @@ const CheckShow = () => {
             </Box>
           </Grid>
             {vehicles.map((data) => (
-              <Grid item lg={4} md={4} sm={6} xs={12} key={data.id}>
+              <Grid item lg={4} md={4} sm={6} xs={12} key={data.id} >
                 <VehicleCard isLoading={false} vehicle={data} isForCheck={true} setVehicleId={setVehicleId} vehicleId={vehicleId} />
               </Grid>
             ))}
-          <Grid item xs={6}>
+          <Grid item lg={12} xs={12}>
+            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+          </Grid>
+          <Grid item lg={6} xs={12}>
             <AnimateButton>
               <Button
                 disableElevation
                 disabled={register != null ? true : false}
                 variant="contained"
-                // type="submit"
                 size="large"
                 color="success"
                 onClick={registerEntry}
+                sx={{ width: 250, height: 50 }}
               >
                 Registrar Entrada
               </Button>
             </AnimateButton>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item lg={6} xs={12}>
             <AnimateButton>
               <Button
                 disableElevation
                 disabled={register != null ? false : true}
                 variant="contained"
-                // type="submit"
                 size="large"
                 color="error"
                 onClick={registerDeparture}
+                sx={{ width: 250, height: 50 }}
               >
                 Registrar Salida
               </Button>
             </AnimateButton>
+          </Grid>
+          <Grid item lg={12} xs={12}>
+            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
           </Grid>
         </Grid>
       </Box>

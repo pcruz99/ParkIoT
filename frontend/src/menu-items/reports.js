@@ -10,10 +10,10 @@ const icons = {
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
-const pages = {
+const reports = {
   id: 'pages',
   title: 'Analisis',
-  // caption: 'Pages Caption',
+  caption: 'Visualizar Información',
   type: 'group',
   children: [
     {
@@ -51,4 +51,4 @@ const pages = {
   ]
 };
 
-export default pages;
+export default reports;

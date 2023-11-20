@@ -34,7 +34,7 @@ const columns = [
     label: 'Placa de Vehiculo',
     minWidth: 170,
     // align: 'right',
-    // format: (value) => value.toFixed(2)
+    // format: (value) => new String(value).toUpperCase()
   },
   {
     id: 'active',
@@ -42,7 +42,14 @@ const columns = [
     minWidth: 170,
     // align: 'right',
     format: (value) => value.toFixed(2)
-  }
+  },
+  {
+    id: 'guard',
+    label: 'Guardia',
+    minWidth: 170,
+    // align: 'right',
+    format: (value) => value.toLocaleString('en-US')
+  },
 ];
 
 function createData(data) {

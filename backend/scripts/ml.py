@@ -24,7 +24,7 @@ def teach_model(queryset):
     global ML_SCORE
 
     data = pd.DataFrame(list(queryset.values(
-        'part_of_day', 'is_holiday', 'is_weekend', 'is_promotionday', 'number_vehicles', 'temperature')))
+        'part_of_day', 'is_holiday', 'is_weekend', 'is_promotionday', 'number_vehicles', 'temperature')))    
 
     data['is_holiday'] = label_encoder.fit_transform(data['is_holiday'])
     data['is_weekend'] = label_encoder.fit_transform(data['is_weekend'])
@@ -46,22 +46,18 @@ def teach_model(queryset):
     y = data['amount']
     data.drop(['number_vehicles', 'amount'], axis=1, inplace=True)
     X = data
-
+    
     try:
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=99)
+            X, y, test_size=0.3, random_state=99)
     except ValueError:
         return 0
-
+    
     try:
         LR.fit(X_train.values, y_train.values)
     except ValueError:
         return 0
-
-    # print(X_train.values)
-    # print(y_train.values)
-    # print(X_test.values)
-    # print(y_test.values)
+    
     ML_SCORE = LR.score(X_test.values, y_test.values)
     return ML_SCORE
 

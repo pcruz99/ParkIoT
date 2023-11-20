@@ -10,7 +10,7 @@ const icons = { IconBrandChrome, IconHelp, StorefrontIcon, DiscountIcon };
 
 const other = {
   id: 'sample-docs-roadmap',
-  title: 'Información',
+  title: 'Más Información',
   type: 'group',
   children: [
     {
@@ -22,16 +22,7 @@ const other = {
       breadcrumbs: false,
       external: true,
       target: true
-    },
-    // {
-    //   id: 'documentation',
-    //   title: 'Documentation',
-    //   type: 'item',
-    //   url: 'https://codedthemes.gitbook.io/berry/',
-    //   icon: icons.IconHelp,
-    //   external: true,
-    //   target: true
-    // }
+    }
   ]
 };
 

@@ -15,13 +15,14 @@ def create_qrcode(username: str = "", url: str = "") -> list:
             box_size=10,
             border=4,
         )
-        qr.add_data(f'{url}/check/{uuid.hex}')
+        qr.add_data(f'{url}/check/{uuid}')
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
 
         buffered = BytesIO()
         img.save(buffered)
         img_str = b64encode(buffered.getvalue()).decode("utf-8")
+        
 
         return [img_str, uuid]
     except Exception:

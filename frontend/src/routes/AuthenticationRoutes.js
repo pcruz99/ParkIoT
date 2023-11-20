@@ -8,6 +8,8 @@ import MinimalLayout from 'layout/MinimalLayout';
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
 
+const TermsConditionsShow = Loadable(lazy(() => import('views/pages/authentication/TermsConditionsShow')));
+
 import { ProtectedRoute } from 'components/Route/ProtectedRoute';
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
@@ -27,6 +29,10 @@ const AuthenticationRoutes = (account) => {
           {
             path: '/register',
             element: <AuthRegister3 />
+          },
+          {
+            path: '/termsconditions',
+            element: <TermsConditionsShow />
           }
         ]
       }

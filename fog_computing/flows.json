@@ -1,0 +1,140 @@
+[
+    {
+        "id": "732d999d25b57e28",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2747f1efa2cd0277",
+        "type": "http request",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "method": "PUT",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://192.168.1.7:8000/parking/space/1/",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 910,
+        "y": 180,
+        "wires": [
+            [
+                "63a8aa9105e3c103"
+            ]
+        ]
+    },
+    {
+        "id": "63a8aa9105e3c103",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "a988a6b4be598e39",
+        "type": "mqtt in",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "topic": "parking/sensor/1",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "037bbe90335c023c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 540,
+        "y": 180,
+        "wires": [
+            [
+                "85e606c6ea39013e",
+                "dd512f8c4fba3a4c"
+            ]
+        ]
+    },
+    {
+        "id": "85e606c6ea39013e",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "dd512f8c4fba3a4c",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 1",
+        "func": "const MIN_DISTANCE = 200;\nif (msg.payload.distance > MIN_DISTANCE && !context.get(\"sent_free\")) {\n        context.set(\"sent_free\", true);\n        context.set(\"sent_notfree\", false);\n        return { payload: { state: true } };\n}\nelse if (msg.payload.distance < MIN_DISTANCE && !context.get(\"sent_notfree\")) {\n        context.set(\"sent_notfree\", true);\n        context.set(\"sent_free\", false);\n        return { payload: { state: false } };\n}\nreturn;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"sent_free\", false);\ncontext.set(\"sent_notfree\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 180,
+        "wires": [
+            [
+                "2747f1efa2cd0277"
+            ]
+        ]
+    },
+    {
+        "id": "037bbe90335c023c",
+        "type": "mqtt-broker",
+        "name": "local",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

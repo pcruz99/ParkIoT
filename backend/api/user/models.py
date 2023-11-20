@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
 
         user = self.model(username=username, email=self.normalize_email(email),
                           first_name=first_name, last_name=last_name,
-                          qrcode=ids[0], uuid=ids[1])
+                          qrcode=ids[0], uuid=ids[1], **kwargs)
         user.set_password(password)        
         user.save(using=self._db)
 
@@ -71,6 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=45)
     uuid = models.TextField(unique=True)
     qrcode = models.TextField(unique=True)
+    cedula = models.CharField(max_length=10, unique=True)
 
     # TODO: agregar estos dos atributos al modelo
     # permissions

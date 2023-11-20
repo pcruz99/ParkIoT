@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 //MUI
 import { Grid, Box } from '@mui/material';
 
+//redux
+import { useSelector } from 'react-redux';
+
 //Scripts
 import caxios from '../../scripts/customAxios.js';
 
@@ -12,7 +15,8 @@ import GeneralBack from 'components/GeneralBack';
 import TotalGrowthBarChart from 'components/Reports/TotalGrowthBarChart';
 
 const ReportShow = () => {
-  const cax = caxios();
+  const account = useSelector((state)=>state.account);
+  const cax = caxios(account.token);  
 
   const [isLoading, setIsLoading] = useState(true);
   const [registers, setRegisters] = useState();

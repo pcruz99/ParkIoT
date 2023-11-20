@@ -32,6 +32,7 @@ const CardWrapper = styled(MainCard)(({ theme, ischecked }) => ({
   color: ischecked === 'true' ? '#000000' : '#fff',
   overflow: 'hidden',
   position: 'relative',
+  // height: 180,
   '&:after': {
     content: '""',
     position: 'absolute',

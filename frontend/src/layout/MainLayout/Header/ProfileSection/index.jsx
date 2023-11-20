@@ -80,6 +80,8 @@ const ProfileSection = () => {
         navigate('/login');
       })
       .catch((error) => {
+        dispatcher({ type: LOGOUT });
+        navigate('/login');
         console.log('error-', error);
       });
   };

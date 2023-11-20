@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 
 from api.authentication.serializers import RegisterSerializer
 
+
 class RegisterViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
     permission_classes = (AllowAny,)
@@ -12,14 +13,17 @@ class RegisterViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        if serializer.is_valid(raise_exception=True):
 
-        return Response(
-            {
-                "success": True,
-                "userID": user.id,
-                "msg": "The user was successfully registered",
-            },
-            status=status.HTTP_201_CREATED,
-        )
+            user = serializer.save()
+
+            return Response(
+                {
+                    "success": True,
+                    "userID": user.id,
+                    "msg": "The user was successfully registered",
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -11,7 +11,7 @@ class VehicleSerializer(serializers.ModelSerializer):
         UniqueValidator(
             queryset=Vehicle.objects.exclude(owner__isnull=True),
             message="El Vehiculo ya se encuentra Registrado"
-        )]
+        )]        
     )
 
     class Meta:
@@ -22,24 +22,21 @@ class VehicleSerializer(serializers.ModelSerializer):
 
     def create(self, validate_data):
         try: 
-            # v = Vehicle.objects.get(placa = validate_data['placa'], owner = None)
-            
-            # if(v.register_manual):
-            #     v.brand = validate_data['brand']
-            #     v.model = validate_data['model']
-            #     v.color = validate_data['color']
-            #     v.tipo = validate_data['tipo']
-            #     v.year = validate_data['year']
-            #     v.owner = validate_data['owner']
-            #     v.register_manual = False
-            #     v.save(update_fields=['brand','model','color','tipo','year','owner','regiter_manual'])
-            # else:
-            #     v.owner = validate_data['owner']
-            #     v.save(update_fields=['owner'])                              
-            
             v = Vehicle.objects.get(placa = validate_data['placa'], owner = None)
-            v.owner = validate_data['owner']
-            v.save(update_fields=['owner'])
+            
+            if(v.register_manual):
+                v.brand = validate_data['brand'] 
+                v.model = validate_data['model']
+                v.color = validate_data['color'] 
+                v.tipo = validate_data['tipo']
+                v.year = validate_data['year']
+                v.owner = validate_data['owner']
+                v.register_manual = False
+                v.save(update_fields=['brand','model','color','tipo','year','owner','register_manual'])
+            else:
+                v.owner = validate_data['owner']
+                v.register_manual = validate_data['register_manual']            
+                v.save(update_fields=['owner', 'register_manual'])                                                     
             return v
         except Vehicle.DoesNotExist:            
             return Vehicle.objects.create(**validate_data)
@@ -71,6 +68,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class RegisterFilteredSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.email')
+    guard = serializers.ReadOnlyField(source='user.email')
     vehicle = serializers.ReadOnlyField(source='vehicle.placa')
 
     class Meta:

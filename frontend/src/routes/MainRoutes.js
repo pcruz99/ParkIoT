@@ -20,10 +20,11 @@ const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 //qrcode page
 const QrcodeShow = Loadable(lazy(() => import('views/pages/QrcodeShow')));
 const CheckShow = Loadable(lazy(() => import('views/pages/CheckShow')));
+const CheckManualShow = Loadable(lazy(() => import('views/pages/CheckManualShow')));
 
 const VehicleShow = Loadable(lazy(() => import('views/pages/VehicleShow')));
 const VehicleCreate = Loadable(lazy(() => import('views/pages/VehicleCreate')));
-const VehicleEdit = Loadable(lazy(()=> import('views/pages/VehicleEdit')));
+const VehicleEdit = Loadable(lazy(() => import('views/pages/VehicleEdit')));
 
 const ParkingShow = Loadable(lazy(() => import('views/dashboard/ParkingShow')));
 
@@ -61,51 +62,6 @@ const MainRoutes = (account) => {
               }
             ]
           },
-          // {
-          //   path: 'utils',
-          //   children: [
-          //     {
-          //       path: 'util-typography',
-          //       element: <UtilsTypography />
-          //     }
-          //   ]
-          // },
-          // {
-          //   path: 'utils',
-          //   children: [
-          //     {
-          //       path: 'util-color',
-          //       element: <UtilsColor />
-          //     }
-          //   ]
-          // },
-          // {
-          //   path: 'utils',
-          //   children: [
-          //     {
-          //       path: 'util-shadow',
-          //       element: <UtilsShadow />
-          //     }
-          //   ]
-          // },
-          // {
-          //   path: 'icons',
-          //   children: [
-          //     {
-          //       path: 'tabler-icons',
-          //       element: <UtilsTablerIcons />
-          //     }
-          //   ]
-          // },
-          // {
-          //   path: 'icons',
-          //   children: [
-          //     {
-          //       path: 'material-icons',
-          //       element: <UtilsMaterialIcons />
-          //     }
-          //   ]
-          // },
           {
             path: 'sample-page',
             element: <SamplePage />
@@ -115,12 +71,18 @@ const MainRoutes = (account) => {
             element: <QrcodeShow />
           },
           {
-            path: 'check/:uuid',
-            element: (
-              <ProtectedRoute isAllowed={role === 'guard' || role === 'admin'} redirecTo="/">
-                <CheckShow />
-              </ProtectedRoute>
-            )
+            path: 'check',
+            element: <ProtectedRoute isAllowed={role === 'guard' || role === 'admin'} redirecTo="/" />,
+            children: [
+              {
+                path: 'manual',
+                element: <CheckManualShow />
+              },
+              {
+                path: ':uuid',
+                element: <CheckShow />
+              }
+            ]
           },
           {
             path: 'vehicle',
@@ -141,10 +103,15 @@ const MainRoutes = (account) => {
           },
           {
             path: 'prognosis',
-            element: <PrognosisShow />
+            element: (
+              <ProtectedRoute isAllowed={role === 'admin'} redirecTo="/">
+                <PrognosisShow />
+              </ProtectedRoute>
+            )
           },
           {
             path: 'report',
+            element: <ProtectedRoute isAllowed={role === 'admin'} redirecTo="/" />,
             children: [
               {
                 path: 'general',
