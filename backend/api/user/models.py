@@ -69,8 +69,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     date = models.DateTimeField(auto_now_add=True)
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
-    uuid = models.TextField(unique=True)
-    qrcode = models.TextField(unique=True)
+    uuid = models.CharField(max_length=36, unique=True, db_index=True)
+    qrcode = models.CharField(max_length=1000, unique=False)
     cedula = models.CharField(max_length=10, unique=True)
 
     # TODO: agregar estos dos atributos al modelo
