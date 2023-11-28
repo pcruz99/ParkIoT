@@ -10,38 +10,34 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os, environ
+import os
+import environ
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-#?: Se utiliza esta variable constante para obtener la url del frontend
+# ?: Se utiliza esta variable constante para obtener la url del frontend
 URL_FRONTEND = env('URL_FRONTEND', default='http://127.0.0.1:3000')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='insecure-S#perS3crEt_007')
-
+SECRET_KEY = env('SECRET_KEY', default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+try:
+    # expects 1 or 0
+    DEBUG = int(os.environ.get("DEBUG", default=0))
+except:
+    DEBUG = False
 
-# try:
-#     # expects 1 or 0
-#     DEBUG = int(os.environ.get("DEBUG", default=0))
-# except:
-#     DEBUG = False
-
-ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
+ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", default="*").split(",")
 
 # Application definition
 
@@ -96,12 +92,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE"  : env("DB_ENGINE"  , default="django.db.backends.sqlite3"),
-        "NAME"    : env("DB_DATABASE", default=os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER"    : env("DB_USER"    , default=None),
+        "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": env("DB_DATABASE", default=os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": env("DB_USER", default=None),
         "PASSWORD": env("DB_PASSWORD", default=None),
-        "HOST"    : env("DB_HOST"    , default=None),
-        "PORT"    : env("DB_PORT"    , default=None),
+        "HOST": env("DB_HOST", default=None),
+        "PORT": env("DB_PORT", default=None),
     }
 }
 
@@ -162,10 +158,10 @@ REST_FRAMEWORK = {
 }
 
 # ##################################################################### #
-#  CORS 
+#  CORS
 # ##################################################################### #
 
-CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Load the default ones
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
@@ -178,7 +174,7 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 
 # ##################################################################### #
-#  TESTING 
+#  TESTING
 # ##################################################################### #
 
 # TESTING = False
