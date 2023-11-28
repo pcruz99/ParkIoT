@@ -47,6 +47,9 @@ class SpaceSerializer(serializers.ModelSerializer):
         model = Space
         fields = '__all__'
         read_only_field = ['number', 'location']
+        
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 
 class RegisterSerializer(serializers.ModelSerializer):

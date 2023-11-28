@@ -15,11 +15,12 @@ import * as Yup from 'yup';
 //MUI
 import { Cancel } from '@mui/icons-material';
 import { Button, Box, TextField, MenuItem, Grid, FormHelperText } from '@mui/material';
-
+//custom
 import { listColorV, listTypesV, listBrandVCarro, listBrandVMoto } from 'static-data/vehicle';
-
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import GeneralBack from 'components/GeneralBack';
+import Spinner from 'components/Spinner.jsx';
+// import Spinner from 'components/Spinner.jsx';
 
 const VehicleEdit = () => {
   const account = useSelector((state) => state.account);
@@ -30,11 +31,12 @@ const VehicleEdit = () => {
   const { id } = useParams();
 
   const [listBrandV, setListBrandV] = useState([]);
+
   const [vehicle, setVehicle] = useState();
-  const [vehicleBrand, setVehicleBrand] = useState('');
+  const [vehicleBrand, setVehicleBrand] = useState();
 
   const handleTipo = (tipo) => {
-    tipo === 'carro' ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
+    (tipo === 'automovil'  || tipo === 'camioneta' || tipo === 'furgoneta') ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
   };
 
   const callAPI = async () => {
@@ -70,7 +72,7 @@ const VehicleEdit = () => {
             <Cancel />
           </Button>
         </Box>
-        {vehicle && vehicleBrand && (
+        {vehicle && vehicleBrand ? (
           <Formik
             initialValues={{
               tipo: vehicle.tipo,
@@ -307,7 +309,7 @@ const VehicleEdit = () => {
               </Box>
             )}
           </Formik>
-        )}
+        ): <Spinner/>}
       </GeneralBack>
     </>
   );

@@ -10,8 +10,6 @@ from rest_framework.views import APIView
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from rest_framework.parsers import JSONParser
-
 from api.user.models import User
 from api.user.serializers import UserSerializer
 from parking.serializers import VehicleSerializer, SpaceSerializer, RegisterSerializer, RegisterTotalDaySerializer, RegisterFilteredSerializer
@@ -51,7 +49,7 @@ class VehicleViewDetail(APIView):
             return Vehicle.objects.get(pk=pk, owner=self.request.user)
         except Vehicle.DoesNotExist:
             return Http404
-    
+
     def get(self, request, pk, format=None):
         vehicle = self.get_object(pk)
         serializer = VehicleSerializer(vehicle)
@@ -136,6 +134,7 @@ class RegisterViewFiltered(APIView):
             return Response(status=HTTP_400_BAD_REQUEST)
         return Response(r.data, status=HTTP_200_OK)
 
+
 class RegistertTotalDayViewList(APIView):
     permission_classes = [IsAuthenticated, ]
 
@@ -215,7 +214,7 @@ class RegisterEntryView(APIView):
         current_date = timezone.localtime(timezone.now())
 
         # *Proceso de Registro Manual por parte del Guardia
-        if request.data['user'] == 0:            
+        if request.data['user'] == 0:
             try:
                 vehicle = Vehicle.objects.get(placa=request.data['placa'])
                 data = {"user": vehicle.owner.id if vehicle.owner != None else None, "vehicle": vehicle.id,
@@ -223,7 +222,7 @@ class RegisterEntryView(APIView):
                 # print(data)
                 # input()
             except Vehicle.DoesNotExist:
-                
+
                 v = VehicleSerializer(data={"placa": request.data['placa']})
                 if v.is_valid(raise_exception=True):
                     vehicle = v.save(owner=None, register_manual=True)
@@ -234,10 +233,10 @@ class RegisterEntryView(APIView):
         else:
             # data = request.data
             data = {"user": request.data['user'], "vehicle": request.data['vehicle'],
-                        "guard": request.data['guard']}
+                    "guard": request.data['guard']}
 
         serializer = RegisterSerializer(data=data)
-        
+
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
@@ -295,7 +294,7 @@ class TeachMLAlgView(APIView):
         registros_total = RegisterTotalDay.objects.all()
         # if registros_total.count() < 100:
         #     return Response({"success": False, "msg": "Error al Entrenar Modelo", "error": "min100reg"}, status=HTTP_400_BAD_REQUEST)
-        score = teach_model(registros_total)        
+        score = teach_model(registros_total)
         if score == 0:
             return Response({"success": False, "msg": "Error al Entrenar Modelo", "error": "scoreEq0"}, status=HTTP_400_BAD_REQUEST)
         return Response({"success": True, "score": score, "msg": "Modelo Entrenado"}, status=HTTP_200_OK)

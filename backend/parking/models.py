@@ -5,10 +5,19 @@ from api.user.models import User
 from scripts.feriados import es_feriado
 
 TIPO_CHOICES = (
-    ('carro', 'carro'),
-    ('moto', 'moto')
+    # ('carro', 'carro'),
+    # ('moto', 'moto')
+    ('automovil', 'automovil'),    
+    ('camioneta', 'camioneta'),
+    ('furgoneta', 'furgoneta'),
+    ('motocicleta', 'motocicleta')    
 )
 
+SPACE_STATES = (
+    ("libre", "libre"),
+    ("ocupado", "ocupado"),
+    ("sin servicio", "sin servicio")
+)
 
 class Vehicle(models.Model):
     brand = models.CharField(max_length=45, verbose_name="marca", null=True, blank=True)
@@ -28,9 +37,7 @@ class Vehicle(models.Model):
 class Space(models.Model):
     number = models.IntegerField(verbose_name="numero", unique=True)
     location = models.CharField(max_length=45, verbose_name="ubicacion")
-    # *This state is equal to free or not free os the parking
-    # *true is equivalent of free and false of not free.
-    state = models.BooleanField(verbose_name="estado")
+    state = models.CharField(max_length=15, choices= SPACE_STATES, verbose_name="estado")
     sensor = models.CharField(
         max_length=45, verbose_name="numero sensor", unique=True)
     tipo = models.CharField(max_length=45, choices=TIPO_CHOICES)

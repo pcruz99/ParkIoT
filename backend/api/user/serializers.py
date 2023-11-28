@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     vehicles = VehicleSerializer(many = True)
     class Meta:
         model = User
-        fields = ["id", "username", "email", "date", "first_name", "last_name", "vehicles"]
+        fields = ["id", "username", "email", "date", "first_name", "last_name", "vehicles", "cedula"]
         read_only_field = ["id"]
 
 

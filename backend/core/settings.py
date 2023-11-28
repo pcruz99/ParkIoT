@@ -23,13 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 #?: Se utiliza esta variable constante para obtener la url del frontend
-URl_FRONTEND = env('URL_FRONTEND')
+URL_FRONTEND = env('URL_FRONTEND', default='http://127.0.0.1:3000')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY', default='insecure-S#perS3crEt_007')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

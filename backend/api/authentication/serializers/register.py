@@ -13,7 +13,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     cedula = serializers.CharField(max_length=10, required=True, validators=[
         UniqueValidator(
             queryset=User.objects.all(),
-            message="Existe un Usuario con esta cedula"
+            message="Ya existe un Usuario con esta cedula"
         )]
     )
 

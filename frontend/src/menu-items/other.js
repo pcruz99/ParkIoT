@@ -14,7 +14,7 @@ const other = {
   type: 'group',
   children: [
     {
-      id: 'sample-page',
+      id: 'info',
       title: 'Información del Comercial Miñaca',
       type: 'item',
       url: 'https://www.comercialminaca.com/',

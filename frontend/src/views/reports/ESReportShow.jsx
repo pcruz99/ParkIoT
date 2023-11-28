@@ -66,6 +66,7 @@ const ESReportShow = () => {
     }
   };
 
+  //TODO: Cuando se realiza el prognostico la fecha seleccionada se borra del field
   return (
     <>
       <GeneralBack title="Reporte de E/S de Vehiculos">

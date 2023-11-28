@@ -49,16 +49,18 @@ def teach_model(queryset):
     
     try:
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.3, random_state=99)
+            X, y, test_size=0.1, random_state=99)        
     except ValueError:
         return 0
     
+    
     try:
-        LR.fit(X_train.values, y_train.values)
+        LR.fit(X_train.values, y_train.values)        
     except ValueError:
         return 0
     
     ML_SCORE = LR.score(X_test.values, y_test.values)
+    print(ML_SCORE)
     return ML_SCORE
 
 

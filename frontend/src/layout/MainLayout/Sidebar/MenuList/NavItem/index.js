@@ -20,7 +20,7 @@ const NavItem = ({ item, level }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const customization = useSelector((state) => state.customization);
-  const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
+  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   const Icon = item.icon;
   const itemIcon = item?.icon ? (
@@ -49,7 +49,8 @@ const NavItem = ({ item, level }) => {
 
   const itemHandler = (id) => {
     dispatch({ type: MENU_OPEN, id });
-    if (matchesSM) dispatch({ type: SET_MENU, opened: false });
+    //!Revisar que funcione bien todo
+    if (matchesSM) dispatch({ type: SET_MENU, opened: true });
   };
 
   // active menu item on page load

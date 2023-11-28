@@ -1,0 +1,577 @@
+[
+    {
+        "id": "732d999d25b57e28",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2747f1efa2cd0277",
+        "type": "http request",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "method": "PUT",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.10.10.104:8000/parking/space/1/",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 470,
+        "y": 140,
+        "wires": [
+            [
+                "63a8aa9105e3c103"
+            ]
+        ]
+    },
+    {
+        "id": "a988a6b4be598e39",
+        "type": "mqtt in",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "topic": "parking/sensor/1",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "037bbe90335c023c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "dd512f8c4fba3a4c",
+                "1bbb08e2a8adbfa8"
+            ]
+        ]
+    },
+    {
+        "id": "85e606c6ea39013e",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 5",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "dd512f8c4fba3a4c",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 1",
+        "func": "const MIN_DISTANCE = 200;\nif (msg.payload.distance > MIN_DISTANCE && !context.get(\"sent_free\")) {\n        context.set(\"sent_free\", true);\n        context.set(\"sent_notfree\", false);\n        return { payload: { state: \"libre\" } };\n}\nelse if (msg.payload.distance < MIN_DISTANCE && !context.get(\"sent_notfree\")) {\n        context.set(\"sent_notfree\", true);\n        context.set(\"sent_free\", false);\n        return { payload: { state: \"ocupado\" } };\n}\nreturn;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"sent_free\", false);\ncontext.set(\"sent_notfree\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 140,
+        "wires": [
+            [
+                "2747f1efa2cd0277"
+            ]
+        ]
+    },
+    {
+        "id": "34d64397ddd51c2a",
+        "type": "http request",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.10.10.104:8000/parking/space/2/",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 470,
+        "y": 220,
+        "wires": [
+            [
+                "7bb4855e38d9a794"
+            ]
+        ]
+    },
+    {
+        "id": "79f6d4f2c1407bd1",
+        "type": "mqtt in",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "topic": "parking/sensor/2",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "037bbe90335c023c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 200,
+        "wires": [
+            [
+                "65dcc5bf237d15ad",
+                "f76c1413627df925"
+            ]
+        ]
+    },
+    {
+        "id": "59e2d18b827342d7",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 7",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "65dcc5bf237d15ad",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 2",
+        "func": "const MIN_DISTANCE = 200;\nif (msg.payload.distance > MIN_DISTANCE && !context.get(\"sent_free\")) {\n        context.set(\"sent_free\", true);\n        context.set(\"sent_notfree\", false);\n        return { payload: { state: \"libre\" } };\n}\nelse if (msg.payload.distance < MIN_DISTANCE && !context.get(\"sent_notfree\")) {\n        context.set(\"sent_notfree\", true);\n        context.set(\"sent_free\", false);\n        return { payload: { state: \"ocupado\" } };\n}\nreturn;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"sent_free\", false);\ncontext.set(\"sent_notfree\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 220,
+        "wires": [
+            [
+                "34d64397ddd51c2a"
+            ]
+        ]
+    },
+    {
+        "id": "4de6f0781dc246bd",
+        "type": "http request",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "method": "PUT",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://10.10.10.104:8000/parking/space/3/",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 470,
+        "y": 300,
+        "wires": [
+            [
+                "cb6fdddf42b931da"
+            ]
+        ]
+    },
+    {
+        "id": "4709d95b69d357a6",
+        "type": "mqtt in",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "topic": "parking/sensor/3",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "037bbe90335c023c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 280,
+        "wires": [
+            [
+                "60df2a29b4510b03",
+                "fba3fefe369380a5"
+            ]
+        ]
+    },
+    {
+        "id": "3951efc5005215b2",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 9",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "60df2a29b4510b03",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 3",
+        "func": "const MIN_DISTANCE = 200;\nif (msg.payload.distance > MIN_DISTANCE && !context.get(\"sent_free\")) {\n        context.set(\"sent_free\", true);\n        context.set(\"sent_notfree\", false);\n        return { payload: { state: \"libre\" } };\n}\nelse if (msg.payload.distance < MIN_DISTANCE && !context.get(\"sent_notfree\")) {\n        context.set(\"sent_notfree\", true);\n        context.set(\"sent_free\", false);\n        return { payload: { state: \"ocupado\" } };\n}\nreturn;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"sent_free\", false);\ncontext.set(\"sent_notfree\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 300,
+        "wires": [
+            [
+                "4de6f0781dc246bd"
+            ]
+        ]
+    },
+    {
+        "id": "4548fc247fb34e38",
+        "type": "http request",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.10.10.104:8000/parking/space/4/",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "2c9e7ea5cff68dbb"
+            ]
+        ]
+    },
+    {
+        "id": "6c3f1af6bae6a76e",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "e4032b6fb1883bca",
+        "type": "mqtt in",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "topic": "parking/sensor/4",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "037bbe90335c023c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 360,
+        "wires": [
+            [
+                "f9507a54e3d5cd4e",
+                "fe761dc76ca37240"
+            ]
+        ]
+    },
+    {
+        "id": "0eef838f61f802c7",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 11",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "f9507a54e3d5cd4e",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 4",
+        "func": "const MIN_DISTANCE = 200;\nif (msg.payload.distance > MIN_DISTANCE && !context.get(\"sent_free\")) {\n        context.set(\"sent_free\", true);\n        context.set(\"sent_notfree\", false);\n        return { payload: { state: \"libre\" } };\n}\nelse if (msg.payload.distance < MIN_DISTANCE && !context.get(\"sent_notfree\")) {\n        context.set(\"sent_notfree\", true);\n        context.set(\"sent_free\", false);\n        return { payload: { state: \"ocupado\" } };\n}\nreturn;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"sent_free\", false);\ncontext.set(\"sent_notfree\", false);",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 380,
+        "wires": [
+            [
+                "4548fc247fb34e38"
+            ]
+        ]
+    },
+    {
+        "id": "1bbb08e2a8adbfa8",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 5",
+        "func": "const msg2 = {payload:{num_sensor: 1, data: msg.payload}}\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "85e606c6ea39013e"
+            ]
+        ]
+    },
+    {
+        "id": "f76c1413627df925",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 6",
+        "func": "const msg2 = {payload:{num_sensor: 2, data: msg.payload}}\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 180,
+        "wires": [
+            [
+                "59e2d18b827342d7"
+            ]
+        ]
+    },
+    {
+        "id": "fba3fefe369380a5",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 7",
+        "func": "const msg2 = {payload:{num_sensor: 3, data: msg.payload}}\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 260,
+        "wires": [
+            [
+                "3951efc5005215b2"
+            ]
+        ]
+    },
+    {
+        "id": "fe761dc76ca37240",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 8",
+        "func": "const msg2 = {payload:{num_sensor: 4, data: msg.payload}}\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "0eef838f61f802c7"
+            ]
+        ]
+    },
+    {
+        "id": "1e0816e26bdc6b37",
+        "type": "function",
+        "z": "732d999d25b57e28",
+        "name": "function 11",
+        "func": "try {\n    if (msg.payload.detail === \"No encontrado.\") {\n        return { payload: { state: \"sin servicio\" } };\n    }\n\n} catch (error) {\n    return;\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 520,
+        "wires": [
+            [
+                "6c3f1af6bae6a76e",
+                "a1f7d8e98c89ef95"
+            ]
+        ]
+    },
+    {
+        "id": "a1f7d8e98c89ef95",
+        "type": "http request",
+        "z": "732d999d25b57e28",
+        "name": "",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.10.10.104:8000/parking/space/4/",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 830,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2c9e7ea5cff68dbb",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "63a8aa9105e3c103",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "7bb4855e38d9a794",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "cb6fdddf42b931da",
+        "type": "debug",
+        "z": "732d999d25b57e28",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "037bbe90335c023c",
+        "type": "mqtt-broker",
+        "name": "local",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

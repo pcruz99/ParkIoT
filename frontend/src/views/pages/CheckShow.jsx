@@ -12,11 +12,12 @@ import { Box, Grid, Typography, Button, Divider } from '@mui/material';
 
 //axios
 import caxios from '../../scripts/customAxios.js';
-
+//custom
 import GeneralBack from 'components/GeneralBack';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import VehicleCard from 'components/VehicleCard';
 import MessageCard from 'components/MessageCard.jsx';
+import Spinner from 'components/Spinner.jsx';
 
 const CheckShow = () => {
   //TODO: Este useSelector es para definir la cuenta del guardia y que sea parte del registro
@@ -34,6 +35,8 @@ const CheckShow = () => {
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState(null);
   const [type, setType] = useState(null);
+
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const getDataAPI = async () => {
     await cax
@@ -78,6 +81,7 @@ const CheckShow = () => {
         )
         .then((response) => {
           if (response.status === 201) {
+            setIsLoaded(false);
             getDataAPI();
             handleRegisterMessage(register);
           }
@@ -110,71 +114,86 @@ const CheckShow = () => {
     getDataAPI();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    setIsLoaded(true);
+  }, [user]);
   return (
     <GeneralBack title="Registro de Entrada y Salida">
-      <Box textAlign={'center'}>
-        <Grid container spacing={2}>
-          <Grid item lg={12} xs={12}>
-            <Box sx={{ border: 1, borderColor: 'gray', borderRadius: 3, padding: 3 }}>
-              <Typography variant="h2">Información del Cliente</Typography>
-              <Typography variant="body1">
-                <b>Nombre:</b> {user.first_name}
-              </Typography>
-              <Typography variant="body1">
-                <b>Apellido:</b> {user.last_name}
-              </Typography>
-              <Typography variant="body1">
-                <b>Cedula:</b>
-              </Typography>
-              <Typography variant="body1">
-                <b>Correo:</b> {user.email}
-              </Typography>
-            </Box>
-          </Grid>
+      {!isLoaded ? (
+        <Spinner />
+      ) : (
+        <Box textAlign={'center'}>
+          <Grid container spacing={2}>
+            <Grid item lg={12} xs={12}>
+              <Box sx={{ border: 1, borderColor: 'gray', borderRadius: 3, padding: 3 }}>
+                <Typography variant="h2">Información del Cliente</Typography>
+                <Typography variant="body1">
+                  <b>Nombre:</b> {user.first_name}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Apellido:</b> {user.last_name}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Cedula:</b> {user.cedula}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Correo:</b> {user.email}
+                </Typography>
+              </Box>
+            </Grid>
             {vehicles.map((data) => (
-              <Grid item lg={4} md={4} sm={6} xs={12} key={data.id} >
+              <Grid item lg={4} md={4} sm={6} xs={12} key={data.id}>
                 <VehicleCard isLoading={false} vehicle={data} isForCheck={true} setVehicleId={setVehicleId} vehicleId={vehicleId} />
               </Grid>
             ))}
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+            <Grid item lg={12} xs={12}>
+              <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+            </Grid>
+            <Grid item lg={6} xs={12}>
+              <AnimateButton>
+                <Button
+                  disableElevation
+                  disabled={register != null ? true : false}
+                  variant="contained"
+                  size="large"
+                  color="success"
+                  onClick={registerEntry}
+                  sx={{ width: 250, height: 50 }}
+                >
+                  Registrar Entrada
+                </Button>
+              </AnimateButton>
+            </Grid>
+            <Grid item lg={6} xs={12}>
+              <AnimateButton>
+                <Button
+                  disableElevation
+                  disabled={register != null ? false : true}
+                  variant="contained"
+                  size="large"
+                  color="error"
+                  onClick={registerDeparture}
+                  sx={{ width: 250, height: 50 }}
+                >
+                  Registrar Salida
+                </Button>
+              </AnimateButton>
+            </Grid>
+            <Grid item lg={12} xs={12}>
+              <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+            </Grid>
           </Grid>
-          <Grid item lg={6} xs={12}>
-            <AnimateButton>
-              <Button
-                disableElevation
-                disabled={register != null ? true : false}
-                variant="contained"
-                size="large"
-                color="success"
-                onClick={registerEntry}
-                sx={{ width: 250, height: 50 }}
-              >
-                Registrar Entrada
-              </Button>
-            </AnimateButton>
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <AnimateButton>
-              <Button
-                disableElevation
-                disabled={register != null ? false : true}
-                variant="contained"
-                size="large"
-                color="error"
-                onClick={registerDeparture}
-                sx={{ width: 250, height: 50 }}
-              >
-                Registrar Salida
-              </Button>
-            </AnimateButton>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      )}
       <MessageCard open={open} setOpen={setOpen} msg={msg} type={type} />
+      <Box textAlign={'left'} sx={{ margin: 4 }}>
+        <Typography variant="h3">Como usar:</Typography>
+        <Typography variant="body1" align="justify">
+          {`Al usar la aplicación, verifica la información en el cuadro superior y elige el vehículo del cliente. 
+          Si el vehículo entra, presiona "Registrar Entrada". Si solo ves "Registrar Salida", 
+          el vehículo está saliendo. Confirma la acción correspondiente.`}
+        </Typography>
+      </Box>
     </GeneralBack>
   );
 };

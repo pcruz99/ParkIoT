@@ -132,7 +132,7 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
                           mt: 1
                         }}
                       >
-                        {vehicle.tipo === 'carro' ? (
+                        {(vehicle.tipo === 'automovil'  || vehicle.tipo === 'camioneta' || vehicle.tipo === 'furgoneta')? (
                           <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
                         ) : (
                           <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />

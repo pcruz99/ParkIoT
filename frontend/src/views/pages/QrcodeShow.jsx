@@ -39,12 +39,12 @@ const QrcodeShow = () => {
   return (
     <>
       <GeneralBack title="Codigo QR">
-        <Box textAlign={'center'}>
+        <Box display="flex" justifyContent="center" alignContent="center">
           <QrcodeCard qrcode={qrcode} />
         </Box>
         <Box textAlign={'left'} sx={{ margin: 4 }}>
           <Typography variant="h3">Como usar:</Typography>
-          <Typography variant="body1" align='justify'>
+          <Typography variant="body1" align="justify">
             {`Al ingresar al estacionamiento, asegúrate de mostrar el código QR al guardia para que pueda identificarte correctamente. Este
               código QR es esencial para tu identificación tanto en la entrada como en la salida del parqueadero. Por favor, ten en cuenta que
               es necesario presentar el código en ambas ocasiones para garantizar un registro preciso de tu ingreso y salida. ¡Gracias por tu

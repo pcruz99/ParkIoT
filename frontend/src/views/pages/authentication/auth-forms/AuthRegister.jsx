@@ -45,7 +45,7 @@ const FirebaseRegister = ({ ...others }) => {
   const scriptedRef = useScriptRef();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [showPassword, setShowPassword] = useState(false);
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
 
   const [strength, setStrength] = useState(0);
   const [level, setLevel] = useState();
@@ -89,6 +89,7 @@ const FirebaseRegister = ({ ...others }) => {
         initialValues={{
           first_name: '',
           last_name: '',
+          cedula: '',
           email: '',
           password: '',
           submit: null
@@ -104,6 +105,7 @@ const FirebaseRegister = ({ ...others }) => {
                 .post(`${configData.API_SERVER}/api/users/register`, {
                   first_name: values.first_name,
                   last_name: values.last_name,
+                  cedula: values.cedula,
                   email: values.email,
                   password: values.password,
                   username: extraerUsuarioCorreo(values.email)
@@ -111,7 +113,7 @@ const FirebaseRegister = ({ ...others }) => {
                 .then((response) => {
                   if (response.data.success) {
                     if (scriptedRef.current) {
-                      setStatus({ success: true });
+                      setStatus({ success: false });
                       setSubmitting(false);
                     }
                     navigate('/login');
@@ -123,9 +125,8 @@ const FirebaseRegister = ({ ...others }) => {
                 })
                 .catch((error) => {
                   console.log(error);
-                  console.log(error.response.data?.email?.msg);
                   setStatus({ success: false });
-                  setErrors({ submit: error.response.data?.email?.msg ?? 'Campos Incorrectos/Incompletos' });
+                  setErrors({ submit: error.response.data?.email?.msg ?? error.response.data?.cedula[0] ?? 'Campos Incorrectos/Incompletos' });
                   setSubmitting(false);
                 });
             } catch (err) {
@@ -181,11 +182,11 @@ const FirebaseRegister = ({ ...others }) => {
               margin="normal"
               name="cedula"
               type="text"
-              // value={values.last_name}
-              // onChange={(e) => {
-              //   handleChange(e);
-              //   values.last_name = e.target.value;
-              // }}
+              value={values.cedula}
+              onChange={(e) => {
+                handleChange(e);
+                values.cedula = e.target.value;
+              }}
               sx={{ ...theme.typography.customInput }}
             />
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
@@ -204,7 +205,6 @@ const FirebaseRegister = ({ ...others }) => {
                   {errors.email}
                 </FormHelperText>
               )}
-              {console.log(errors.email)}
             </FormControl>
 
             <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
@@ -276,8 +276,6 @@ const FirebaseRegister = ({ ...others }) => {
                 />
               </Grid>
             </Grid>
-
-            {console.log(touched)}
 
             {errors.submit && (
               <Box sx={{ mt: 3 }}>

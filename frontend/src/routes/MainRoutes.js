@@ -14,9 +14,6 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 // const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
 // const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
-
 //qrcode page
 const QrcodeShow = Loadable(lazy(() => import('views/pages/QrcodeShow')));
 const CheckShow = Loadable(lazy(() => import('views/pages/CheckShow')));
@@ -61,10 +58,6 @@ const MainRoutes = (account) => {
                 element: <ParkingShow />
               }
             ]
-          },
-          {
-            path: 'sample-page',
-            element: <SamplePage />
           },
           {
             path: 'qrcode',

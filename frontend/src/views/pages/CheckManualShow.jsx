@@ -1,5 +1,5 @@
 //react
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 //MUI
 import { Grid, Typography, Button, Box, TextField, Divider } from '@mui/material';
@@ -11,9 +11,11 @@ import { useSelector } from 'react-redux';
 //axios
 import caxios from '../../scripts/customAxios.js';
 
+//custom
 import GeneralBack from 'components/GeneralBack';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import MessageCard from 'components/MessageCard.jsx';
+import Spinner from 'components/Spinner.jsx';
 
 const CheckManualShow = () => {
   const account = useSelector((state) => state.account);
@@ -27,22 +29,25 @@ const CheckManualShow = () => {
   const [checked, setCheked] = useState(false);
   const [register, setRegister] = useState(null);
 
+  const [isLoaded, setIsLoaded] = useState(true);
+
   const handleCheckVehicle = async () => {
     await cax
       .get(`/parking/check/manual/${placa}`)
-      .then((response) => {
+      .then((response) => {        
         if (response.status === 200) {
           setRegister(response.data.register);
-          setCheked(true);
           setMsg('Vehiculo Existente Listo para Registrar');
           setType('success');
           setOpen(true);
-        }else if(response.status === 204){
-          setCheked(true);
+        } else if (response.status === 204) {
+          setRegister(null);
           setMsg('Vehiculo no Existente Listo para Registrar');
           setType('success');
           setOpen(true);
         }
+        setCheked(true);
+        setIsLoaded(false);
       })
       .catch(() => {
         setMsg('No hay datos disponibles');
@@ -50,8 +55,6 @@ const CheckManualShow = () => {
         setOpen(true);
       });
   };
-
-  console.log(register);
 
   const registerEntry = async () => {
     if (checked) {
@@ -66,12 +69,12 @@ const CheckManualShow = () => {
           { timeout: 5000 }
         )
         .then((response) => {
-          console.log(response.data);
-          if (response.status === 201) {            
+          if (response.status === 201) {
             setMsg(`Registro de Entrada Existoso`);
             setType('success');
             setOpen(true);
             setCheked(false);
+            setIsLoaded(false);
           }
         })
         .catch((error) => {
@@ -88,99 +91,118 @@ const CheckManualShow = () => {
           setMsg(`Registro de Salida Existoso`);
           setType('success');
           setOpen(true);
-          setCheked(false);          
+          setCheked(false);
         }
       });
     }
   };
 
+  useEffect(() => {    
+      if(isLoaded === false){
+        setIsLoaded(true)
+      }
+  }, [isLoaded]);
+
   return (
     <GeneralBack title="Registro Manual de Vehículos">
-      <Box textAlign={'center'}>
-        <Grid container spacing={2}>
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Typography variant="h3">Ingrese el Numero de Placa del Vehículo</Typography>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Box>
-              <ArrowDownward sx={{ width: 50, height: 50 }} />
-            </Box>
-          </Grid>
-          {placa != '' && (
+      {!isLoaded ? (
+        <Spinner />
+      ) : (
+        <Box textAlign={'center'}>
+          <Grid container spacing={2}>
             <Grid item lg={12} xs={12}>
-              <Typography variant="h2">{placa.toUpperCase()}</Typography>
+              <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
             </Grid>
-          )}
-          <Grid item lg={12} xs={12}>
-            <TextField
-              fullWidth
-              id="placa"
-              label="Placa del Vehículo"
-              variant="outlined"
-              value={placa}
-              onChange={(e) => {
-                setPlaca(e.target.value.toUpperCase());
-              }}
-              helperText="Escriba la placa del Vehículo"
-              sx={{ width: 250, height: 80, fontSize: 50 }}
-            />
+            <Grid item lg={12} xs={12}>
+              <Typography variant="h3">Ingrese el Numero de Placa del Vehículo</Typography>
+            </Grid>
+            <Grid item lg={12} xs={12}>
+              <Box>
+                <ArrowDownward sx={{ width: 50, height: 50 }} />
+              </Box>
+            </Grid>
+            {placa != '' && (
+              <Grid item lg={12} xs={12}>
+                <Typography variant="h2">{placa.toUpperCase()}</Typography>
+              </Grid>
+            )}
+            <Grid item lg={12} xs={12}>
+              <TextField
+                fullWidth
+                id="placa"
+                label="Placa del Vehículo"
+                variant="outlined"
+                value={placa}
+                onChange={(e) => {
+                  setPlaca(e.target.value.toUpperCase());
+                }}
+                helperText="Escriba la placa del Vehículo"
+                sx={{ width: 250, height: 80, fontSize: 50 }}
+              />
+            </Grid>
+            <Grid item lg={12} xs={12}>
+              <AnimateButton>
+                <Button
+                  disableElevation
+                  variant="contained"
+                  size="large"
+                  color="secondary"
+                  onClick={handleCheckVehicle}
+                  sx={{ width: 200, height: 50 }}
+                >
+                  Verificar la Placa
+                </Button>
+              </AnimateButton>
+            </Grid>
+            <Grid item lg={12} xs={12}>
+              <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+            </Grid>
+            <Grid item lg={6} xs={12}>
+              <AnimateButton>
+                <Button
+                  disableElevation
+                  disabled={checked ? (register != null ? true : false) : true}
+                  variant="contained"
+                  size="large"
+                  color="success"
+                  onClick={registerEntry}
+                  sx={{ width: 250, height: 50 }}
+                >
+                  Registrar Entrada
+                </Button>
+              </AnimateButton>
+            </Grid>
+            <Grid item lg={6} xs={12}>
+              <AnimateButton>
+                <Button
+                  disableElevation
+                  disabled={checked ? (register === null ? true : false) : true}
+                  variant="contained"
+                  size="large"
+                  color="error"
+                  onClick={registerDeparture}
+                  sx={{ width: 250, height: 50 }}
+                >
+                  Registrar Salida
+                </Button>
+              </AnimateButton>
+            </Grid>
+            <Grid item lg={12} xs={12}>
+              <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+            </Grid>
           </Grid>
-          <Grid item lg={12} xs={12}>
-            <AnimateButton>
-              <Button
-                disableElevation
-                variant="contained"
-                size="large"
-                color="secondary"
-                onClick={handleCheckVehicle}
-                sx={{ width: 200, height: 50 }}
-              >
-                Verificar la Placa
-              </Button>
-            </AnimateButton>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <AnimateButton>
-              <Button
-                disableElevation
-                disabled={checked ? (register != null ? true : false) : true}
-                variant="contained"
-                size="large"
-                color="success"
-                onClick={registerEntry}
-                sx={{ width: 250, height: 50 }}
-              >
-                Registrar Entrada
-              </Button>
-            </AnimateButton>
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <AnimateButton>
-              <Button
-                disableElevation
-                disabled={checked ? (register === null ? true : false) : true}
-                variant="contained"
-                size="large"
-                color="error"
-                onClick={registerDeparture}
-                sx={{ width: 250, height: 50 }}
-              >
-                Registrar Salida
-              </Button>
-            </AnimateButton>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      )}
+
       <MessageCard open={open} setOpen={setOpen} msg={msg} type={type} />
+      <Box textAlign={'left'} sx={{ margin: 4 }}>
+        <Typography variant="h3">Como usar:</Typography>
+        <Typography variant="body1" align="justify">
+          {`Cuando ingreses a la aplicación, introduce la placa del vehículo. Verifica si hay un registro existente. 
+          Si la placa no está registrada, presiona "Registrar Entrada" para agregarla al sistema. 
+          Si la placa ya existe y el vehículo se está retirando, selecciona "Registrar Salida" para mantener un seguimiento preciso.`}
+        </Typography>
+      </Box>
     </GeneralBack>
   );
 };

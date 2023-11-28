@@ -13,10 +13,11 @@ import BasicDatePicker from 'components/Mui/BasicDatepicker';
 //Custom Axios
 import caxios from '../../scripts/customAxios.js';
 
+//custom
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import GeneralBack from 'components/GeneralBack';
 import MessageCard from 'components/MessageCard.jsx';
-// import MessageCard from 'components/MessageCard.jsx';
+import Spinner from 'components/Spinner.jsx';
 
 const POD = [
   { value: 'MAD', label: 'Madrugada' },
@@ -33,13 +34,16 @@ const PrognosisShow = () => {
   const [pod, setPod] = useState('');
 
   const [score, setScore] = useState(0);
-  const [cantVehicles, setCantVehicles] = useState();
+  const [cantVehicles, setCantVehicles] = useState(-1);
 
   const [prognosticado, setPrognosticado] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState(null);
   const [type, setType] = useState(null);
+
+  const [isLoaded1, setIsLoaded1] = useState(true);
+  const [isLoaded2, setIsLoaded2] = useState(true);
 
   const callAPI = async () => {
     await cax
@@ -57,14 +61,28 @@ const PrognosisShow = () => {
     callAPI();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (isLoaded1 === false) {
+      setIsLoaded1(true);
+    }
+  }, [isLoaded1]);
+
+  useEffect(() => {
+    if (isLoaded2 === false) {
+      setIsLoaded2(true);
+    }
+  }, [isLoaded2]);
+
   const trainModel = async () => {
     await cax
       .post('/parking/ml/teach/', {}, { timeout: 5000 })
       .then((response) => {
         setScore(response.data?.score);
+
         setOpen(true);
         setMsg('Modelo entrenado con Exito');
         setType('success');
+        setIsLoaded1(false);
       })
       .catch((error) => {
         setOpen(true);
@@ -85,6 +103,7 @@ const PrognosisShow = () => {
             setOpen(true);
             setMsg('Prediccion realizada con Exito');
             setType('success');
+            setIsLoaded2(false);
           })
           .catch((error) => {
             setOpen(true);
@@ -99,82 +118,96 @@ const PrognosisShow = () => {
     }
   };
 
+  //TODO: Cuando se realiza el prognostico la fecha seleccionada se borra del field
   return (
     <>
       <GeneralBack title="Pronóstico con IA">
-        <Grid container spacing={3}>
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <Box display="flex" justifyContent="center" alignContent="center">
-              <AnimateButton>
-                <Button disableElevation variant="contained" size="large" sx={{ height: 48 }} onClick={trainModel}>
-                  {score == 0 ? 'Entrenar Modelo' : 'Volver a Entrenar Modelo'}
-                </Button>
-              </AnimateButton>
-            </Box>
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <Box display="flex" justifyContent="center" alignContent="center">
-              <Typography variant="h4">Estado:_</Typography>
-              <Typography variant="body1" sx={{ color: score != 0 ? 'green' : 'red' }}>
-                {score != 0 ? 'Entrenado' : 'No Entrenado'}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
-          </Grid>
+        {!isLoaded1 ? (
+          <Spinner />
+        ) : (
+          <Box>
+            <Grid container spacing={3}>
+              <Grid item lg={12} xs={12}>
+                <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <AnimateButton>
+                    <Button disableElevation variant="contained" size="large" sx={{ height: 48 }} onClick={trainModel}>
+                      {score === 0 ? 'Entrenar Modelo' : 'Volver a Entrenar Modelo'}
+                    </Button>
+                  </AnimateButton>
+                </Box>
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <Typography variant="h4">Estado:_</Typography>
+                  <Typography variant="body1" sx={{ color: score != 0 ? 'green' : 'red' }}>
+                    {score != 0 ? 'Entrenado' : 'No Entrenado'}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item lg={12} xs={12}>
+                <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+        {!isLoaded2 ? (
+          <Spinner />
+        ) : (
+          <Box>
+            <Grid container spacing={3}>
+              <Grid item lg={3} xs={12}>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <BasicDatePicker setPickDate={setPickDate} />
+                </Box>
+              </Grid>
+              <Grid item lg={3} xs={12}>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <TextField
+                    // fullWidth
+                    label="Parte del Dia"
+                    helperText="Elija la parte del dia"
+                    value={pod}
+                    onChange={(e) => {
+                      setPod(e.target.value);
+                    }}
+                    select
+                    required
+                    sx={{ width: 250, height: 80 }}
+                  >
+                    {POD.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+              </Grid>
+              <Grid item lg={3} xs={12}>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <AnimateButton>
+                    <Button fullWidth disabled={!score} variant="contained" size="large" sx={{ height: 48 }} onClick={doPrognosis}>
+                      Generar Pronostico
+                    </Button>
+                  </AnimateButton>
+                </Box>
+              </Grid>
 
-          <Grid item lg={3} xs={12}>
-            <Box display="flex" justifyContent="center" alignContent="center">
-              <BasicDatePicker setPickDate={setPickDate} />
-            </Box>
-          </Grid>
-          <Grid item lg={3} xs={12}>
-            <Box display="flex" justifyContent="center" alignContent="center">
-              <TextField
-                // fullWidth
-                label="Parte del Dia"
-                helperText="Elija la parte del dia"
-                value={pod}
-                onChange={(e) => {
-                  setPod(e.target.value);
-                }}
-                select
-                required
-                sx={{ width: 250, height: 80 }}
-              >
-                {POD.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-          </Grid>
-          <Grid item lg={3} xs={12}>
-            <Box display="flex" justifyContent="center" alignContent="center">
-              <AnimateButton>
-                <Button fullWidth disabled={!score} variant="contained" size="large" sx={{ height: 48 }} onClick={doPrognosis}>
-                  Generar Pronostico
-                </Button>
-              </AnimateButton>
-            </Box>
-          </Grid>
-
-          <Grid item lg={3} xs={12}>
-            <Box display="flex" justifyContent="center" alignContent="center">
-              <Typography variant="h4">Cantidad de Vehiculos:_</Typography>
-              {prognosticado && (
-                <Typography variant="body1" sx={{ color: cantVehicles === 1 ? 'green' : 'red' }}>
-                  {cantVehicles === 1 ? 'ALTO' : 'BAJO'}
-                </Typography>
-              )}
-            </Box>
-          </Grid>
-        </Grid>
+              <Grid item lg={3} xs={12}>
+                <Box display="flex" justifyContent="center" alignContent="center">
+                  <Typography variant="h4">Cantidad de Vehiculos:_</Typography>
+                  {prognosticado && (
+                    <Typography variant="body1" sx={{ color: cantVehicles === 1 ? 'green' : 'red' }}>
+                      {cantVehicles === 1 ? 'ALTO' : 'BAJO'}
+                    </Typography>
+                  )}
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
         <Box textAlign={'left'} sx={{ margin: 4 }}>
           <Typography variant="h3">Como usar:</Typography>
           <Typography variant="body1" align="justify">
@@ -186,6 +219,7 @@ const PrognosisShow = () => {
             gestión de tráfico con esta herramienta intuitiva y potente!`}
           </Typography>
         </Box>
+
         <MessageCard open={open} setOpen={setOpen} msg={msg} type={type} />
       </GeneralBack>
     </>

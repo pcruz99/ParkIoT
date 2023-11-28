@@ -29,8 +29,8 @@ const VehicleCreate = () => {
   const account = useSelector((state) => state.account);
   const navigate = useNavigate();
 
-  const handleTipo = (e) => {
-    e.target.value === 'carro' ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
+  const handleTipo = (tipo) => {
+    (tipo === 'automovil'  || tipo === 'camioneta' || tipo === 'furgoneta') ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
   };
 
   return (
@@ -116,7 +116,7 @@ const VehicleCreate = () => {
                     value={values.tipo}
                     onChange={(e) => {
                       handleChange(e);
-                      handleTipo(e);
+                      handleTipo(e.target.value);
                       values.tipo = e.target.value;
                     }}
                     // onLoad={console.log('hola')}

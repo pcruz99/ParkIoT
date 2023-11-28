@@ -27,11 +27,14 @@ const ParkingShow = () => {
     <>
       <GeneralBack title="Estacionamientos Disponibles">
         <Grid container spacing={2}>
-          {spaces.map((data) => (
-            <Grid item xs={12} md={2} key={data.id}>
-              <ParkingCard isLoading={!completed} space={data} />
-            </Grid>
-          ))}
+          {spaces
+            .slice()
+            .sort((a, b) => a.number - b.number)
+            .map((data) => (
+              <Grid item xs={12} md={2} key={data.id}>
+                <ParkingCard isLoading={!completed} space={data} />
+              </Grid>
+            ))}
         </Grid>
       </GeneralBack>
     </>

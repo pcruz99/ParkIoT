@@ -14,13 +14,10 @@ import {
   Chip,
   ClickAwayListener,
   Divider,
-  // Grid,
-  // InputAdornment,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  // OutlinedInput,
   Paper,
   Popper,
   Stack,
@@ -28,16 +25,11 @@ import {
 } from '@mui/material';
 
 // third-party
-import PerfectScrollbar from 'react-perfect-scrollbar';
+// import PerfectScrollbar from 'react-perfect-scrollbar';
 import axios from 'axios';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
-
-// import UpgradePlanCard from './UpgradePlanCard';
-
-// import User1 from 'assets/images/users/user-round.svg';
-
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons';
 import { QrCode, DirectionsCar } from '@mui/icons-material';
@@ -47,11 +39,11 @@ import { LOGOUT } from 'store/actions';
 
 const ProfileSection = () => {
   const theme = useTheme();
-  const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-
   const account = useSelector((state) => state.account);
   const dispatcher = useDispatch();
+
+  const customization = useSelector((state) => state.customization);
 
   // const [sdm, setSdm] = useState(true);
   // const [value, setValue] = useState('');
@@ -79,10 +71,10 @@ const ProfileSection = () => {
         dispatcher({ type: LOGOUT });
         navigate('/login');
       })
-      .catch((error) => {
+      .catch(() => {
         dispatcher({ type: LOGOUT });
         navigate('/login');
-        console.log('error-', error);
+        // console.log('error-', error);
       });
   };
 
@@ -114,6 +106,16 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
 
+  useEffect(() => {
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(-1);
+      }, 10000);
+    }).then((res) => {
+      setSelectedIndex(res);
+    });
+  }, [selectedIndex]);
+
   return (
     <>
       <Chip
@@ -136,20 +138,6 @@ const ProfileSection = () => {
             lineHeight: 0
           }
         }}
-        // icon={
-        //   <Avatar
-        //     src={User1}
-        //     sx={{
-        //       ...theme.typography.mediumAvatar,
-        //       margin: '8px 0 8px 8px !important',
-        //       cursor: 'pointer'
-        //     }}
-        //     ref={anchorRef}
-        //     aria-controls={open ? 'menu-list-grow' : undefined}
-        //     aria-haspopup="true"
-        //     color="inherit"
-        //   />
-        // }
         label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
         variant="outlined"
         ref={anchorRef}
@@ -192,121 +180,73 @@ const ProfileSection = () => {
                       <Typography variant="subtitle2">
                         <b>Rol:</b> {capitalizerCustom(account?.user?.role)}
                       </Typography>
+                      <Typography variant="subtitle2">
+                        <b>Nombre de Usuario:</b> {account?.user?.username}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <b>Correo:</b> {account?.user?.email}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <b>Cedula:</b> {account?.user?.cedula}
+                      </Typography>
                     </Stack>
-                    {/* <OutlinedInput
-                      sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
-                      id="input-search-profile"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                      placeholder="Search profile options"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <IconSearch stroke={1.5} size="1rem" color={theme.palette.grey[500]} />
-                        </InputAdornment>
-                      }
-                      aria-describedby="search-helper-text"
-                      inputProps={{
-                        'aria-label': 'weight'
-                      }}
-                    /> */}
-                    {/* <Divider /> */}
                   </Box>
-                  <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 1 }}>
-                      {/* <UpgradePlanCard /> */}
-                      {/* <Divider /> */}
-
-                      <Divider />
-                      <List
-                        component="nav"
-                        sx={{
-                          width: '100%',
-                          maxWidth: 350,
-                          minWidth: 300,
-                          backgroundColor: theme.palette.background.paper,
-                          borderRadius: '10px',
-                          [theme.breakpoints.down('md')]: {
-                            minWidth: '100%'
-                          },
-                          '& .MuiListItemButton-root': {
-                            mt: 0.5
-                          }
-                        }}
+                  {/* <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}> */}
+                  <Box sx={{ p: 1 }}>
+                    <Divider />
+                    <List
+                      component="nav"
+                      sx={{
+                        width: '100%',
+                        maxWidth: 350,
+                        minWidth: 300,
+                        backgroundColor: theme.palette.background.paper,
+                        borderRadius: '10px',
+                        [theme.breakpoints.down('md')]: {
+                          minWidth: '100%'
+                        },
+                        '& .MuiListItemButton-root': {
+                          mt: 0.5
+                        }
+                      }}
+                    >
+                      {(account.user.role === 'client' || account.user.role === 'admin') && (
+                        <Box>
+                          <ListItemButton
+                            sx={{ borderRadius: `${customization.borderRadius}px` }}
+                            selected={selectedIndex === 1}
+                            onClick={(event) => handleListItemClick(event, 1, '/vehicle/show')}
+                          >
+                            <ListItemIcon>
+                              <DirectionsCar stroke={1.5} size="1.3rem" />
+                            </ListItemIcon>
+                            <ListItemText primary={<Typography variant="body2">Registrar Vehiculos</Typography>} />
+                          </ListItemButton>
+                          <ListItemButton
+                            sx={{ borderRadius: `${customization.borderRadius}px` }}
+                            selected={selectedIndex === 2}
+                            onClick={(event) => handleListItemClick(event, 2, '/qrcode')}
+                          >
+                            <ListItemIcon>
+                              <QrCode stroke={1.5} size="1.3rem" />
+                            </ListItemIcon>
+                            <ListItemText primary={<Typography variant="body2">Generar Codigo QR</Typography>} />
+                          </ListItemButton>
+                        </Box>
+                      )}
+                      <ListItemButton
+                        sx={{ borderRadius: `${customization.borderRadius}px` }}
+                        selected={selectedIndex === 4}
+                        onClick={handleLogout}
                       >
-                        {/* <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '#')}
-                        >
-                          <ListItemIcon>
-                            <IconSettings stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                        </ListItemButton> */}
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 1}
-                          onClick={(event) => handleListItemClick(event, 1, '/vehicle/show')}
-                        >
-                          <ListItemIcon>
-                            <DirectionsCar stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Registrar Vehiculos</Typography>} />
-                        </ListItemButton>
-
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 2}
-                          onClick={(event) => handleListItemClick(event, 2, '/qrcode')}
-                        >
-                          <ListItemIcon>
-                            <QrCode stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Generar Codigo QR</Typography>} />
-                        </ListItemButton>
-
-                        {/* <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 3}
-                          onClick={(event) => handleListItemClick(event, 3, '#')}
-                        >
-                          <ListItemIcon>
-                            <IconUser stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Grid container spacing={1} justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="body2">Social Profile</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Chip
-                                    label="02"
-                                    size="small"
-                                    sx={{
-                                      bgcolor: theme.palette.warning.dark,
-                                      color: theme.palette.background.default
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
-                            }
-                          />
-                        </ListItemButton> */}
-
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 4}
-                          onClick={handleLogout}
-                        >
-                          <ListItemIcon>
-                            <IconLogout stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Cerrar Session</Typography>} />
-                        </ListItemButton>
-                      </List>
-                    </Box>
-                  </PerfectScrollbar>
+                        <ListItemIcon>
+                          <IconLogout stroke={1.5} size="1.3rem" />
+                        </ListItemIcon>
+                        <ListItemText primary={<Typography variant="body2">Cerrar Session</Typography>} />
+                      </ListItemButton>
+                    </List>
+                  </Box>
+                  {/* </PerfectScrollbar> */}
                 </MainCard>
               </ClickAwayListener>
             </Paper>
