@@ -1,9 +1,10 @@
 version: '3.8'
 services:
-  appseed-app:
+  parkiot-back:
     container_name: parkiot
     restart: always
-    build: .
+    build: 
+      context: .
     networks:
       - db_network
       - web_network
@@ -18,7 +19,7 @@ services:
     networks:
       - web_network
     depends_on: 
-      - appseed-app
+      - parkiot-back
 networks:
   db_network:
     driver: bridge
