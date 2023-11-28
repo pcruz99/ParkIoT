@@ -1,0 +1,4 @@
+name: sample-django
+services:
+- name: server
+  run_command: gunicorn --worker-tmp-dir . core.wsgi
