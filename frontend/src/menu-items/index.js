@@ -4,7 +4,7 @@ import other from './other';
 import check from './check';
 // ==============================|| MENU ITEMS ||============================== //
 
-const menuItems = (account) => {  
+const menuItems = (account) => {
   switch (account?.user.role) {
     case 'admin':
       return { items: [dashboard, reports, check, other] };

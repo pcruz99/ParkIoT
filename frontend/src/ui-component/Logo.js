@@ -1,28 +1,15 @@
 // material-ui
 // import { useTheme } from '@mui/material/styles';
-import ImagenIcon from 'assets/images/logo-color.png';
-/**
- * if you want to use image instead of <svg> uncomment following.
- *
- * import logoDark from 'assets/images/logo-dark.svg';
- * import logo from 'assets/images/logo.svg';
- *
- */
+import PropTypes from 'prop-types';
+import ImagenIcon from 'assets/images/logo.png';
 
-// ==============================|| LOGO SVG ||============================== //
-
-const Logo = ({width}) => {
+const Logo = ({ width }) => {
   // const theme = useTheme();
+  return <img src={ImagenIcon} alt="ParkIoT" width={width} />;
+};
 
-  return (
-    /**
-     * if you want to use image instead of svg uncomment following, and comment out <svg> element.
-     *
-     * <img src={logo} alt="Berry" width="100" />
-     *
-     */
-    <img src={ImagenIcon} alt="ParkIoT" width={width} />   
-  );
+Logo.propTypes = {
+  width: PropTypes.number
 };
 
 export default Logo;

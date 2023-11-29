@@ -15,8 +15,8 @@ import GeneralBack from 'components/GeneralBack';
 import TotalGrowthBarChart from 'components/Reports/TotalGrowthBarChart';
 
 const ReportShow = () => {
-  const account = useSelector((state)=>state.account);
-  const cax = caxios(account.token);  
+  const account = useSelector((state) => state.account);
+  const cax = caxios(account.token);
 
   const [isLoading, setIsLoading] = useState(true);
   const [registers, setRegisters] = useState();

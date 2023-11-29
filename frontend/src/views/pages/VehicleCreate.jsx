@@ -30,7 +30,7 @@ const VehicleCreate = () => {
   const navigate = useNavigate();
 
   const handleTipo = (tipo) => {
-    (tipo === 'automovil'  || tipo === 'camioneta' || tipo === 'furgoneta') ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
+    tipo === 'automovil' || tipo === 'camioneta' || tipo === 'furgoneta' ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
   };
 
   return (
@@ -79,10 +79,6 @@ const VehicleCreate = () => {
                   setSubmitting(true);
                   setStatus({ success: true });
                   navigate('/vehicle/show');
-                } else {
-                  // setStatus({ success: false });
-                  // setErrors({ submit: response.data });
-                  // setSubmitting(false);
                 }
               })
               .catch((error) => {

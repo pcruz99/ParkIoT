@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 //redux
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from 'store/actions';
 //axios
 import axios from 'axios';
 //MUI
@@ -14,6 +16,7 @@ import Spinner from 'components/Spinner';
 
 const ParkingShow = () => {
   const account = useSelector((state) => state.account);
+  const dispatcher = useDispatch();
   const [spaces, setSpaces] = useState([]);
   const [completed, setCompleted] = useState(false);
   useEffect(() => {
@@ -26,6 +29,11 @@ const ParkingShow = () => {
       .then((response) => {
         setSpaces(response.data);
         setCompleted(true);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 403) {
+          dispatcher({ type: LOGOUT });
+        }
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

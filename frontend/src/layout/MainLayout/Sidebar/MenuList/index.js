@@ -10,7 +10,7 @@ import menuItem from 'menu-items';
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
 const MenuList = () => {
-  const account = useSelector((state) => state.account);  
+  const account = useSelector((state) => state.account);
   const navItems = menuItem(account).items.map((item) => {
     switch (item.type) {
       case 'group':

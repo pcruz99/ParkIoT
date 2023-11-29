@@ -37,7 +37,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 }));
 
 // ==============================|| DASHBOARD - TOTAL INCOME LIGHT CARD ||============================== //
-
+// eslint-disable-next-line
 const GeneralBack = ({ children, title }) => {
   return (
     <>

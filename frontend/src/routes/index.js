@@ -10,9 +10,9 @@ import { useSelector } from 'react-redux';
 
 export default function ThemeRoutes() {
   const account = useSelector((state) => state.account);
-  
+
   const mr = MainRoutes(account);
   const ar = AuthenticationRoutes(account);
-  
+
   return useRoutes([mr, ar]);
 }

@@ -36,7 +36,7 @@ const VehicleEdit = () => {
   const [vehicleBrand, setVehicleBrand] = useState();
 
   const handleTipo = (tipo) => {
-    (tipo === 'automovil'  || tipo === 'camioneta' || tipo === 'furgoneta') ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
+    tipo === 'automovil' || tipo === 'camioneta' || tipo === 'furgoneta' ? setListBrandV(listBrandVCarro) : setListBrandV(listBrandVMoto);
   };
 
   const callAPI = async () => {
@@ -309,7 +309,9 @@ const VehicleEdit = () => {
               </Box>
             )}
           </Formik>
-        ): <Spinner/>}
+        ) : (
+          <Spinner />
+        )}
       </GeneralBack>
     </>
   );

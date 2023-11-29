@@ -50,9 +50,9 @@ class Register(models.Model):
     is_active = models.BooleanField(default=True)
     #TODO: Definir este campo para que acepte valores nulos 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="usuario", related_name='users', blank=True, null=True)
+        User, on_delete=models.CASCADE, verbose_name="usuario", related_name='registers1', blank=True, null=True)
     vehicle = models.ForeignKey(
-        Vehicle, on_delete=models.CASCADE, verbose_name="vehiculo", related_name='vehicles')
+        Vehicle, on_delete=models.CASCADE, verbose_name="vehiculo", related_name='registers2')
     #TODO: Si es necesrio, agregar la informacion del guardia que realizo el registro
     guard = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 

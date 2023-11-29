@@ -22,7 +22,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
     <>
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
         <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
-          <LogoSection/>          
+          <LogoSection />
         </Box>
       </Box>
       <BrowserView>
@@ -36,7 +36,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         >
           <MenuList />
           <Stack direction="row" justifyContent="center" sx={{ mb: 2 }}>
-            <Chip label={process.env.REACT_APP_VERSION} disabled chipcolor="secondary" size="small" sx={{ cursor: 'pointer' }} />            
+            <Chip label={process.env.REACT_APP_VERSION} disabled chipcolor="secondary" size="small" sx={{ cursor: 'pointer' }} />
           </Stack>
         </PerfectScrollbar>
       </BrowserView>

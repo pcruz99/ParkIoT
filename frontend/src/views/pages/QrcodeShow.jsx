@@ -1,16 +1,22 @@
+//react
 import { useEffect, useState } from 'react';
+//redux
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from 'store/actions';
+//axios
 import axios from 'axios';
-// import MainCard from 'ui-component/cards/MainCard';
+//MUI
 import { Box, Typography } from '@mui/material';
-// import { Typography } from '@mui/material'
-
+//custom
 import QrcodeCard from 'components/QrcodeCard';
 import configData from '../../config';
 import GeneralBack from 'components/GeneralBack';
+import Spinner from 'components/Spinner';
 
 const QrcodeShow = () => {
   const account = useSelector((state) => state.account);
+  const dispatcher = useDispatch();
   const [qrcode, setQrcode] = useState(null);
 
   const callApi = async () => {
@@ -27,7 +33,9 @@ const QrcodeShow = () => {
         setQrcode(response.data.qrcode);
       })
       .catch((error) => {
-        console.log(error);
+        if (error?.response?.status === 403) {
+          dispatcher({ type: LOGOUT });
+        }
         setQrcode(null);
       });
   };
@@ -39,9 +47,13 @@ const QrcodeShow = () => {
   return (
     <>
       <GeneralBack title="Codigo QR">
-        <Box display="flex" justifyContent="center" alignContent="center">
-          <QrcodeCard qrcode={qrcode} />
-        </Box>
+        {!qrcode ? (
+          <Spinner />
+        ) : (
+          <Box display="flex" justifyContent="center" alignContent="center">
+            <QrcodeCard qrcode={qrcode} />
+          </Box>
+        )}
         <Box textAlign={'left'} sx={{ margin: 4 }}>
           <Typography variant="h3">Como usar:</Typography>
           <Typography variant="body1" align="justify">

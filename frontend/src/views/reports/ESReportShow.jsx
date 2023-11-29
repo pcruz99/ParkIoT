@@ -21,12 +21,12 @@ import GeneralBack from 'components/GeneralBack';
 import MessageCard from 'components/MessageCard.jsx';
 
 const ESReportShow = () => {
-  const account = useSelector((state)=>state.account);
+  const account = useSelector((state) => state.account);
   const dateNow = new Date();
   const cax = caxiox(account.token);
 
   const [registers, setRegister] = useState(null);
-  const [pickDate, setPickDate] = useState();
+  const [pickDate, setPickDate] = useState({ day: dateNow.getDate(), month: dateNow.getMonth() + 1, year: dateNow.getFullYear() });
   const [placa, setPlaca] = useState('');
 
   const [open, setOpen] = useState(false);
@@ -48,12 +48,11 @@ const ESReportShow = () => {
   };
 
   useEffect(() => {
-    // callAPI(2023, 10, 24);
-    callAPI(dateNow.getFullYear(), dateNow.getMonth() + 1, dateNow.getDate());
+    callAPI(pickDate.year, pickDate.month, pickDate.day);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const consultar = () => {
-    if (pickDate) {
+    if (pickDate.year != '') {
       if (placa) {
         callAPI(pickDate.year, pickDate.month, pickDate.day, placa);
       } else {
@@ -66,14 +65,13 @@ const ESReportShow = () => {
     }
   };
 
-  //TODO: Cuando se realiza el prognostico la fecha seleccionada se borra del field
   return (
     <>
       <GeneralBack title="Reporte de E/S de Vehiculos">
         <Box textAlign={'center'}>
           <Grid container spacing={2}>
             <Grid item lg={3} xs={12}>
-              <BasicDatePicker setPickDate={setPickDate} />
+              <BasicDatePicker setPickDate={setPickDate} pickDate={pickDate} />
             </Grid>
             <Grid item lg={3} xs={12}>
               <TextField

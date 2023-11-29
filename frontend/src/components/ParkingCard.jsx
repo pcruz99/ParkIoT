@@ -13,7 +13,8 @@ import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme, estado }) => ({
-  backgroundColor: estado === 'libre' ? theme.palette.success.dark : estado === 'ocupado' ? theme.palette.error.dark : theme.palette.grey[800],
+  backgroundColor:
+    estado === 'libre' ? theme.palette.success.dark : estado === 'ocupado' ? theme.palette.error.dark : theme.palette.grey[800],
   color: theme.palette.primary.light,
   overflow: 'hidden',
   position: 'relative',
@@ -87,7 +88,7 @@ const ParkingCard = ({ isLoading, space }) => {
                       <Typography variant="h4" sx={{ color: 'primary.light', mt: 0.25 }}>
                         {space?.state.toUpperCase()}
                       </Typography>
-                      {(space.tipo === 'automovil'  || space.tipo === 'camioneta' || space.tipo === 'furgoneta')? (
+                      {space.tipo === 'automovil' || space.tipo === 'camioneta' || space.tipo === 'furgoneta' ? (
                         <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
                       ) : (
                         <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />

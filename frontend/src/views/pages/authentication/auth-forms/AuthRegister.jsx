@@ -126,7 +126,9 @@ const FirebaseRegister = ({ ...others }) => {
                 .catch((error) => {
                   console.log(error);
                   setStatus({ success: false });
-                  setErrors({ submit: error.response.data?.email?.msg ?? error.response.data?.cedula[0] ?? 'Campos Incorrectos/Incompletos' });
+                  setErrors({
+                    submit: error.response.data?.email?.msg ?? error.response.data?.cedula[0] ?? 'Campos Incorrectos/Incompletos'
+                  });
                   setSubmitting(false);
                 });
             } catch (err) {

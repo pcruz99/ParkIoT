@@ -62,7 +62,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         registers = Register.objects.filter(
-            user=attrs['user'], is_active=True, date=timezone.localtime(timezone.now()).date())
+            vehicle=attrs['vehicle'], is_active=True, date=timezone.localtime(timezone.now()).date())
         if registers:
             raise exceptions.ValidationError(
                 {"success": False, "msg": "Ya existe un registro activo"})
@@ -71,12 +71,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class RegisterFilteredSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.email')
-    guard = serializers.ReadOnlyField(source='user.email')
+    guard = serializers.ReadOnlyField(source='guard.email')    
     vehicle = serializers.ReadOnlyField(source='vehicle.placa')
 
     class Meta:
         model = Register
-        fields = '__all__'
+        fields = '__all__'        
 
 
 class RegisterTotalDaySerializer(serializers.ModelSerializer):

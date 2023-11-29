@@ -7,6 +7,8 @@ import ArrowDownward from '@mui/icons-material/ArrowDownward';
 
 //redux
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from 'store/actions.js';
 
 //axios
 import caxios from '../../scripts/customAxios.js';
@@ -19,6 +21,7 @@ import Spinner from 'components/Spinner.jsx';
 
 const CheckManualShow = () => {
   const account = useSelector((state) => state.account);
+  const dispatcher = useDispatch();
   const cax = caxios(account.token);
 
   const [open, setOpen] = useState(false);
@@ -33,8 +36,8 @@ const CheckManualShow = () => {
 
   const handleCheckVehicle = async () => {
     await cax
-      .get(`/parking/check/manual/${placa}`)
-      .then((response) => {        
+      .get(`/parking/check/manual/${placa}/`)
+      .then((response) => {
         if (response.status === 200) {
           setRegister(response.data.register);
           setMsg('Vehiculo Existente Listo para Registrar');
@@ -49,7 +52,10 @@ const CheckManualShow = () => {
         setCheked(true);
         setIsLoaded(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        if (error?.response?.status === 403) {
+          dispatcher({ type: LOGOUT });
+        }
         setMsg('No hay datos disponibles');
         setType('warning');
         setOpen(true);
@@ -97,10 +103,10 @@ const CheckManualShow = () => {
     }
   };
 
-  useEffect(() => {    
-      if(isLoaded === false){
-        setIsLoaded(true)
-      }
+  useEffect(() => {
+    if (isLoaded === false) {
+      setIsLoaded(true);
+    }
   }, [isLoaded]);
 
   return (

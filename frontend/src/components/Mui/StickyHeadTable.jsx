@@ -32,7 +32,7 @@ const columns = [
   {
     id: 'vehicle',
     label: 'Placa de Vehiculo',
-    minWidth: 170,
+    minWidth: 170
     // align: 'right',
     // format: (value) => new String(value).toUpperCase()
   },
@@ -49,7 +49,7 @@ const columns = [
     minWidth: 170,
     // align: 'right',
     format: (value) => value.toLocaleString('en-US')
-  },
+  }
 ];
 
 function createData(data) {
@@ -83,7 +83,7 @@ export default function StickyHeadTable({ registers }) {
   React.useEffect(() => {
     if (data) {
       const r = [];
-      if (r.length == 0) {
+      if (r.length === 0) {
         data.forEach((i) => {
           r.push(createData(i));
         });

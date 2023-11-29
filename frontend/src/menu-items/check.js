@@ -1,5 +1,5 @@
 // assets
-import { BackHand } from "@mui/icons-material";
+import { BackHand } from '@mui/icons-material';
 
 // constant
 const icons = {

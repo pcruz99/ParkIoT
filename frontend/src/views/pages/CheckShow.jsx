@@ -6,6 +6,8 @@ import { useParams } from 'react-router';
 
 //redux
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from 'store/actions.js';
 
 //MUI
 import { Box, Grid, Typography, Button, Divider } from '@mui/material';
@@ -20,8 +22,8 @@ import MessageCard from 'components/MessageCard.jsx';
 import Spinner from 'components/Spinner.jsx';
 
 const CheckShow = () => {
-  //TODO: Este useSelector es para definir la cuenta del guardia y que sea parte del registro
   const account = useSelector((state) => state.account);
+  const dispatcher = useDispatch();
   const cax = caxios(account.token);
   const { uuid } = useParams();
 
@@ -48,7 +50,10 @@ const CheckShow = () => {
           setRegister(response.data.register);
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        if (error?.response?.status === 403) {
+          dispatcher({ type: LOGOUT });
+        }
         setMsg('No hay datos disponibles');
         setType('warning');
         setOpen(true);
@@ -117,6 +122,7 @@ const CheckShow = () => {
   useEffect(() => {
     setIsLoaded(true);
   }, [user]);
+
   return (
     <GeneralBack title="Registro de Entrada y Salida">
       {!isLoaded ? (

@@ -12,7 +12,7 @@ urlpatterns = [
     path(r'space/', SpaceViewList.as_view(), name='space-list'),
     path(r'space/<int:pk>/', SpaceViewDetail.as_view(), name='space-detail'),
     path(r'check/<uuid:uuid>/', CheckView.as_view(), name='check'),
-    path(r'check/manual/<str:placa>', CheckManualView.as_view(), name='check-manual'),
+    path(r'check/manual/<str:placa>/', CheckManualView.as_view(), name='check-manual'),
     path(r'register/', RegisterViewFiltered.as_view(), name='register-filtered'), #*: register/?year={y}&month={m}&day={d}&placa={p}
     path(r'register/entry/', RegisterEntryView.as_view(), name='register-entry'),
     path(r'register/<int:pk>/departure/',

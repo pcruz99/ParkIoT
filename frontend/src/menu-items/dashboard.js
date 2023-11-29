@@ -19,7 +19,7 @@ const dashboard = {
       url: '/dashboard/parking',
       icon: icons.LocalParking,
       breadcrumbs: false
-    },
+    }
   ]
 };
 

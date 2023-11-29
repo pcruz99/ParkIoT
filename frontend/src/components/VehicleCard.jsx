@@ -116,7 +116,7 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
       {isLoading ? (
         <SkeletonEarningCard />
       ) : (
-        <Box sx={{ cursor:  isForCheck ? 'pointer': 'default' }} onClick={handleCheckVehicle} component="div">
+        <Box sx={{ cursor: isForCheck ? 'pointer' : 'default' }} onClick={handleCheckVehicle} component="div">
           <CardWrapper border={false} content={false} ischecked={vehicleId === vehicle.id ? 'true' : 'false'}>
             <Box sx={{ p: 2.25 }}>
               <Grid container direction="column">
@@ -132,7 +132,7 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
                           mt: 1
                         }}
                       >
-                        {(vehicle.tipo === 'automovil'  || vehicle.tipo === 'camioneta' || vehicle.tipo === 'furgoneta')? (
+                        {vehicle.tipo === 'automovil' || vehicle.tipo === 'camioneta' || vehicle.tipo === 'furgoneta' ? (
                           <DirectionsCar stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />
                         ) : (
                           <TwoWheeler stroke={1.5} size="1.3rem" sx={{ color: 'white' }} />

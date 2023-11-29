@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
+// eslint-disable-next-line
 const QrcodeCard = ({ qrcode }) => {
   return (
     <>
@@ -18,8 +19,8 @@ const QrcodeCard = ({ qrcode }) => {
           }
         }}
         src={`data:image/png;base64,${qrcode}`}
-        alt='Codigo QR con Informacion del Usuario'
-      />      
+        alt="Codigo QR con Informacion del Usuario"
+      />
     </>
   );
 };

@@ -16,7 +16,7 @@ const LogoSection = () => {
   const dispatch = useDispatch();
   return (
     <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      <Logo width={75}/>
+      <Logo width={55} />
     </ButtonBase>
   );
 };

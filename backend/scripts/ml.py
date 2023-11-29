@@ -29,17 +29,19 @@ def teach_model(queryset):
     data['is_holiday'] = label_encoder.fit_transform(data['is_holiday'])
     data['is_weekend'] = label_encoder.fit_transform(data['is_weekend'])
     data['is_promotionday'] = label_encoder.fit_transform(
-        data['is_promotionday'])
-    # data['part_of_day'] = label_encoder.fit_transform(data['part_of_day'])
+        data['is_promotionday'])    
     pod = []
     for i in data['part_of_day']:
         pod.append(pod_to_num(i))
     data['part_of_day'] = pod
 
+    # 0 es una cantidad baja y 1 es alta
+    #define si es mayor a la media de vehiculos registrados en el dia fue alta
+    #caso contrario fue una baja cantidad de vehiculo
+    #siempre considerando al promedio como valor de referencia
     avg = data['number_vehicles'].mean()
     amount = []
-    for i in data['number_vehicles']:
-        # 0 es una cantidad baja y 1 es alta
+    for i in data['number_vehicles']:        
         amount.append(1 if i >= avg else 0)
     data['amount'] = amount
 
@@ -49,10 +51,9 @@ def teach_model(queryset):
     
     try:
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.1, random_state=99)        
+            X, y, test_size=0.3, random_state=99)        
     except ValueError:
         return 0
-    
     
     try:
         LR.fit(X_train.values, y_train.values)        
@@ -60,7 +61,6 @@ def teach_model(queryset):
         return 0
     
     ML_SCORE = LR.score(X_test.values, y_test.values)
-    print(ML_SCORE)
     return ML_SCORE
 
 

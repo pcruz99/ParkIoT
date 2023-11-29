@@ -130,6 +130,7 @@ class RegisterViewFiltered(APIView):
             registers = Register.objects.filter(date=date)
 
         r = RegisterFilteredSerializer(registers, many=True)
+
         if not r.data:
             return Response(status=HTTP_400_BAD_REQUEST)
         return Response(r.data, status=HTTP_200_OK)
@@ -139,20 +140,25 @@ class RegistertTotalDayViewList(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, format=None):
+        table = "prk_registertotalday"
+        # table = "parkiot.prk_registertotalday"
         res = []
         total = 0
         sql = f"""SELECT id, part_of_day, MONTH(date) as Month, SUM(number_vehicles) AS Total 
-            FROM prk_registertotalday     
+            FROM {table}     
             WHERE YEAR(date)={timezone.localtime(timezone.now()).date().year}        
-            GROUP BY part_of_day, MONTH(date) ORDER BY Month ASC"""
+            GROUP BY part_of_day, Month, id ORDER BY Month ASC"""
 
-        for i in RegisterTotalDay.objects.raw(sql):
-            total += i.Total
-            res.append({'month': i.Month, 'part_of_day': str(
-                i.part_of_day), 'total': int(i.Total)})
-        return Response({"data": {
-            "registers": res, "total_vehicles": total
-        }}, status=HTTP_200_OK)
+        try:
+            for i in RegisterTotalDay.objects.raw(sql):
+                total += i.Total
+                res.append({'month': i.Month, 'part_of_day': str(
+                    i.part_of_day), 'total': int(i.Total)})
+            return Response({"data": {
+                "registers": res, "total_vehicles": total
+            }}, status=HTTP_200_OK)
+        except Exception:
+            return Response(status=HTTP_400_BAD_REQUEST)
 
 # =================================================================================================
 # ============================= Vehicle Register by Guard Zone ====================================
@@ -219,8 +225,6 @@ class RegisterEntryView(APIView):
                 vehicle = Vehicle.objects.get(placa=request.data['placa'])
                 data = {"user": vehicle.owner.id if vehicle.owner != None else None, "vehicle": vehicle.id,
                         "guard": request.data['guard']}
-                # print(data)
-                # input()
             except Vehicle.DoesNotExist:
 
                 v = VehicleSerializer(data={"placa": request.data['placa']})

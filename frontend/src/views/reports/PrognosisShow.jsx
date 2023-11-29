@@ -30,7 +30,7 @@ const PrognosisShow = () => {
   const account = useSelector((state) => state.account);
   const cax = caxios(account.token);
 
-  const [pickDate, setPickDate] = useState();
+  const [pickDate, setPickDate] = useState({ day: '', month: '', year: '' });
   const [pod, setPod] = useState('');
 
   const [score, setScore] = useState(0);
@@ -92,7 +92,7 @@ const PrognosisShow = () => {
   };
 
   const doPrognosis = async () => {
-    if (pickDate && pod != '') {
+    if (pickDate.year != '' && pod != '') {
       if (score != 0) {
         await cax
           .get(`/parking/ml/prognosis/?year=${pickDate.year}&month=${pickDate.month}&day=${pickDate.day}&pod=${pod}`, { timeout: 5000 })
@@ -160,7 +160,7 @@ const PrognosisShow = () => {
             <Grid container spacing={3}>
               <Grid item lg={3} xs={12}>
                 <Box display="flex" justifyContent="center" alignContent="center">
-                  <BasicDatePicker setPickDate={setPickDate} />
+                  <BasicDatePicker setPickDate={setPickDate} pickDate={pickDate} />
                 </Box>
               </Grid>
               <Grid item lg={3} xs={12}>

@@ -6,7 +6,7 @@ const instance = (token = '') => {
     baseURL: configData.API_SERVER,
     timeout: 1000,
     headers: {
-      Authorization: token,
+      Authorization: token
       // 'Content-Type': 'application/json'
     }
   });
