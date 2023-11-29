@@ -140,8 +140,7 @@ class RegistertTotalDayViewList(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, format=None):
-        table = "prk_registertotalday"
-        # table = "parkiot.prk_registertotalday"
+        table = "parkiot.prk_registertotalday"
         res = []
         total = 0
         sql = f"""SELECT id, part_of_day, MONTH(date) as Month, SUM(number_vehicles) AS Total 
