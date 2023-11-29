@@ -23,7 +23,7 @@ const ReportShow = () => {
 
   const getDataAPI = async () => {
     await cax
-      .get('/parking/registertotalday')
+      .get('/parking/registertotalday/')
       .then((response) => {
         setRegisters(response.data);
       })

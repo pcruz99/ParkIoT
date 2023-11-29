@@ -19,7 +19,7 @@ EXPOSE 8000
 # running migrations
 # RUN python manage.py makemigrations
 # RUN python manage.py migrate
-# RUN gunicorn --worker-tmp-dir . core.wsgi
+# RUN gunicorn --worker-tmp-dir . core.wsgi:application
 
 # gunicorn
 CMD ["gunicorn", "--config", "gunicorn-cfg.py", "core.wsgi"]

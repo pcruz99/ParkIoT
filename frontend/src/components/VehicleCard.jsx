@@ -79,7 +79,7 @@ const VehicleCard = ({ isLoading, vehicle, isForCheck, setVehicleId, vehicleId }
   //! Esto no es definitivo, hay que mejorar la funcionliad
   const callAPI = async () => {
     const cax = caxios(account?.token);
-    await cax.delete(`/parking/vehicle/${vehicle.id}`).then((response) => {
+    await cax.delete(`/parking/vehicle/${vehicle.id}/`).then((response) => {
       if (response.status == 204) {
         dispatcher({
           type: SET_VEHICLES,

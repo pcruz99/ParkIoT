@@ -40,7 +40,7 @@ const VehicleEdit = () => {
   };
 
   const callAPI = async () => {
-    await cax(`/parking/vehicle/${id}`).then((response) => {
+    await cax(`/parking/vehicle/${id}/`).then((response) => {
       if (response.status === 200) {
         setVehicle(response.data);
       }
