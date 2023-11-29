@@ -1,6 +1,6 @@
 console.log(process.env);
 // const BACKEND_SERVER = 'http://127.0.0.1:8000';
-const BACKEND_SERVER = 'https://king-prawn-app-c8ugt.ondigitalocean.app/login';
+const BACKEND_SERVER = 'https://oyster-app-bdvft.ondigitalocean.app/parkiot-backend2';
 const config = {
   // basename: only at build time to set, and Don't add '/' at end off BASENAME for breadcrumbs, also Don't put only '/' use blank('') instead,
   // like '/berry-material-react/react/default'

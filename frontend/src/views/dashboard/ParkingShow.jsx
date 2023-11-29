@@ -1,10 +1,16 @@
+//react
 import { useState, useEffect } from 'react';
+//redux
 import { useSelector } from 'react-redux';
+//axios
 import axios from 'axios';
+//MUI
 import { Grid } from '@mui/material';
+//custom
 import ParkingCard from 'components/ParkingCard';
 import configData from '../../config';
 import GeneralBack from 'components/GeneralBack';
+import Spinner from 'components/Spinner';
 
 const ParkingShow = () => {
   const account = useSelector((state) => state.account);
@@ -26,16 +32,20 @@ const ParkingShow = () => {
   return (
     <>
       <GeneralBack title="Estacionamientos Disponibles">
-        <Grid container spacing={2}>
-          {spaces
-            .slice()
-            .sort((a, b) => a.number - b.number)
-            .map((data) => (
-              <Grid item xs={12} md={2} key={data.id}>
-                <ParkingCard isLoading={!completed} space={data} />
-              </Grid>
-            ))}
-        </Grid>
+        {spaces.length === 0 ? (
+          <Spinner />
+        ) : (
+          <Grid container spacing={2}>
+            {spaces
+              .slice()
+              .sort((a, b) => a.number - b.number)
+              .map((data) => (
+                <Grid item xs={12} md={2} key={data.id}>
+                  <ParkingCard isLoading={!completed} space={data} />
+                </Grid>
+              ))}
+          </Grid>
+        )}
       </GeneralBack>
     </>
   );
