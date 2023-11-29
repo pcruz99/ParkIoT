@@ -19,47 +19,48 @@ ML_SCORE = None
 def get_ml_score():
     return ML_SCORE
 
+
 def teach_model(queryset):
     global LR
     global ML_SCORE
 
     data = pd.DataFrame(list(queryset.values(
-        'part_of_day', 'is_holiday', 'is_weekend', 'is_promotionday', 'number_vehicles', 'temperature')))    
+        'part_of_day', 'is_holiday', 'is_weekend', 'is_promotionday', 'number_vehicles', 'temperature')))
 
     data['is_holiday'] = label_encoder.fit_transform(data['is_holiday'])
     data['is_weekend'] = label_encoder.fit_transform(data['is_weekend'])
     data['is_promotionday'] = label_encoder.fit_transform(
-        data['is_promotionday'])    
+        data['is_promotionday'])
     pod = []
     for i in data['part_of_day']:
         pod.append(pod_to_num(i))
     data['part_of_day'] = pod
 
     # 0 es una cantidad baja y 1 es alta
-    #define si es mayor a la media de vehiculos registrados en el dia fue alta
-    #caso contrario fue una baja cantidad de vehiculo
-    #siempre considerando al promedio como valor de referencia
+    # define si es mayor a la media de vehiculos registrados en el dia fue alta
+    # caso contrario fue una baja cantidad de vehiculo
+    # siempre considerando al promedio como valor de referencia
     avg = data['number_vehicles'].mean()
     amount = []
-    for i in data['number_vehicles']:        
+    for i in data['number_vehicles']:
         amount.append(1 if i >= avg else 0)
     data['amount'] = amount
 
     y = data['amount']
     data.drop(['number_vehicles', 'amount'], axis=1, inplace=True)
     X = data
-    
+
     try:
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.3, random_state=99)        
+            X, y, test_size=0.3, random_state=99)
     except ValueError:
         return 0
-    
+
     try:
-        LR.fit(X_train.values, y_train.values)        
+        LR.fit(X_train.values, y_train.values)
     except ValueError:
         return 0
-    
+
     ML_SCORE = LR.score(X_test.values, y_test.values)
     return ML_SCORE
 
@@ -87,7 +88,7 @@ def prognosis_model(date: date, pod: str):
     # TODO: FIX: Arreglar el mensaje de error donde solo se puede hacer el pedido de temperatura
     # para 10 dias adelantes y 1 dia para atras en la cuenta gratutita
     if not temp['success'] and temp['error'] == 'max10days':
-        return {"success": False, "msg": 'Predicciones de mas de 10 dias no se pueden realizar', "error": "max10days"}
+        return {"success": False, "msg": 'Predicciones de más de 10 días no se pueden realizar', "error": "max10days"}
 
     #!: En caso de que la temperatura no se obtenga de la API Meteomatics
     #!: mantendre el resultado de 0 como un string para que salte la excepcion de la prediccion

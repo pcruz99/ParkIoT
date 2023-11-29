@@ -35,7 +35,7 @@ const VehicleCreate = () => {
 
   return (
     <>
-      <GeneralBack title="Registrar Vehiculo">
+      <GeneralBack title="Registrar Vehículo">
         <Box textAlign={'end'} sx={{ margin: 2 }}>
           <Button
             variant="outlined"
@@ -59,15 +59,15 @@ const VehicleCreate = () => {
             // submit: null
           }}
           validationSchema={Yup.object().shape({
-            model: Yup.string().max(255, 'El maximo es: 255').required('Se requiere el Modelo del Vehiculo'),
+            model: Yup.string().max(255, 'El máximo es: 255').required('Se requiere el Modelo del Vehículo'),
             year: Yup.number()
-              .min(1500, 'El año minimo es: 1500')
-              .max(anioActual, `El año maximo es: ${anioActual}`)
-              .required('Se requiere el Año del Vehiculo'),
+              .min(1500, 'El año mínimo es: 1500')
+              .max(anioActual, `El año máximo es: ${anioActual}`)
+              .required('Se requiere el Año del Vehículo'),
             placa: Yup.string()
-              .min(6, 'Minimo de caracateres es: 6')
-              .max(7, 'Maximo de caracteres es: 7')
-              .required('Se requiere la Placa del Vehiculo')
+              .min(6, 'Mínimo de caracteres es: 6')
+              .max(7, 'Máximo de caracteres es: 7')
+              .required('Se requiere la Placa del Vehículo')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             await axios
@@ -106,8 +106,8 @@ const VehicleCreate = () => {
                     fullWidth
                     name="tipo"
                     id="tipo-id"
-                    label="Tipo de Vehiculo"
-                    helperText="Elija el tipo de Vehiculo"
+                    label="Tipo de Vehículo"
+                    helperText="Elija el tipo de Vehículo"
                     variant="outlined"
                     value={values.tipo}
                     onChange={(e) => {
@@ -132,7 +132,7 @@ const VehicleCreate = () => {
                     name="brand"
                     id="brand-id"
                     label="Marca"
-                    helperText="Elija el color del Vehiculo"
+                    helperText="Elija la marca del Vehículo"
                     variant="outlined"
                     value={values.brand}
                     onChange={(e) => {
@@ -216,8 +216,8 @@ const VehicleCreate = () => {
                     fullWidth
                     name="color"
                     id="color-id"
-                    label="Color del Vehiculo"
-                    helperText="Elija el color del Vehiculo"
+                    label="Color del Vehículo"
+                    helperText="Elija el color del Vehículo"
                     value={values.color}
                     onChange={(e) => {
                       handleChange(e);

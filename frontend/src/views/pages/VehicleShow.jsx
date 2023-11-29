@@ -22,10 +22,12 @@ import Spinner from 'components/Spinner';
 
 const VehicleShow = () => {
   const account = useSelector((state) => state.account);
-  const { vehicles, slots } = useSelector((state) => state.vehicles);
   const dispatcher = useDispatch();
-  const [disableAddButton, setDisableAddButton] = useState(false);
   const navigate = useNavigate();
+
+  const { vehicles, slots } = useSelector((state) => state.vehicles);
+  const [disableAddButton, setDisableAddButton] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleAddVehicle = () => {
     if (slots < 3) {
@@ -41,11 +43,11 @@ const VehicleShow = () => {
         }
       })
       .then((response) => {
-        console.log(response);
         dispatcher({
           type: SET_VEHICLES,
           payload: [...response.data]
         });
+        setIsLoaded(true);
       })
       .catch((error) => {
         if (error?.response?.status === 403) {
@@ -57,11 +59,10 @@ const VehicleShow = () => {
   useEffect(() => {
     slots === 3 ? setDisableAddButton(true) : setDisableAddButton(false);
   }, [slots]);
-
   return (
     <>
-      <GeneralBack title="Vehiculos Registrados">
-        {slots === 0 ? (
+      <GeneralBack title="Vehículos Registrados">
+        {!isLoaded ? (
           <Spinner />
         ) : (
           <Box>

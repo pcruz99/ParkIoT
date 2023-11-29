@@ -67,7 +67,7 @@ const ESReportShow = () => {
 
   return (
     <>
-      <GeneralBack title="Reporte de E/S de Vehiculos">
+      <GeneralBack title="Reporte de E/S de Vehículos">
         <Box textAlign={'center'}>
           <Grid container spacing={2}>
             <Grid item lg={3} xs={12}>
@@ -77,13 +77,13 @@ const ESReportShow = () => {
               <TextField
                 fullWidth
                 id="placa"
-                label="Placa del Vehiculo"
+                label="Placa del Vehículo"
                 variant="outlined"
                 value={placa}
                 onChange={(e) => {
                   setPlaca(e.target.value.toUpperCase());
                 }}
-                helperText="Escriba la placa del Vehiculo"
+                helperText="Escriba la placa del Vehículo"
                 sx={{ width: 250, height: 80 }}
               />
             </Grid>

@@ -12,7 +12,7 @@ const icons = {
 
 const reports = {
   id: 'pages',
-  title: 'Analisis',
+  title: 'Análisis',
   caption: 'Visualizar Información',
   type: 'group',
   children: [
@@ -40,7 +40,7 @@ const reports = {
         },
         {
           id: 'es',
-          title: 'E/S de Vehiculos',
+          title: 'E/S de Vehículos',
           type: 'item',
           url: '/report/es/'
           // icon: icons.ImportExport

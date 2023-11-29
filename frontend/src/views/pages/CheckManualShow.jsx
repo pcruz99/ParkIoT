@@ -40,12 +40,12 @@ const CheckManualShow = () => {
       .then((response) => {
         if (response.status === 200) {
           setRegister(response.data.register);
-          setMsg('Vehiculo Existente Listo para Registrar');
+          setMsg('Vehículo Existente Listo para Registrar');
           setType('success');
           setOpen(true);
         } else if (response.status === 204) {
           setRegister(null);
-          setMsg('Vehiculo no Existente Listo para Registrar');
+          setMsg('Vehículo NO Existente Listo para Registrar');
           setType('success');
           setOpen(true);
         }
@@ -76,7 +76,7 @@ const CheckManualShow = () => {
         )
         .then((response) => {
           if (response.status === 201) {
-            setMsg(`Registro de Entrada Existoso`);
+            setMsg(`Registro de Entrada Exitoso`);
             setType('success');
             setOpen(true);
             setCheked(false);
@@ -94,7 +94,7 @@ const CheckManualShow = () => {
     if (register != null) {
       await cax.put(`/parking/register/${register.id}/departure/`).then((response) => {
         if (response.status === 201) {
-          setMsg(`Registro de Salida Existoso`);
+          setMsg(`Registro de Salida Exitoso`);
           setType('success');
           setOpen(true);
           setCheked(false);
@@ -139,6 +139,7 @@ const CheckManualShow = () => {
                 label="Placa del Vehículo"
                 variant="outlined"
                 value={placa}
+                inputProps={{ maxLength: 7 }}
                 onChange={(e) => {
                   setPlaca(e.target.value.toUpperCase());
                 }}

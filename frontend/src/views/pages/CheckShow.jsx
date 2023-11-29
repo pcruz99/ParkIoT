@@ -42,7 +42,7 @@ const CheckShow = () => {
 
   const getDataAPI = async () => {
     await cax
-      .get(`/parking/check/${uuid}`)
+      .get(`/parking/check/${uuid}/`)
       .then((response) => {
         if (response.status == 200) {
           setUser(response.data.user);
@@ -62,11 +62,11 @@ const CheckShow = () => {
 
   const handleRegisterMessage = (reg) => {
     if (reg == null) {
-      setMsg(`Registro de Entrada Existoso`);
+      setMsg(`Registro de Entrada Exitoso`);
       setType('success');
       setOpen(true);
     } else {
-      setMsg(`Registro de Salida Existoso`);
+      setMsg(`Registro de Salida Exitoso`);
       setType('success');
       setOpen(true);
     }
@@ -97,7 +97,7 @@ const CheckShow = () => {
           setOpen(true);
         });
     } else {
-      setMsg('Necesita elegir un Vehiculo Primero o el Usuario no tiene Vehiculos Registrados');
+      setMsg('Necesita elegir un Vehículo Primero o el Usuario no tiene Vehículos Registrados');
       setType('error');
       setOpen(true);
     }

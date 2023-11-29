@@ -31,7 +31,7 @@ const columns = [
   },
   {
     id: 'vehicle',
-    label: 'Placa de Vehiculo',
+    label: 'Placa de Vehículo',
     minWidth: 170
     // align: 'right',
     // format: (value) => new String(value).toUpperCase()

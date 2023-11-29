@@ -101,7 +101,7 @@ const PrognosisShow = () => {
             setPrognosticado(true);
 
             setOpen(true);
-            setMsg('Prediccion realizada con Exito');
+            setMsg('Predicción realizada con Éxito');
             setType('success');
             setIsLoaded2(false);
           })
@@ -118,7 +118,6 @@ const PrognosisShow = () => {
     }
   };
 
-  //TODO: Cuando se realiza el prognostico la fecha seleccionada se borra del field
   return (
     <>
       <GeneralBack title="Pronóstico con IA">
@@ -168,7 +167,7 @@ const PrognosisShow = () => {
                   <TextField
                     // fullWidth
                     label="Parte del Dia"
-                    helperText="Elija la parte del dia"
+                    helperText="Elija la parte del día"
                     value={pod}
                     onChange={(e) => {
                       setPod(e.target.value);
@@ -197,7 +196,7 @@ const PrognosisShow = () => {
 
               <Grid item lg={3} xs={12}>
                 <Box display="flex" justifyContent="center" alignContent="center">
-                  <Typography variant="h4">Cantidad de Vehiculos:_</Typography>
+                  <Typography variant="h4">Cantidad de Vehículos:_</Typography>
                   {prognosticado && (
                     <Typography variant="body1" sx={{ color: cantVehicles === 1 ? 'green' : 'red' }}>
                       {cantVehicles === 1 ? 'ALTO' : 'BAJO'}

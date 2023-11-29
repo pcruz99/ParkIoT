@@ -80,7 +80,7 @@ const FirebaseRegister = ({ ...others }) => {
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Registrate con tu Correo Electronico</Typography>
+            <Typography variant="subtitle1">Regístrate con tu Correo Electrónico</Typography>
           </Box>
         </Grid>
       </Grid>

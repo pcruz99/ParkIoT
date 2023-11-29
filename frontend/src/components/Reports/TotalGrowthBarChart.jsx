@@ -108,7 +108,7 @@ const TotalGrowthBarChart = ({ isLoading, registers }) => {
                 <Grid item>
                   <Grid container direction="column" spacing={1}>
                     <Grid item>
-                      <Typography variant="subtitle2">Total de Vehiculos en el Año</Typography>
+                      <Typography variant="subtitle2">Total de Vehículos en el Año</Typography>
                     </Grid>
                     <Grid item>
                       <Typography variant="h3">{registers?.data.total_vehicles ?? '####'}</Typography>

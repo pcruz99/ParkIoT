@@ -72,7 +72,7 @@ const FirebaseLogin = ({ ...others }) => {
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Inicia Session con tu Correo Electronico</Typography>
+            <Typography variant="subtitle1">Inicia Sesión con tu Correo Electrónico</Typography>
           </Box>
         </Grid>
       </Grid>
@@ -206,7 +206,7 @@ const FirebaseLogin = ({ ...others }) => {
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
                 <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
-                  Iniciar Session
+                  Iniciar Sesión
                 </Button>
               </AnimateButton>
             </Box>

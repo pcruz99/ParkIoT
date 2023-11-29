@@ -220,7 +220,7 @@ const ProfileSection = () => {
                             <ListItemIcon>
                               <DirectionsCar stroke={1.5} size="1.3rem" />
                             </ListItemIcon>
-                            <ListItemText primary={<Typography variant="body2">Registrar Vehiculos</Typography>} />
+                            <ListItemText primary={<Typography variant="body2">Registrar Vehículos</Typography>} />
                           </ListItemButton>
                           <ListItemButton
                             sx={{ borderRadius: `${customization.borderRadius}px` }}
@@ -230,7 +230,7 @@ const ProfileSection = () => {
                             <ListItemIcon>
                               <QrCode stroke={1.5} size="1.3rem" />
                             </ListItemIcon>
-                            <ListItemText primary={<Typography variant="body2">Generar Codigo QR</Typography>} />
+                            <ListItemText primary={<Typography variant="body2">Generar Código QR</Typography>} />
                           </ListItemButton>
                         </Box>
                       )}
@@ -242,7 +242,7 @@ const ProfileSection = () => {
                         <ListItemIcon>
                           <IconLogout stroke={1.5} size="1.3rem" />
                         </ListItemIcon>
-                        <ListItemText primary={<Typography variant="body2">Cerrar Session</Typography>} />
+                        <ListItemText primary={<Typography variant="body2">Cerrar Sesión</Typography>} />
                       </ListItemButton>
                     </List>
                   </Box>

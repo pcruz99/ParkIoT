@@ -46,7 +46,7 @@ const QrcodeShow = () => {
 
   return (
     <>
-      <GeneralBack title="Codigo QR">
+      <GeneralBack title="Código QR">
         {!qrcode ? (
           <Spinner />
         ) : (
