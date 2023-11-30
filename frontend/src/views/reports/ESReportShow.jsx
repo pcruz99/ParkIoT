@@ -41,7 +41,7 @@ const ESReportShow = () => {
       })
       .catch(() => {
         setRegister([]);
-        setMsg('No existen Registros con esos Datos o en la Fecha de Hoy');
+        setMsg('No existen Registros en esa Fecha.');
         setType('error');
         setOpen(true);
       });

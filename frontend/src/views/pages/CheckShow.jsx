@@ -97,7 +97,7 @@ const CheckShow = () => {
           setOpen(true);
         });
     } else {
-      setMsg('Necesita elegir un Vehículo Primero o el Usuario no tiene Vehículos Registrados');
+      setMsg('Necesita elegir un Vehículo');
       setType('error');
       setOpen(true);
     }
