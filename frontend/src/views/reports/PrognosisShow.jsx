@@ -62,18 +62,19 @@ const PrognosisShow = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (isLoaded1 === false) {
+    if (score != 0) {
       setIsLoaded1(true);
     }
-  }, [isLoaded1]);
+  }, [score]);
 
   useEffect(() => {
-    if (isLoaded2 === false) {
+    if (cantVehicles != -1) {
       setIsLoaded2(true);
     }
-  }, [isLoaded2]);
+  }, [cantVehicles]);
 
   const trainModel = async () => {
+    setScore(0);
     await cax
       .post('/parking/ml/teach/', {}, { timeout: 5000 })
       .then((response) => {
@@ -94,6 +95,7 @@ const PrognosisShow = () => {
   const doPrognosis = async () => {
     if (pickDate.year != '' && pod != '') {
       if (score != 0) {
+        setCantVehicles(-1);
         await cax
           .get(`/parking/ml/prognosis/?year=${pickDate.year}&month=${pickDate.month}&day=${pickDate.day}&pod=${pod}`, { timeout: 5000 })
           .then((response) => {
@@ -103,6 +105,7 @@ const PrognosisShow = () => {
             setOpen(true);
             setMsg('Predicción realizada con Éxito');
             setType('success');
+
             setIsLoaded2(false);
           })
           .catch((error) => {

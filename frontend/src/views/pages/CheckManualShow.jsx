@@ -29,41 +29,48 @@ const CheckManualShow = () => {
   const [type, setType] = useState(null);
 
   const [placa, setPlaca] = useState('');
-  const [checked, setCheked] = useState(false);
   const [register, setRegister] = useState(null);
 
   const [isLoaded, setIsLoaded] = useState(true);
+  const [statusReq, setStatusReq] = useState(0);
 
   const handleCheckVehicle = async () => {
-    await cax
-      .get(`/parking/check/manual/${placa}/`)
-      .then((response) => {
-        if (response.status === 200) {
-          setRegister(response.data.register);
-          setMsg('Vehículo Existente Listo para Registrar');
-          setType('success');
+    if (placa) {
+      setStatusReq(0);
+      await cax
+        .get(`/parking/check/manual/${placa}/`)
+        .then((response) => {
+          if (response.status === 200) {
+            setRegister(response.data.register);
+            setMsg('Vehículo Existente Listo para Registrar');
+            setType('success');
+            setOpen(true);
+          } else if (response.status === 204) {
+            setRegister(null);
+            setMsg('Vehículo NO Existente Listo para Registrar');
+            setType('success');
+            setOpen(true);
+          }
+          setStatusReq(response.status);
+          setIsLoaded(false);
+        })
+        .catch((error) => {
+          if (error?.response?.status === 403) {
+            dispatcher({ type: LOGOUT });
+          }
+          setMsg('No hay datos disponibles');
+          setType('warning');
           setOpen(true);
-        } else if (response.status === 204) {
-          setRegister(null);
-          setMsg('Vehículo NO Existente Listo para Registrar');
-          setType('success');
-          setOpen(true);
-        }
-        setCheked(true);
-        setIsLoaded(false);
-      })
-      .catch((error) => {
-        if (error?.response?.status === 403) {
-          dispatcher({ type: LOGOUT });
-        }
-        setMsg('No hay datos disponibles');
-        setType('warning');
-        setOpen(true);
-      });
+        });
+    } else {
+      setMsg('Ingrese la Placa del Vehículo');
+      setType('warning');
+      setOpen(true);
+    }
   };
 
   const registerEntry = async () => {
-    if (checked) {
+    if (statusReq != 0) {
       await cax
         .post(
           '/parking/register/entry/',
@@ -79,35 +86,40 @@ const CheckManualShow = () => {
             setMsg(`Registro de Entrada Exitoso`);
             setType('success');
             setOpen(true);
-            setCheked(false);
-            setIsLoaded(false);
           }
         })
         .catch((error) => {
           setMsg(error?.response.data.msg[0]);
           setType('error');
           setOpen(true);
+        })
+        .finally(() => {
+          setStatusReq(0);
         });
     }
   };
   const registerDeparture = async () => {
     if (register != null) {
-      await cax.put(`/parking/register/${register.id}/departure/`).then((response) => {
-        if (response.status === 201) {
-          setMsg(`Registro de Salida Exitoso`);
-          setType('success');
-          setOpen(true);
-          setCheked(false);
-        }
-      });
+      await cax
+        .put(`/parking/register/${register.id}/departure/`)
+        .then((response) => {
+          if (response.status === 201) {
+            setMsg(`Registro de Salida Exitoso`);
+            setType('success');
+            setOpen(true);
+          }
+        })
+        .finally(() => {
+          setStatusReq(0);
+        });
     }
   };
 
   useEffect(() => {
-    if (isLoaded === false) {
+    if (statusReq != 0) {
       setIsLoaded(true);
     }
-  }, [isLoaded]);
+  }, [statusReq]);
 
   return (
     <GeneralBack title="Registro Manual de Vehículos">
@@ -168,7 +180,7 @@ const CheckManualShow = () => {
               <AnimateButton>
                 <Button
                   disableElevation
-                  disabled={checked ? (register != null ? true : false) : true}
+                  disabled={statusReq != 0 ? (register != null ? true : false) : true}
                   variant="contained"
                   size="large"
                   color="success"
@@ -183,7 +195,7 @@ const CheckManualShow = () => {
               <AnimateButton>
                 <Button
                   disableElevation
-                  disabled={checked ? (register === null ? true : false) : true}
+                  disabled={statusReq != 0 ? (register === null ? true : false) : true}
                   variant="contained"
                   size="large"
                   color="error"

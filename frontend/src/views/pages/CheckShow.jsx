@@ -27,7 +27,7 @@ const CheckShow = () => {
   const cax = caxios(account.token);
   const { uuid } = useParams();
 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const [vehicles, setVehicles] = useState([]);
 
   const [register, setRegister] = useState(null);
@@ -41,6 +41,9 @@ const CheckShow = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const getDataAPI = async () => {
+    setUser(null);
+    setVehicles([]);
+    setRegister(null);
     await cax
       .get(`/parking/check/${uuid}/`)
       .then((response) => {
@@ -60,18 +63,6 @@ const CheckShow = () => {
       });
   };
 
-  const handleRegisterMessage = (reg) => {
-    if (reg == null) {
-      setMsg(`Registro de Entrada Exitoso`);
-      setType('success');
-      setOpen(true);
-    } else {
-      setMsg(`Registro de Salida Exitoso`);
-      setType('success');
-      setOpen(true);
-    }
-  };
-
   const registerEntry = async () => {
     if (vehicleId) {
       await cax
@@ -88,7 +79,9 @@ const CheckShow = () => {
           if (response.status === 201) {
             setIsLoaded(false);
             getDataAPI();
-            handleRegisterMessage(register);
+            setMsg(`Registro de Entrada Exitoso`);
+            setType('success');
+            setOpen(true);
           }
         })
         .catch((error) => {
@@ -109,7 +102,9 @@ const CheckShow = () => {
         if (response.status === 201) {
           setRegister(null);
           setVehicleId(null);
-          handleRegisterMessage(register);
+          setMsg(`Registro de Salida Exitoso`);
+          setType('success');
+          setOpen(true);
         }
       });
     }
@@ -120,7 +115,9 @@ const CheckShow = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setIsLoaded(true);
+    if (user != null) {
+      setIsLoaded(true);
+    }
   }, [user]);
 
   return (
