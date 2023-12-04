@@ -75,6 +75,17 @@ const FirebaseLogin = ({ ...others }) => {
             <Typography variant="subtitle1">Inicia Sesión con tu Correo Electrónico</Typography>
           </Box>
         </Grid>
+        <Grid item xs={12} container alignItems="center" justifyContent="center">
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle1" align="center">
+              {`
+              Para asegurarte de no perder el acceso a esta página, 
+              te recomendamos que la guardes en favoritos o la añadas como acceso directo. 
+              De esta manera, podrás volver a ingresar fácilmente en el futuro
+              `}
+            </Typography>
+          </Box>
+        </Grid>
       </Grid>
 
       <Formik

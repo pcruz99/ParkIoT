@@ -202,7 +202,7 @@ const PrognosisShow = () => {
                   <Typography variant="h4">Cantidad de Vehículos:_</Typography>
                   {prognosticado && (
                     <Typography variant="body1" sx={{ color: cantVehicles === 1 ? 'green' : 'red' }}>
-                      {cantVehicles === 1 ? 'ALTO' : 'BAJO'}
+                      {cantVehicles === 1 ? 'ALTO' : cantVehicles === 0 ? 'BAJO' : ''}
                     </Typography>
                   )}
                 </Box>
