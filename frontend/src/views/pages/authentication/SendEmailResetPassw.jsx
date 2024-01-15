@@ -48,7 +48,7 @@ const SendEmailResetPassw = () => {
         });
     } else {
       setOpen(true);
-      setMsg('Ingrese el Correo Electronico Valido');
+      setMsg('Ingrese un Correo Electronico Valido');
       setType('error');
     }
   };

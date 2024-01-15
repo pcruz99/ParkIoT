@@ -7,7 +7,7 @@ import { LOGOUT } from 'store/actions';
 //axios
 import axios from 'axios';
 //MUI
-import { Grid } from '@mui/material';
+import { Grid, Box, Typography } from '@mui/material';
 //custom
 import ParkingCard from 'components/ParkingCard';
 import configData from '../../config';
@@ -52,6 +52,13 @@ const ParkingShow = () => {
                   <ParkingCard isLoading={!completed} space={data} />
                 </Grid>
               ))}
+            <Box textAlign={'left'} sx={{ margin: 4 }}>
+              <Typography variant="h3">Como usar:</Typography>
+              <Typography variant="body1" align="justify">
+                {`Es importante notar que la disponibilidad de espacios de estacionamiento puede haber cambiado desde la última vez que lo viste. 
+                Se sugiere verificar en tiempo real y contemplar alternativas.`}
+              </Typography>
+            </Box>
           </Grid>
         )}
       </GeneralBack>

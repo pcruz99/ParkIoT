@@ -9,8 +9,10 @@ from api.authentication.models import ActiveSession
 
 
 def _generate_jwt_token(user):
+    print(datetime.utcnow())
+    print(datetime.utcnow()+ timedelta(days=30))
     token = jwt.encode(
-        {"id": user.pk, "exp": datetime.utcnow() + timedelta(days=7)},
+        {"id": user.pk, "exp": datetime.utcnow() + timedelta(days=30)},
         settings.SECRET_KEY,
     )
 
@@ -54,8 +56,12 @@ class LoginSerializer(serializers.Serializer):
                        algorithms=["HS256"])
 
         #!: El error de la doble session puede ser en la excepcion de jwt.ExpiredSignatureError
-        except (ObjectDoesNotExist, ValueError, jwt.ExpiredSignatureError):
-            # session.delete()        
+        except (ObjectDoesNotExist, ValueError):  
+            session = ActiveSession.objects.create(
+                user=user, token=_generate_jwt_token(user)
+            )
+        except jwt.ExpiredSignatureError:
+            session.delete()
             session = ActiveSession.objects.create(
                 user=user, token=_generate_jwt_token(user)
             )
