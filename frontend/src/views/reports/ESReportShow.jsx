@@ -65,6 +65,14 @@ const ESReportShow = () => {
     }
   };
 
+  const handleCompletePlaca = (e) => {
+    if (e.target.value.length === 3 && e.nativeEvent.inputType != 'deleteContentBackward') {
+      setPlaca(e.target.value.toUpperCase() + '-');
+    } else {
+      setPlaca(e.target.value.toUpperCase());
+    }
+  };
+
   return (
     <>
       <GeneralBack title="Reporte de E/S de Vehículos">
@@ -81,7 +89,7 @@ const ESReportShow = () => {
                 variant="outlined"
                 value={placa}
                 onChange={(e) => {
-                  setPlaca(e.target.value.toUpperCase());
+                  handleCompletePlaca(e);
                 }}
                 helperText="Escriba la placa del Vehículo"
                 sx={{ width: 250, height: 80 }}
