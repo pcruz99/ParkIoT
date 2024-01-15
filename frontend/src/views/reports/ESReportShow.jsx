@@ -88,6 +88,7 @@ const ESReportShow = () => {
                 label="Placa del Vehículo"
                 variant="outlined"
                 value={placa}
+                inputProps={{ maxLength: 8 }}
                 onChange={(e) => {
                   handleCompletePlaca(e);
                 }}
