@@ -18,6 +18,7 @@ from parking.models import Vehicle, Space, Register, RegisterTotalDay
 from scripts.partofday import get_part_of_day
 from scripts.promotionalday import es_promotionday
 from scripts.api_clima import get_temperature
+from scripts.feriados import es_feriado
 
 from scripts.ml import teach_model, prognosis_model, get_ml_score
 
@@ -253,6 +254,8 @@ class RegisterEntryView(APIView):
                 temp = get_temperature(str(current_date.date()))
                 register_total = RegisterTotalDay.objects.create(
                     part_of_day=pod,
+                    is_holiday=es_feriado(current_date.date()),
+                    is_weekend = current_date.weekday() >= 5,
                     is_promotionday=es_promotionday(current_date.date()),
                     number_vehicles=1,
                     temperature=temp['data']['temp'] if temp['success'] else 0

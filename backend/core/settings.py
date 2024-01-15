@@ -24,6 +24,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # ?: Se utiliza esta variable constante para obtener la url del frontend
 URL_FRONTEND = env('URL_FRONTEND', default='http://127.0.0.1:3000')
 
+SENDER_EMAIL = env('SENDER_EMAIL')
+SENDER_PASSWORD = env('SENDER_PASSWORD')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 

@@ -85,10 +85,9 @@ def prognosis_model(date: date, pod: str):
     is_promotionday = es_promotionday(date)
 
     temp = get_temperature(str(date))
-    # TODO: FIX: Arreglar el mensaje de error donde solo se puede hacer el pedido de temperatura
-    # para 10 dias adelantes y 1 dia para atras en la cuenta gratutita
+  
     if not temp['success'] and temp['error'] == 'max10days':
-        return {"success": False, "msg": 'Predicciones de más de 10 días no se pueden realizar', "error": "max10days"}
+        return {"success": False, "msg": 'Predicciones fuera de rango (max:10dias, min:1dia)', "error": "max10days"}
 
     #!: En caso de que la temperatura no se obtenga de la API Meteomatics
     #!: mantendre el resultado de 0 como un string para que salte la excepcion de la prediccion
@@ -98,8 +97,7 @@ def prognosis_model(date: date, pod: str):
     try:
         data = LR.predict(
             [[is_holiday, is_weekend, is_promotionday, part_of_day, temperature]])
-        # data = LR.predict(
-        #     [[0, 0, 0, 3, 1]])
+        # data = LR.predict([[0, 0, 0, 3, 1]])
         return {"success": True, "msg": "Prediccion Realizada con Exito", "data": data[0]}
     except Exception:
         return {"success": False, "msg": "Problema en la prediccion", "error": "errorPredict"}

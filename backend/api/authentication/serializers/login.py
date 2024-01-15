@@ -53,7 +53,9 @@ class LoginSerializer(serializers.Serializer):
             jwt.decode(session.token, settings.SECRET_KEY,
                        algorithms=["HS256"])
 
+        #!: El error de la doble session puede ser en la excepcion de jwt.ExpiredSignatureError
         except (ObjectDoesNotExist, ValueError, jwt.ExpiredSignatureError):
+            # session.delete()        
             session = ActiveSession.objects.create(
                 user=user, token=_generate_jwt_token(user)
             )

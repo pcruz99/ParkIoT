@@ -27,10 +27,11 @@ const POD = [
 ];
 
 const PrognosisShow = () => {
+  const dateNow = new Date();
   const account = useSelector((state) => state.account);
   const cax = caxios(account.token);
 
-  const [pickDate, setPickDate] = useState({ day: '', month: '', year: '' });
+  const [pickDate, setPickDate] = useState({ day: dateNow.getDate(), month: dateNow.getMonth() + 1, year: dateNow.getFullYear() });
   const [pod, setPod] = useState('');
 
   const [score, setScore] = useState(0);
@@ -42,8 +43,7 @@ const PrognosisShow = () => {
   const [msg, setMsg] = useState(null);
   const [type, setType] = useState(null);
 
-  const [isLoaded1, setIsLoaded1] = useState(true);
-  const [isLoaded2, setIsLoaded2] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   const callAPI = async () => {
     await cax
@@ -61,20 +61,23 @@ const PrognosisShow = () => {
     callAPI();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  //--------------------IsLoading--------------------
   useEffect(() => {
     if (score != 0) {
-      setIsLoaded1(true);
+      setIsLoaded(true);
     }
   }, [score]);
 
   useEffect(() => {
     if (cantVehicles != -1) {
-      setIsLoaded2(true);
+      setIsLoaded(true);
     }
   }, [cantVehicles]);
+  //------------------------------------------------
 
   const trainModel = async () => {
     setScore(0);
+    setIsLoaded(false);
     await cax
       .post('/parking/ml/teach/', {}, { timeout: 5000 })
       .then((response) => {
@@ -83,12 +86,15 @@ const PrognosisShow = () => {
         setOpen(true);
         setMsg('Modelo entrenado con Exito');
         setType('success');
-        setIsLoaded1(false);
+        //--------------------IsLoading--------------------
+        setIsLoaded(true);
       })
       .catch((error) => {
         setOpen(true);
         setMsg(error.response.data?.msg);
         setType('error');
+        //--------------------IsLoading--------------------
+        setIsLoaded(true);
       });
   };
 
@@ -96,6 +102,7 @@ const PrognosisShow = () => {
     if (pickDate.year != '' && pod != '') {
       if (score != 0) {
         setCantVehicles(-1);
+        setIsLoaded(false);
         await cax
           .get(`/parking/ml/prognosis/?year=${pickDate.year}&month=${pickDate.month}&day=${pickDate.day}&pod=${pod}`, { timeout: 5000 })
           .then((response) => {
@@ -105,13 +112,15 @@ const PrognosisShow = () => {
             setOpen(true);
             setMsg('Predicción realizada con Éxito');
             setType('success');
-
-            setIsLoaded2(false);
+            //--------------------IsLoading--------------------
+            setIsLoaded(true);
           })
           .catch((error) => {
             setOpen(true);
             setMsg(error.response.data?.msg);
             setType('error');
+            //--------------------IsLoading--------------------
+            setIsLoaded(true);
           });
       }
     } else {
@@ -124,7 +133,7 @@ const PrognosisShow = () => {
   return (
     <>
       <GeneralBack title="Pronóstico con IA">
-        {!isLoaded1 ? (
+        {!isLoaded ? (
           <Spinner />
         ) : (
           <Box>
@@ -143,7 +152,10 @@ const PrognosisShow = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Box display="flex" justifyContent="center" alignContent="center">
-                  <Typography variant="h4">Estado:_</Typography>
+                  <Typography variant="h4">Estado:</Typography>
+                  <Typography variant="h4" color="inherit" noWrap>
+                    &nbsp;
+                  </Typography>
                   <Typography variant="body1" sx={{ color: score != 0 ? 'green' : 'red' }}>
                     {score != 0 ? 'Entrenado' : 'No Entrenado'}
                   </Typography>
@@ -153,12 +165,7 @@ const PrognosisShow = () => {
                 <Divider sx={{ flexGrow: 5, color: 'black', my: 1 }} orientation="horizontal" />
               </Grid>
             </Grid>
-          </Box>
-        )}
-        {!isLoaded2 ? (
-          <Spinner />
-        ) : (
-          <Box>
+
             <Grid container spacing={3}>
               <Grid item lg={3} xs={12}>
                 <Box display="flex" justifyContent="center" alignContent="center">
@@ -199,7 +206,10 @@ const PrognosisShow = () => {
 
               <Grid item lg={3} xs={12}>
                 <Box display="flex" justifyContent="center" alignContent="center">
-                  <Typography variant="h4">Cantidad de Vehículos:_</Typography>
+                  <Typography variant="h4">Cantidad de Vehículos:</Typography>
+                  <Typography variant="h4" color="inherit" noWrap>
+                    &nbsp;
+                  </Typography>
                   {prognosticado && (
                     <Typography variant="body1" sx={{ color: cantVehicles === 1 ? 'green' : 'red' }}>
                       {cantVehicles === 1 ? 'ALTO' : cantVehicles === 0 ? 'BAJO' : ''}
@@ -210,13 +220,14 @@ const PrognosisShow = () => {
             </Grid>
           </Box>
         )}
+
         <Box textAlign={'left'} sx={{ margin: 4 }}>
           <Typography variant="h3">Como usar:</Typography>
           <Typography variant="body1" align="justify">
             {`Descubre la potencia de nuestra funcionalidad de Machine Learning para el pronóstico de tráfico. Para comenzar, utiliza el botón 
             "Entrenar Modelo" para iniciar el proceso y observa el estado en tiempo real en el campo correspondiente. Si necesitas
             actualizar el modelo con datos recientes, simplemente vuelve a entrenarlo después de generar informes diarios. Una vez
-            entrenado, selecciona la fecha y la parte del día para realizar pronósticos con un máximo de 10 días hacia adelante. Los
+            entrenado, selecciona la fecha y la parte del día para realizar pronósticos con un máximo de 10 días hacia adelante y 1 día atrás. Los
             resultados se clasificarán como "ALTO" o "BAJO", indicando la cantidad prevista de vehículos. ¡Optimiza tus decisiones de
             gestión de tráfico con esta herramienta intuitiva y potente!`}
           </Typography>

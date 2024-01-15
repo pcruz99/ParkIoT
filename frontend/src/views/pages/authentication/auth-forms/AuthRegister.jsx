@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 // material-ui
@@ -37,6 +37,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import configData from '../../../../config';
 import { extraerUsuarioCorreo } from 'scripts/extraerInfo';
+import { verificarCedula } from 'scripts/cedula.js';
 
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
@@ -66,10 +67,6 @@ const FirebaseRegister = ({ ...others }) => {
     setLevel(strengthColor(temp));
   };
 
-  useEffect(() => {
-    changePassword('123456');
-  }, []);
-
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
@@ -95,8 +92,12 @@ const FirebaseRegister = ({ ...others }) => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('El correo es requerido'),
-          password: Yup.string().max(255).required('La contrasena es requerida')
+          email: Yup.string().email('Debe ser un Correo Valido').max(255).required('El correo es requerido'),
+          password: Yup.string().max(255).required('La contrasena es requerida'),
+          cedula: Yup.string()
+            .max(255)
+            .required('La cedula es requerida')
+            .test('valid', 'La cedula es Invalida', (val) => verificarCedula(val))
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           if (checked) {
@@ -179,6 +180,7 @@ const FirebaseRegister = ({ ...others }) => {
               </Grid>
             </Grid>
             <TextField
+              error={Boolean(touched.cedula && errors.cedula)}
               fullWidth
               label="Cedula"
               margin="normal"
@@ -191,6 +193,12 @@ const FirebaseRegister = ({ ...others }) => {
               }}
               sx={{ ...theme.typography.customInput }}
             />
+            {touched.cedula && errors.cedula && (
+              <FormHelperText error id="standard-weight-helper-text--register">
+                {errors.cedula}
+              </FormHelperText>
+            )}
+
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-register">Correo Electronico</InputLabel>
               <OutlinedInput

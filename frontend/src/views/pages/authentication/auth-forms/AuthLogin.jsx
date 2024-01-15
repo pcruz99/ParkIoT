@@ -35,6 +35,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { ACCOUNT_INITIALIZE } from 'store/actions';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import configData from '../../../../config';
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -197,17 +198,25 @@ const FirebaseLogin = ({ ...others }) => {
                 </FormHelperText>
               )}
             </FormControl>
-            {/* <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <FormControlLabel
+            {/* <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}> */}
+            {/* <FormControlLabel
                 control={
                   <Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />
                 }
                 label="Remember me"
-              />
-              <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                Forgot Password?
+              /> */}
+            <Box textAlign={'end'}>
+              <Typography
+                component={Link}
+                to={'/sendemailresetpassw'}
+                variant="subtitle1"
+                color="secondary"
+                sx={{ textDecoration: 'none', cursor: 'pointer' }}
+              >
+                ¿Ha olvidado su contraseña?
               </Typography>
-            </Stack> */}
+            </Box>
+            {/* </Stack> */}
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>

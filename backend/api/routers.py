@@ -4,6 +4,9 @@ from api.authentication.viewsets import (
     LoginViewSet,
     ActiveSessionViewSet,
     LogoutViewSet,
+    SendEmailViewSet,
+    CheckRecoveryPassViewSet,
+    RecoveryPassViewSet
 )
 from rest_framework import routers
 from api.user.viewsets import UserViewSet, UserQrcodeView
@@ -23,6 +26,12 @@ router.register(r"logout", LogoutViewSet, basename="logout")
 router2 = routers.SimpleRouter(trailing_slash = True)
 
 router2.register(r"qrcode", UserQrcodeView, basename="qrcode")
+
+router2.register(r"sendemail", SendEmailViewSet, basename="send-email")
+
+router2.register(r"checkrecovery", CheckRecoveryPassViewSet, basename="check-recovery")
+
+router2.register(r"recoverypass", RecoveryPassViewSet, basename="recovery-pass")
 
 urlpatterns = [
     *router.urls,

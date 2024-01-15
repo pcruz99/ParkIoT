@@ -65,8 +65,8 @@ const VehicleCreate = () => {
               .max(anioActual, `El año máximo es: ${anioActual}`)
               .required('Se requiere el Año del Vehículo'),
             placa: Yup.string()
-              .min(6, 'Mínimo de caracteres es: 6')
-              .max(7, 'Máximo de caracteres es: 7')
+              .min(7, 'Mínimo de caracteres es: 6')
+              .max(8, 'Máximo de caracteres es: 7')
               .required('Se requiere la Placa del Vehículo')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -115,7 +115,6 @@ const VehicleCreate = () => {
                       handleTipo(e.target.value);
                       values.tipo = e.target.value;
                     }}
-                    // onLoad={console.log('hola')}
                     select
                     required
                   >
@@ -241,10 +240,15 @@ const VehicleCreate = () => {
                     id="placa-id"
                     label="Placa"
                     variant="outlined"
-                    value={values.placa}
+                    inputProps={{ maxLength: 8 }}
+                    value={values.placa.toUpperCase()}
                     onChange={(e) => {
-                      handleChange(e);
-                      values.placa = e.target.value;
+                      if (e.target.value.length === 3 && e.nativeEvent.inputType != 'deleteContentBackward') {
+                        e.target.value = e.target.value.toUpperCase() + '-';
+                        handleChange(e);
+                      } else {
+                        handleChange(e);
+                      }
                     }}
                     InputProps={{
                       sx: {
