@@ -31,4 +31,4 @@ def get_temperature(date: str) -> dict:
                 return {'success': False, "msg": "No se puede predecir la temperatura del dia en mas de 10 dias", "error": "max10days"}
             return {"success": False, "error": "other"}
     except Exception:
-        pass
+        return {"success": False, "error": "other"}

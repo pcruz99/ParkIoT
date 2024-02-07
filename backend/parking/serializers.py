@@ -82,4 +82,5 @@ class RegisterFilteredSerializer(serializers.ModelSerializer):
 class RegisterTotalDaySerializer(serializers.ModelSerializer):
     class Meta:
         model = RegisterTotalDay
-        fields = ('id', 'date', 'number_vehicles', 'part_of_day')
+        # fields = ('id', 'date', 'number_vehicles', 'part_of_day')
+        fields = '__all__'

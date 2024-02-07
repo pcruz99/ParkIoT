@@ -2,8 +2,6 @@ from django.utils import timezone
 from django.db import models
 from api.user.models import User
 
-from scripts.feriados import es_feriado
-
 TIPO_CHOICES = (
     # ('carro', 'carro'),
     # ('moto', 'moto')

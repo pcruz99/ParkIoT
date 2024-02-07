@@ -71,6 +71,11 @@ class VehicleViewDetail(APIView):
         vehicle.save(update_fields=['owner'])
         return Response(status=HTTP_204_NO_CONTENT)
 
+class Vehicle2ViewList(mixins.ListModelMixin, generics.GenericAPIView):
+    def get(self, request, format=None):
+        queryset = Vehicle.objects.all()
+        serializer = VehicleSerializer(queryset, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
 
 class SpaceViewList(mixins.ListModelMixin,
                     mixins.CreateModelMixin,
@@ -105,6 +110,12 @@ class SpaceViewDetail(mixins.UpdateModelMixin,
 # ==================================== Registers Views Zone =============================================
 # =================================================================================================
 
+class RegisterViewList(mixins.ListModelMixin, generics.GenericAPIView):
+    def get(self, request, format=None):
+        queryset = Register.objects.all()
+        serializer = RegisterSerializer(queryset, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
 class RegisterViewFiltered(APIView):
     permission_classes = [IsAuthenticated, ]
 
@@ -137,6 +148,13 @@ class RegisterViewFiltered(APIView):
         return Response(r.data, status=HTTP_200_OK)
 
 
+class RegisterTDViewList(mixins.ListModelMixin, generics.GenericAPIView):
+    def get(self, request, format=None):
+        queryset = RegisterTotalDay.objects.all()
+        serializer = RegisterTotalDaySerializer(queryset, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+
 class RegistertTotalDayViewList(APIView):
     permission_classes = [IsAuthenticated, ]
 
@@ -146,8 +164,9 @@ class RegistertTotalDayViewList(APIView):
         total = 0
         sql = f"""SELECT GROUP_CONCAT(id) as id, part_of_day, MONTH(date) as Month, SUM(number_vehicles) AS Total 
             FROM {table}     
-            WHERE YEAR(date)={timezone.localtime(timezone.now()).date().year}        
+            WHERE YEAR(date)=2023        
             GROUP BY part_of_day, Month ORDER BY Month ASC"""             
+            # WHERE YEAR(date)={timezone.localtime(timezone.now()).date().year}        
         try:
             for i in RegisterTotalDay.objects.raw(sql):
                 total += i.Total
