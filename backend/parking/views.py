@@ -164,9 +164,9 @@ class RegistertTotalDayViewList(APIView):
         total = 0
         sql = f"""SELECT GROUP_CONCAT(id) as id, part_of_day, MONTH(date) as Month, SUM(number_vehicles) AS Total 
             FROM {table}     
-            WHERE YEAR(date)=2023        
+            WHERE YEAR(date)={timezone.localtime(timezone.now()).date().year}        
             GROUP BY part_of_day, Month ORDER BY Month ASC"""             
-            # WHERE YEAR(date)={timezone.localtime(timezone.now()).date().year}        
+            
         try:
             for i in RegisterTotalDay.objects.raw(sql):
                 total += i.Total
