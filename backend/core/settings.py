@@ -187,4 +187,9 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 # GITHUB_CLIENT_ID = env('GITHUB_CLIENT_ID')
 # GITHUB_SECRET_KEY = env('GITHUB_SECRET_KEY')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'assests')
